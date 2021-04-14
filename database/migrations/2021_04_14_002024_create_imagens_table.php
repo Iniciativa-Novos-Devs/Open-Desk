@@ -16,6 +16,15 @@ class CreateImagensTable extends Migration
         Schema::create('hd_imagens', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+
+            /**
+             * Colocar:
+             * tamanho
+             * extensao
+             * origem (nullable) //Rota, controller etc
+             * destinado_a (nullable) //perfil, chamado, etc
+             * legenda (nullable)
+             */
         });
     }
 

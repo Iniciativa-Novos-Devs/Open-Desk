@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAtendentesTable extends Migration
+class CreateHdTipoProblemasTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateAtendentesTable extends Migration
      */
     public function up()
     {
-        Schema::create('hd_atendentes', function (Blueprint $table) {
-            $table->id();
+        Schema::create('hd_tipo_problemas', function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->timestamps();
-            $table->softDeletes();
+            $table->string('nome');
+            $table->string('versao', 10)->nullable();
         });
     }
 
@@ -27,6 +28,6 @@ class CreateAtendentesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('hd_atendentes');
+        Schema::dropIfExists('hd_tipo_problemas');
     }
 }

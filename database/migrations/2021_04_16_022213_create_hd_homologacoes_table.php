@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateHomologacoesTable extends Migration
+class CreateHdHomologacoesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,15 +14,13 @@ class CreateHomologacoesTable extends Migration
     public function up()
     {
         Schema::create('hd_homologacoes', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->timestamps();
             $table->softDeletes();
-
-            $table->boolean('resolvido')->default(false);
-            $table->integer('nota')->unsigned()->nullable();
-            $table->bigInteger('chamado_id')->unsigned();
-
-            $table->foreign('chamado_id')->references('id')->on('hd_chamados')->onDelete('cascade');
+            $table->tinyInteger('resolvido')->default(0);
+            $table->unsignedInteger('nota')->nullable();
+            $table->unsignedBigInteger('chamado_id')->index('hd_homologacoes_chamado_id_foreign');
+            $table->string('versao', 10)->nullable();
         });
     }
 

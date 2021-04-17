@@ -14,5 +14,31 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('menuPrincipal');
+});
+
+
+Route::get('/areas', function () {
+    return view('areas');
+});
+
+
+Route::get('/atividadearea', function () {
+    return view('atividadeArea');
+});
+
+Route::get('/problemaarea', function () {
+    return view('problemaArea');
+});
+
+Route::get('/parametros', function () {
+    return view('parametros');
+});
+
+Route::get('/usuarioatendimentoarea', function () {
+    return view('usuarioAtendimentoArea');
+});
+
+Route::get('/chamados', function () {
+    return view('chamados');
 });

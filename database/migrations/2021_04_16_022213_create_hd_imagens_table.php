@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateImagensTable extends Migration
+class CreateHdImagensTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,17 +14,9 @@ class CreateImagensTable extends Migration
     public function up()
     {
         Schema::create('hd_imagens', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->timestamps();
-
-            /**
-             * Colocar:
-             * tamanho
-             * extensao
-             * origem (nullable) //Rota, controller etc
-             * destinado_a (nullable) //perfil, chamado, etc
-             * legenda (nullable)
-             */
+            $table->string('versao', 10)->nullable();
         });
     }
 

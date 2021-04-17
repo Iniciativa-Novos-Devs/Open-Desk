@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAreasTable extends Migration
+class CreateHdTipoMovimentacoesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateAreasTable extends Migration
      */
     public function up()
     {
-        Schema::create('hd_areas', function (Blueprint $table) {
-            $table->id();
+        Schema::create('hd_tipo_movimentacoes', function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->timestamps();
-
-            $table->string('sigla');
             $table->string('nome');
+            $table->string('versao', 10)->nullable();
         });
     }
 
@@ -29,6 +28,6 @@ class CreateAreasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('hd_areas');
+        Schema::dropIfExists('hd_tipo_movimentacoes');
     }
 }

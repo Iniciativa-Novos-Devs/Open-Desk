@@ -10,11 +10,13 @@
     @include('cabecalho');
     @include('navbaradm');
 
-    <select class="form-select" aria-label="Default select example">
-        <option selected>Area</option>
-        <option value="1">One</option>
-        <option value="2">Two</option>
-        <option value="3">Three</option>
+    <select class="form-select" aria-label="Default select example" id='seletor_area' onchange="verAtividade()">
+        <option value =''> selecione a Area</option>
+         @foreach ( $areas as $area )
+            <option value="{{ $area->id }}" {{ $area_atual && $area_atual == $area->id ? "selected" : "" }}>{{ $area->sigla }}</option>
+         @endforeach
+
+
       </select>
 
 
@@ -28,16 +30,14 @@
           </tr>
         </thead>
         <tbody>
+          @foreach ($atividades as $atividade )
           <tr>
-            <th scope="row">1</th>
-            <td>Contratos</td>
-            <td>11/01/2021</td>
+            <td scope="row">{{ $atividade->id }}</td>
+            <td>{{ $atividade->nome }}</td>
+            <td>{{ $atividade->created_at }}</td>
           </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td>Utilidade Pública</td>
-            <td>15/01/2021</td>
-          </tr>
+
+          @endforeach
 
         </tbody>
       </table>
@@ -82,7 +82,21 @@
       </table>
 
 
+ <script>
+    function isNumber(n) { return !isNaN(parseFloat(n)) && !isNaN(n - 0); }
 
+
+     function verAtividade (){
+         var area = document.getElementById('seletor_area');
+         if (area && area.value && isNumber(area.value)){
+             var area_id = area.value;
+             window.location.href="{{ route ('areas') }}" + "?area=" + area_id
+         }
+
+
+     }
+
+ </script>
 
 </body>
 </html>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AreaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,10 +19,7 @@ Route::get('/', function () {
 });
 
 
-Route::get('/areas', function () {
-    return view('areas');
-});
-
+Route::get('/areas', [AreaController::class, 'index'])->name('areas');
 
 Route::get('/atividadearea', function () {
     return view('atividadeArea');

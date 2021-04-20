@@ -7,16 +7,14 @@
     <title>Áreas</title>
 </head>
 <body>
-    @include('cabecalho');
-    @include('navbaradm');
+    @include('cabecalho')
+    @include('navbaradm')
 
     <select class="form-select" aria-label="Default select example" id='seletor_area' onchange="verAtividade()">
         <option value =''> selecione a Area</option>
          @foreach ( $areas as $area )
             <option value="{{ $area->id }}" {{ $area_atual && $area_atual == $area->id ? "selected" : "" }}>{{ $area->sigla }}</option>
          @endforeach
-
-
       </select>
 
 

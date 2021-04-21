@@ -10,4 +10,14 @@ class Atividade extends Model
     use HasFactory;
 
     protected $table = 'hd_atividades_area';
+
+    protected $fillable     = [
+        'nome',
+        'area_id',
+    ];
+
+    public function area()
+    {
+        return $this->belongsTo(\App\Models\Area::class, 'area_id', 'id');
+    }
 }

@@ -11,4 +11,9 @@ class Area extends Model
 
     protected $table = 'hd_areas';
 
+    protected $fillable     = [
+        'sigla',
+        'nome',
+    ];
+
 }

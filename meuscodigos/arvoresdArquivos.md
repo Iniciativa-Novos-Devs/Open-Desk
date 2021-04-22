@@ -1,0 +1,19 @@
+* layouts
+    * [x] login 
+    * pagina
+* login
+    * login
+    * recuperacao
+    * criacao
+* usuarios
+    * index
+    * edit
+    * show
+* areas
+    * index
+    * edit
+    * show
+* atividades
+    * index
+    * edit
+    * show

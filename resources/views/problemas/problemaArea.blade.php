@@ -1,1 +1,0 @@
-Problemas relacionados na área

@@ -10,6 +10,22 @@ class AreaController extends Controller
 {
     public function index(Request $request)
     {
-        return view('areas');
+        $areas = Area::paginate(20);
+
+        return view('areas.index', [
+            'areas' => $areas,
+        ]);
+    }
+
+    public function show($area_id)
+    {
+        $area = Area::find($area_id);
+
+        if(!$area)
+            return redirect()->route('dashboard')->with('error', 'Área não encontrada');
+        
+        return view('areas.show', [
+            'area'      => $area,
+        ]);
     }
 }

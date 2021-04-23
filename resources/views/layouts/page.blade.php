@@ -1,18 +1,19 @@
 @extends('layouts.app')
 
-@section('head')
+@section('head_content')
 @yield('head')
 @livewireStyles
 @endsection
 
-@section('js')
-@livewireScripts
-@yield('js')
-@endsection
 
 @section('body_content')
 <div class="container-fluid">
-    @include('layouts.includes.cabecalho')
-    @yield('content')
+@include('layouts.includes.cabecalho')
+@yield('content')
 </div>
+@endsection
+
+@section('js')
+@livewireScripts
+@yield('scripts')
 @endsection

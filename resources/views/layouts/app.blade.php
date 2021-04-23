@@ -13,7 +13,7 @@
         @yield('title', config('sistema.site_title'))
     </title>
 
-    @yield('head')
+    @yield('head_content')
   </head>
   <body @yield('body_class')>
     @yield('body_content')

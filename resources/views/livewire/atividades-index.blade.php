@@ -1,16 +1,24 @@
 <div>
-    <select class="form-select" aria-label="Selecione uma Area" id='seletor_area' 
-        wire:model="area_atual"
-    >
-        <option value=''>Selecione uma Area</option>
-        @foreach ( $areas as $area )
-        <option value="{{ $area->id }}">
-            {{ $area->sigla }} - {{ $area->nome }}
-        </option>
-        @endforeach
-    </select>
+    <label for="seletor_area" class="w-100"> Filtrar por área
+        <select class="form-select" aria-label="Selecione uma Area" id='seletor_area' 
+            wire:model="area_atual"
+        >
+            <option value=''>Selecione uma Area</option>
+            @foreach ( $areas as $area )
+            <option value="{{ $area->id }}">
+                {{ $area->sigla }} - {{ $area->nome }}
+            </option>
+            @endforeach
+        </select>
+    </label>
 
-    <h2> Atividades Área #{{ $area_atual }} </h2>
+    @php
+        $area_atual_nome = $atividades->first()->area->nome ?? '';
+    @endphp
+
+    <div>
+        <h2>{{ $area_atual && $area_atual_nome ? 'Atividades de '. $area_atual_nome : 'Todas as Atividades' }}</h2>
+    </div>
 
     @if($atividades)
     <div class="w-100">

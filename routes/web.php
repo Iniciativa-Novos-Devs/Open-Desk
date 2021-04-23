@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\AreaController;
+use App\Http\Controllers\AtividadesController;
+use App\Http\Controllers\ChamadoController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,25 +21,22 @@ Route::get('/', function () {
     return view('menuPrincipal');
 });
 
+Route::group(['prefix' => 'painel'], function () {    
+    //-----------------------------------------------------------------------------------
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-Route::get('/areas', [AreaController::class, 'index'])->name('areas');
 
-Route::get('/atividadearea', function () {
-    return view('atividadeArea');
+    //-----------------------------------------------------------------------------------
+    Route::get('/atividades', [AtividadesController::class, 'index'])->name('atividades_index');
+    
+    
+    //-----------------------------------------------------------------------------------
+    Route::get('/areas', [AreaController::class, 'index'])->name('areas_index');
+    Route::get('/areas/{area_id}/{area_slug?}', [AreaController::class, 'show'])->name('areas_show');
+
+    //-----------------------------------------------------------------------------------
+    Route::get('/chamados', [ChamadoController::class, 'index'])->name('chamados_index');
+    Route::get('/chamados/{chamado_id}/{chamado_slug?}', [ChamadoController::class, 'show'])->name('chamados_show');
+    
 });
 
-Route::get('/problemaarea', function () {
-    return view('problemaArea');
-});
-
-Route::get('/parametros', function () {
-    return view('parametros');
-});
-
-Route::get('/usuarioatendimentoarea', function () {
-    return view('usuarioAtendimentoArea');
-});
-
-Route::get('/chamados', function () {
-    return view('chamados');
-});

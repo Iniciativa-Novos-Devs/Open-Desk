@@ -33,7 +33,7 @@ class AtividadesIndex extends Component
 
     public function setAtividades()
     {
-        $atividades   = Atividade::orderBy($this->order_by, $this->order_dir);
+        $atividades   = Atividade::with('area')->orderBy($this->order_by, $this->order_dir);
 
         if($this->area_atual)
             $atividades = $atividades->where('area_id', $this->area_atual);

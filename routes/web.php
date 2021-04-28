@@ -18,18 +18,18 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('menuPrincipal');
+    return redirect()->route('dashboard');
 });
 
-Route::group(['prefix' => 'painel'], function () {    
+Route::group(['prefix' => 'painel'], function () {
     //-----------------------------------------------------------------------------------
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
 
     //-----------------------------------------------------------------------------------
     Route::get('/atividades', [AtividadesController::class, 'index'])->name('atividades_index');
-    
-    
+
+
     //-----------------------------------------------------------------------------------
     Route::get('/areas', [AreaController::class, 'index'])->name('areas_index');
     Route::get('/areas/{area_id}/{area_slug?}', [AreaController::class, 'show'])->name('areas_show');
@@ -37,6 +37,6 @@ Route::group(['prefix' => 'painel'], function () {
     //-----------------------------------------------------------------------------------
     Route::get('/chamados', [ChamadoController::class, 'index'])->name('chamados_index');
     Route::get('/chamados/{chamado_id}/{chamado_slug?}', [ChamadoController::class, 'show'])->name('chamados_show');
-    
+
 });
 

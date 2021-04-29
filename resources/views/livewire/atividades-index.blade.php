@@ -1,6 +1,6 @@
 <div>
     <label for="seletor_area" class="w-100"> Filtrar por área
-        <select class="form-select" aria-label="Selecione uma Area" id='seletor_area' 
+        <select class="form-select" aria-label="Selecione uma Area" id='seletor_area'
             wire:model="area_atual"
         >
             <option value=''>Selecione uma Area</option>
@@ -17,7 +17,10 @@
     @endphp
 
     <div>
-        <h2>{{ $area_atual && $area_atual_nome ? 'Atividades de '. $area_atual_nome : 'Todas as Atividades' }}</h2>
+        <h2>
+            {{ $area_atual && $area_atual_nome ? 'Atividades de '. $area_atual_nome : 'Todas as Atividades' }}
+            <a href="{{ route('atividades_add') }}" class="btn btn-sm btn-outline-info">Criar atividade</a>
+        </h2>
     </div>
 
     @if($atividades)
@@ -48,9 +51,12 @@
                         <td scope="row">{{ $atividade->id }}</td>
                         <td>{{ $atividade->nome }}</td>
                         <td>{{ $atividade->created_at }}</td>
+                        <td>
+                            <a href="{{ route('atividades_edit', $atividade->id) }}" class="btn btn-sm btn-outline-info">Editar</a>
+                        </td>
                     </tr>
                     @endforeach
-                
+
             </tbody>
             <tfoot>
                 <tr>
@@ -62,7 +68,7 @@
                             <div class="col-4 align-middle mt-3">
                                 <span class="w-100 align-middle">
                                     <strong>{{ $items_by_page >= $atividades->total() ? $atividades->total() : $items_by_page }}</strong>
-                                    itens do total de 
+                                    itens do total de
                                     <strong>{{ $atividades->total() }}</strong>
                                 </span>
                             </div>
@@ -71,7 +77,7 @@
                                     wire:model="items_by_page"
                                 >
                                 @foreach ([ 10, 20, 30, 50, 100, ] as $qtd)
-                                    <option value="{{ $qtd }}">{{ $qtd }}</option>                                    
+                                    <option value="{{ $qtd }}">{{ $qtd }}</option>
                                 @endforeach
                                 </select>
                             </div>

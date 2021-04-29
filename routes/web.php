@@ -28,6 +28,10 @@ Route::group(['prefix' => 'painel'], function () {
 
     //-----------------------------------------------------------------------------------
     Route::get('/atividades', [AtividadesController::class, 'index'])->name('atividades_index');
+    Route::get('/atividades/{id}/edit', [AtividadesController::class, 'edit'])->name('atividades_edit');
+    Route::post('/atividades/{id}/update', [AtividadesController::class, 'update'])->name('atividades_update');
+    Route::get('/atividades/add', [AtividadesController::class, 'add'])->name('atividades_add');
+    Route::post('/atividades/store', [AtividadesController::class, 'store'])->name('atividades_store');
 
 
     //-----------------------------------------------------------------------------------

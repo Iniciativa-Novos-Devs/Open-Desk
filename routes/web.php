@@ -4,6 +4,7 @@ use App\Http\Controllers\AreaController;
 use App\Http\Controllers\AtividadesController;
 use App\Http\Controllers\ChamadoController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProblemaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -39,9 +40,17 @@ Route::group(['prefix' => 'painel'], function () {
     Route::get('/areas', [AreaController::class, 'index'])->name('areas_index');
     Route::get('/areas/{area_id}/{area_slug?}', [AreaController::class, 'show'])->name('areas_show');
 
+
     //-----------------------------------------------------------------------------------
     Route::get('/chamados', [ChamadoController::class, 'index'])->name('chamados_index');
     Route::get('/chamados/{chamado_id}/{chamado_slug?}', [ChamadoController::class, 'show'])->name('chamados_show');
+
+
+    //-----------------------------------------------------------------------------------
+    Route::get('/problemas', [ProblemaController::class, 'index'])->name('problemas_index');
+    Route::get('/problemas/add', [ProblemaController::class, 'add'])->name('problemas_add');
+
+
 
 });
 

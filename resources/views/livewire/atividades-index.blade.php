@@ -43,6 +43,9 @@
                     >Data Cadastro
                         {{ $order_by == 'created_at' ? '*' :''  }}
                     </th>
+                    <th>
+                        Ações
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -53,6 +56,7 @@
                         <td>{{ $atividade->created_at }}</td>
                         <td>
                             <a href="{{ route('atividades_edit', $atividade->id) }}" class="btn btn-sm btn-outline-info">Editar</a>
+                            <a href="{{ route('atividades_delete', $atividade->id) }}" class="btn btn-sm btn-outline-danger">Deletar</a>
                         </td>
                     </tr>
                     @endforeach

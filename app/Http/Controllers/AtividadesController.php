@@ -49,6 +49,19 @@ class AtividadesController extends Controller
         return redirect()->route('atividades_index')->with('success', 'Atividade atualizada com sucesso');
     }
 
+    public function delete(Request $request, $id)
+    {
+        $atividade = Atividade::where('id', $id)->first();
+
+        if(!$atividade)
+            return redirect()->route('atividades_index')->with('error', 'Esta atividade não existe');
+
+        $atividade->delete();
+
+        return redirect()->route('atividades_index')->with('success', 'Atividade deletada com sucesso');
+    }
+
+
     public function store(Request $request)
     {
         $request->validate([

@@ -13,3 +13,7 @@
 		@include('layouts.includes.navbar_user')
 	@endif
 </header>
+
+<div class="w-100">
+    <x-flash-messages/>
+</div>

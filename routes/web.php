@@ -32,6 +32,7 @@ Route::group(['prefix' => 'painel'], function () {
     Route::post('/atividades/{id}/update', [AtividadesController::class, 'update'])->name('atividades_update');
     Route::get('/atividades/add', [AtividadesController::class, 'add'])->name('atividades_add');
     Route::post('/atividades/store', [AtividadesController::class, 'store'])->name('atividades_store');
+    Route::get('/atividades/{id}/delete', [AtividadesController::class, 'delete'])->name('atividades_delete');
 
 
     //-----------------------------------------------------------------------------------

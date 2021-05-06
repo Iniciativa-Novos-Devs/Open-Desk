@@ -14,4 +14,9 @@ class Problema extends Model
         'descricao' ,
         'atividade_area_id',
     ];
+
+    public function atividade()
+    {
+        return $this->belongsTo(\App\Models\Atividade::class, 'atividade_area_id', 'id');
+    }
 }

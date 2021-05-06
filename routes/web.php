@@ -48,7 +48,10 @@ Route::group(['prefix' => 'painel'], function () {
 
     //-----------------------------------------------------------------------------------
     Route::get('/problemas', [ProblemaController::class, 'index'])->name('problemas_index');
-    Route::get('/problemas/add', [ProblemaController::class, 'add'])->name('problemas_add');
+    Route::get('/problemas/add/{atividade_id?}', [ProblemaController::class, 'add'])->name('problemas_add');
+    Route::get('/problemas/edit/{atividade_id}', [ProblemaController::class, 'edit'])->name('problemas_edit');
+    Route::get('/problemas/delete/{atividade_id}', [ProblemaController::class, 'delete'])->name('problemas_delete');
+    Route::post('/problemas/store', [ProblemaController::class, 'store'])->name('problemas_store');
 
 
 

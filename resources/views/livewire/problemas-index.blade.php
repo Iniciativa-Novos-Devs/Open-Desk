@@ -1,12 +1,12 @@
-<div>
-    <label for="seletor_atividade" class="w-100"> Filtrar por área
+<div class='w-100'>
+    <label for="seletor_atividade" class="w-100"> Filtrar por Atividade
         <select class="form-select" aria-label="Selecione uma Atividade" id='seletor_atividade'
             wire:model="atividade_atual"
         >
             <option value=''>Selecione uma Atividade</option>
             @foreach ( $atividades as $atividade )
             <option value="{{ $atividade->id }}">
-                {{ $atividade->sigla }} - {{ $atividade->nome }}
+                {{ $atividade->nome }}
             </option>
             @endforeach
         </select>
@@ -18,7 +18,7 @@
 
     <div>
         <h2>
-            {{ $atividade_atual && $atividade_atual_nome ? 'Problemas de '. $atividade_atual_nome : 'Todas as Problemas' }}
+            {{ $atividade_atual && $atividade_atual_nome ? 'Problemas de '. $atividade_atual_nome : 'Todas os Problemas' }}
             <a href="{{ route('problemas_add') }}" class="btn btn-sm btn-outline-info">Criar problema</a>
         </h2>
     </div>

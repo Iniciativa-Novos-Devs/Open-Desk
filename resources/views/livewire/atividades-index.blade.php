@@ -1,4 +1,4 @@
-<div>
+<div class='w-100'>
     <label for="seletor_area" class="w-100"> Filtrar por área
         <select class="form-select" aria-label="Selecione uma Area" id='seletor_area'
             wire:model="area_atual"

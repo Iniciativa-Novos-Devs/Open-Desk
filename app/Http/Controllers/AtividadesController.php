@@ -13,13 +13,13 @@ class AtividadesController extends Controller
         return view('atividades.index');
     }
 
+
     public function edit($id)
     {
         $atividade = Atividade::where('id', $id)->first();
 
         if(!$atividade)
             return redirect()->route('atividades_index')->with('error', 'Esta atividade não existe');
-
         return view('atividades.form', [
             'atividade' => $atividade,
             'id'        => $id,
@@ -36,28 +36,21 @@ class AtividadesController extends Controller
         $request->validate([
             'nome' => 'required|min:3|max:50|string',
         ]);
-
         $atividade = Atividade::where('id', $id)->first();
-
         if(!$atividade)
             return redirect()->route('atividades_index')->with('error', 'Esta atividade não existe');
-
         $atividade->update([
             'nome' => $request->input('nome'),
         ]);
-
         return redirect()->route('atividades_index')->with('success', 'Atividade atualizada com sucesso');
     }
 
     public function delete(Request $request, $id)
     {
         $atividade = Atividade::where('id', $id)->first();
-
         if(!$atividade)
             return redirect()->route('atividades_index')->with('error', 'Esta atividade não existe');
-
         $atividade->delete();
-
         return redirect()->route('atividades_index')->with('success', 'Atividade deletada com sucesso');
     }
 
@@ -67,11 +60,9 @@ class AtividadesController extends Controller
         $request->validate([
             'nome' => 'required|min:3|max:50|string',
         ]);
-
         Atividade::create([
             'nome' => $request->input('nome'),
         ]);
-
         return redirect()->route('atividades_index')->with('success', 'Atividade criada com sucesso');
     }
 

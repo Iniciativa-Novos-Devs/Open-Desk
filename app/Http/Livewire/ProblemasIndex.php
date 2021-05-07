@@ -20,7 +20,7 @@ class ProblemasIndex extends Component
 
     public function mount()
     {
-        $this->atividades        = Atividade::all();
+        $this->atividades        = Atividade::orderBy('id', 'asc')->get();
         $this->atividade_atual   = request()->input('atividade') ?? null;
     }
 

@@ -39,6 +39,11 @@
                         {{ $order_by == 'nome' ? '*' :''  }}
                     </th>
                     <th scope="col" class="cursor-pointer"
+                        wire:click="changeOrderBy('atividade_area_id')"
+                    >Atividade
+                        {{ $order_by == 'atividade_area_id' ? '*' :''  }}
+                    </th>
+                    <th scope="col" class="cursor-pointer"
                         wire:click="changeOrderBy('created_at')"
                     >Data Cadastro
                         {{ $order_by == 'created_at' ? '*' :''  }}
@@ -52,11 +57,14 @@
                     @foreach ($problemas as $problema )
                     <tr>
                         <td scope="row">{{ $problema->id }}</td>
-                        <td>{{ $problema->nome }}</td>
+                        <td>{{ $problema->descricao }}</td>
+                        <td>{{ $problema->atividade_area_id }}</td>
                         <td>{{ $problema->created_at }}</td>
                         <td>
                             <a href="{{ route('problemas_edit', $problema->id) }}" class="btn btn-sm btn-outline-info">Editar</a>
-                            <a href="{{ route('problemas_delete', $problema->id) }}" class="btn btn-sm btn-outline-danger">Deletar</a>
+                            <a href="{{ route('problemas_delete', $problema->id) }}"
+                                class="btn btn-sm btn-outline-danger"
+                                onclick="if (! confirm('Deseja mesmo deletar o problema?')) { return false; }">Deletar</a>
                         </td>
                     </tr>
                     @endforeach

@@ -37,4 +37,16 @@ class ProblemaController extends Controller
 
         return redirect()->route('problemas_index')->with('success', 'Problema criado com sucesso');
     }
+
+    public function delete($problema_id)
+    {
+        $problema = Problema::where('id', $problema_id)->first();
+
+        if(!$problema)
+            return redirect()->route('problemas_index')->with('error', 'Problema não encontrado');
+
+        $problema->delete();
+
+        return redirect()->route('problemas_index')->with('success', 'Problema deletado com sucesso');
+    }
 }

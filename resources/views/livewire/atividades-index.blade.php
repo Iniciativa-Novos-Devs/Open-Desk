@@ -56,7 +56,10 @@
                         <td>{{ $atividade->created_at }}</td>
                         <td>
                             <a href="{{ route('atividades_edit', $atividade->id) }}" class="btn btn-sm btn-outline-info">Editar</a>
-                            <a href="{{ route('atividades_delete', $atividade->id) }}" class="btn btn-sm btn-outline-danger">Deletar</a>
+                            <a href="{{ route('problemas_add', $atividade->id) }}" class="btn btn-sm btn-success">+ problema</a>
+                            <a href="{{ route('atividades_delete', $atividade->id) }}"
+                                class="btn btn-sm btn-outline-danger"
+                                onclick="if (! confirm('Deseja mesmo deletar  a atividade?')) { return false; }">Deletar</a>
                         </td>
                     </tr>
                     @endforeach

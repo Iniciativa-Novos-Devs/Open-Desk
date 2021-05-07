@@ -1,7 +1,7 @@
 @extends('layouts.page')
 
 @section('content')
-{{ $atividade_id ?? 'Vazio' }}
+
     <div class="row">
         <form action="{{ route('problemas_store') }}" method="POST">
             @csrf

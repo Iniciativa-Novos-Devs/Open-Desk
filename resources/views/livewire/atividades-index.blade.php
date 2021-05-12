@@ -60,6 +60,7 @@
                             <a href="{{ route('atividades_delete', $atividade->id) }}"
                                 class="btn btn-sm btn-outline-danger"
                                 onclick="if (! confirm('Deseja mesmo deletar  a atividade?')) { return false; }">Deletar</a>
+                            <a href="{{ route('problemas_index', $atividade->id) }}" class="btn btn-sm btn-success">Ver problemas</a>
                         </td>
                     </tr>
                     @endforeach

@@ -2,6 +2,6 @@
 
 @section('content')
 
-    @livewire('problemas-index')
+    @livewire('problemas-index', [$atividade_id])
 
 @endsection

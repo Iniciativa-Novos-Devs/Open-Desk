@@ -8,9 +8,11 @@ use Illuminate\Http\Request;
 
 class ProblemaController extends Controller
 {
-    public function index()
+    public function index($atividade_id = null)
     {
-        return view('problemas.index');
+        return view('problemas.index', [
+            'atividade_id' => $atividade_id,
+        ]);
     }
 
     public function add($atividade_id = null)

@@ -18,10 +18,10 @@ class ProblemasIndex extends Component
     public $atividade_atual    = null;
     public $atividades         = null;
 
-    public function mount()
+    public function mount($atividade_id = null)
     {
         $this->atividades        = Atividade::orderBy('id', 'asc')->get();
-        $this->atividade_atual   = request()->input('atividade') ?? null;
+        $this->atividade_atual   = $atividade_id ?? request()->input('atividade') ?? null;
     }
 
     public function render()

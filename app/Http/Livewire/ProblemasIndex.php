@@ -36,7 +36,7 @@ class ProblemasIndex extends Component
         $problemas   = Problema::with('atividade')->orderBy($this->order_by, $this->order_dir);
 
         if($this->atividade_atual)
-            $problemas = $problemas->where('atividade_id', $this->atividade_atual);
+            $problemas = $problemas->where('atividade_area_id', $this->atividade_atual);
 
         return $problemas;
     }

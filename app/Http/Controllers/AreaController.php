@@ -11,6 +11,7 @@ class AreaController extends Controller
     public function index(Request $request)
     {
         $areas = Area::paginate(20);
+        
 
         return view('areas.index', [
             'areas' => $areas,
@@ -23,7 +24,7 @@ class AreaController extends Controller
 
         if(!$area)
             return redirect()->route('dashboard')->with('error', 'Área não encontrada');
-        
+
         return view('areas.show', [
             'area'      => $area,
         ]);

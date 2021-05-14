@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Problema;
 use Illuminate\Http\Request;
 
 class ChamadoController extends Controller
@@ -60,6 +61,8 @@ class ChamadoController extends Controller
 
     public function add(Request $request)
     {
-        return view('chamados.form');
+        return view('chamados.form', [
+            'problemas' => Problema::all(),
+        ]);
     }
 }

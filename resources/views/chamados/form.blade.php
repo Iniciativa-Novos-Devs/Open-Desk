@@ -18,7 +18,7 @@
         <div class="row p-0 m-0">
             <div class="col-8 mt-0 _bg-danger">
                 <div class="row">
-                    <div class="col-12">
+                    <form class="col-12">
                         <div class="row p-0 m-0">
                             <div class="col-4 mx-0 mt-2 p-0 px-1">
                                 <label for="select_esq">Selecione</label>
@@ -30,14 +30,15 @@
                                     <option value="3">Three</option>
                                 </select>
                             </div>
+
                             <div class="col-8 mx-0 mt-2 p-0 px-1">
                                 <label for="select_dir">Selecione</label>
-                                <select class="form-select mx-0 _bg-warning" id="select_dir"
+                                <select class="form-select mx-0 _bg-warning" id="select_dir" required
                                     aria-label="Default select example">
-                                    <option selected>Open this select menu</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
+                                    <option value='' selected>Escolha um problema</option>
+                                    @foreach ($problemas as $problema)
+                                        <option value='{{ $problema->id }}'>{{ $problema->descricao }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -55,7 +56,7 @@
                                 <button type="submit" class="form-control">Cadastrar</button>
                             </div>
                         </div>
-                    </div>
+                    </form>
 
                     <div class="col-12">
                         <hr class="w-100">

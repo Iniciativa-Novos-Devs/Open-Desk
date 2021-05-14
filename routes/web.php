@@ -43,6 +43,7 @@ Route::group(['prefix' => 'painel'], function () {
 
     //-----------------------------------------------------------------------------------
     Route::get('/chamados', [ChamadoController::class, 'index'])->name('chamados_index');
+    Route::get('/chamados/add', [ChamadoController::class, 'add'])->name('chamados_add');
     Route::get('/chamados/{chamado_id}/{chamado_slug?}', [ChamadoController::class, 'show'])->name('chamados_show');
 
 

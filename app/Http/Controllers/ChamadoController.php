@@ -57,4 +57,9 @@ class ChamadoController extends Controller
             'historico' => $historico,
         ]);
     }
+
+    public function add(Request $request)
+    {
+        return view('chamados.form');
+    }
 }

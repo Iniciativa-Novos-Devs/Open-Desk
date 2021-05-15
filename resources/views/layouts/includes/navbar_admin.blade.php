@@ -17,12 +17,9 @@
                         Chamados
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <li><a class="dropdown-item" href="#">Abrir Chamado</a></li>
-                        <li><a class="dropdown-item" href="#">Visualizar Chamado</a></li>
+                        <li><a class="dropdown-item" href="{{ route('chamados_add') }}">Abrir Chamado</a></li>
                         <li><a class="dropdown-item" href="#">Atender chamados</a></li>
-
                     </ul>
-
 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
@@ -38,16 +35,7 @@
                         <li><a class="dropdown-item" href="{{  route('problemas_index') }}">Problemas</a></li>
                         <li><a class="dropdown-item" href="#">Atendentes</a></li>
                         <li><a class="dropdown-item" href="#">Visualizar chamado</a></li>
-
                     </ul>
-                </li>
-
-                <li class="nav-item">
-                <li><a class="nav-link" href="{{ route('areas_index') }}">Áreas</a></li>
-                </li>
-
-                <li class="nav-item">
-                <li><a class="nav-link" href="{{ route('atividades_index') }}">Atividades</a></li>
                 </li>
             </ul>
         </div>

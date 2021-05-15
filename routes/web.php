@@ -54,7 +54,7 @@ Route::group(['prefix' => 'painel'], function () {
     Route::get('/problemas/delete/{atividade_id}', [ProblemaController::class, 'delete'])->name('problemas_delete');
     Route::post('/problemas/store', [ProblemaController::class, 'store'])->name('problemas_store');
 
-
+//TODO corrigir problemas para add problema
 
 });
 

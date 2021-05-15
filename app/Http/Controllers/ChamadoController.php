@@ -61,8 +61,6 @@ class ChamadoController extends Controller
 
     public function add(Request $request)
     {
-        return view('chamados.form', [
-            'problemas' => Problema::all(),
-        ]);
+        return view('chamados.form');
     }
 }

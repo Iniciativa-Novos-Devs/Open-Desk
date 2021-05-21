@@ -30,7 +30,7 @@
 
     <div class="w-100">
         <h2>
-            {{ $atividade_atual && $atividade_atual_nome ? 'Problemas de '. $atividade_atual_nome : 'Todas os Problemas' }}
+            {{ $atividade_atual && $atividade_atual_nome ? 'Problemas de '. $atividade_atual_nome : 'Todos os Problemas' }}
         </h2>
     </div>
 
@@ -68,9 +68,10 @@
                     @foreach ($problemas as $problema )
                     <tr>
                         <td scope="row">{{ $problema->id }}</td>
-                        <td>{{ $problema->descricao }}</td>
-                        <td>
-                            {{ $problema->atividade_area_id }}
+                        <td title="{{ $problema->descricao }}">
+                            {{ \Str::limit($problema->descricao, 25, '...') }}
+                        <td title="{{ $problema->atividade->nome }}">
+                            {{ \Str::limit($problema->atividade->nome, 20, '...') }}
                             <button type="button" class="btn btn-sm btn-info outline-none p-0 px-1"
                                 wire:click="changeAtividadeAtual({{ $problema->atividade_area_id }})"
                                 title="Filtrar por atividade {{ $problema->atividade_area_id }}">

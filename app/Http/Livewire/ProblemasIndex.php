@@ -51,4 +51,12 @@ class ProblemasIndex extends Component
         $this->order_by     = in_array($order_by, $accepted_order_by) ? $order_by : 'id';
         $this->order_dir    = $this->order_dir == 'DESC' ? 'ASC' : 'DESC';
     }
+
+    public function changeAtividadeAtual($atividade_atual)
+    {
+        if(!is_numeric($atividade_atual))
+            return;
+        
+        $this->atividade_atual = (int) $atividade_atual;
+    }
 }

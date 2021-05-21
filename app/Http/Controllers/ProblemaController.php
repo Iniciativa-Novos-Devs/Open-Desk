@@ -15,13 +15,13 @@ class ProblemaController extends Controller
         ]);
     }
 
-    public function add($atividade_id = null)
+    public function add($atividade_id)
     {
         $atividades = Atividade::select('id', 'nome')->get();
 
         return view('problemas.add', [
-            'atividades' => $atividades,
-            'atividade_id' => $atividade_id,
+            'atividades'    => $atividades,
+            'atividade_id'  => $atividade_id,
         ]);
     }
 
@@ -37,7 +37,7 @@ class ProblemaController extends Controller
             'descricao'         => $request->input('descricao'),
         ]);
 
-        return redirect()->route('problemas_index')->with('success', 'Problema criado com sucesso');
+        return redirect()->route('problemas_index', $request->input('atividade_id'))->with('success', 'Problema criado com sucesso');
     }
 
     public function delete($problema_id)

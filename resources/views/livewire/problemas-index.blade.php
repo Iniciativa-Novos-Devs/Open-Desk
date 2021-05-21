@@ -1,25 +1,36 @@
 <div class='w-100'>
-    <label for="seletor_atividade" class="w-100"> Filtrar por Atividade
-        <select class="form-select" aria-label="Selecione uma Atividade" id='seletor_atividade'
-            wire:model="atividade_atual"
-        >
-            <option value=''>Selecione uma Atividade</option>
-            @foreach ( $atividades as $atividade )
-            <option value="{{ $atividade->id }}">
-                {{ $atividade->nome }}
-            </option>
-            @endforeach
-        </select>
-    </label>
+    <div class="row mb-3">
+        <div class="col-6">
+            <label for="seletor_atividade" class="w-100"> Filtrar por Atividade
+                <select class="form-select" aria-label="Selecione uma Atividade" id='seletor_atividade'
+                    wire:model="atividade_atual"
+                >
+                    <option value=''>Selecione uma Atividade</option>
+                    @foreach ( $atividades as $atividade )
+                    <option value="{{ $atividade->id }}">
+                        {{ $atividade->nome }}
+                    </option>
+                    @endforeach
+                </select>
+            </label>
+        </div>
+
+        <div class="col-6">
+            <div class="d-flex pt-2">
+                @if($atividade_atual && is_numeric($atividade_atual))
+                <a href="{{ route('problemas_add', $atividade_atual) }}" class="btn btn-sm btn-info mt-3">Criar problema</a>
+                @endif
+            </div>
+        </div>
+    </div>
 
     @php
         $atividade_atual_nome = $problemas->first()->atividade->nome ?? '';
     @endphp
 
-    <div>
+    <div class="w-100">
         <h2>
             {{ $atividade_atual && $atividade_atual_nome ? 'Problemas de '. $atividade_atual_nome : 'Todas os Problemas' }}
-            <a href="{{ route('problemas_add') }}" class="btn btn-sm btn-outline-info">Criar problema</a>
         </h2>
     </div>
 
@@ -58,7 +69,14 @@
                     <tr>
                         <td scope="row">{{ $problema->id }}</td>
                         <td>{{ $problema->descricao }}</td>
-                        <td>{{ $problema->atividade_area_id }}</td>
+                        <td>
+                            {{ $problema->atividade_area_id }}
+                            <button type="button" class="btn btn-sm btn-info outline-none p-0 px-1"
+                                wire:click="changeAtividadeAtual({{ $problema->atividade_area_id }})"
+                                title="Filtrar por atividade {{ $problema->atividade_area_id }}">
+                                <i class="bi bi-funnel outline-none"></i>
+                            </button>
+                        </td>
                         <td>{{ $problema->created_at }}</td>
                         <td>
                             <a href="{{ route('problemas_edit', $problema->id) }}" class="btn btn-sm btn-outline-info">Editar</a>

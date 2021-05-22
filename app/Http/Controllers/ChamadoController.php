@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Chamado;
-use App\Models\Problema;
+use App\Models\Usuario;
 use Illuminate\Http\Request;
 
 class ChamadoController extends Controller
 {
     public function index(Request $request)
     {
-        # code...
+        return 'aqui é "chamados_index" '
+        .'<a href="'. route('chamados_add') .'">Adicionar chamado</a>';
     }
 
     public function show($chamado_id)
@@ -67,28 +68,44 @@ class ChamadoController extends Controller
 
     public function store(Request $request)
     {
+        /**
+         //TODO fazer validação de usuários aqui
+         //permitir que um chamado seja criado por um atendente enviando um udentificador desse usuário
+
+         $user       = auth()->user();
+
+         if(!$user)
+             return redirect()->route('chamados_index')->with('success', 'Apenas usuario sem permissão para criar chamados');
+
+         $usuario = Usuario::where('email', $user->email)->first();
+
+         if(!$usuario)
+             return redirect()->route('chamados_index')->with('success', 'Apenas usuario sem permissão para criar chamados');
+
+         $usuario_id = $usuario->id;
+         */
+
+        $usuario_id = 1; //TODO fazer validação de usuários aqui
+
         $request->validate([
-            'tipo_problema_id'  => 'required|numeric|exists:hd_tipo_problemas,id',
-            'area_id'           => 'required|numeric|exists:hd_areas,id',
             'problema_id'       => 'required|numeric|exists:hd_problemas,id',
-            'usuario_id'        => 'required|numeric|exists:hd_usuarios,id',
-            'imagem_id'         => 'nullable|numeric|exists:hd_imagens,id',
             'observacao'        => 'required|min:10|max:500',
-            'versao'            => 'required|string|min:10',
         ]);
 
-        Chamado::create([
-            'tipo_problema_id'  => $request->input('tipo_problema_id'),
-            'area_id'           => $request->input('area_id'),
+        $novo_chamado = [
             'problema_id'       => $request->input('problema_id'),
-            'usuario_id'        => $request->input('usuario_id'),
-            'imagem_id'         => $request->input('imagem_id'),
             'observacao'        => $request->input('observacao'),
-            'versao'            => $request->input('versao'),
-            'status_id'         => 1, //TODO CRIAR CLASSE PARA ENUM  E APAGAR A TABELA STATUS
-        ]);
+        ];
 
-        return redirect()->route('atividades_index')->with('success', 'Atividade criada com sucesso');
+        $novo_chamado['tipo_problema_id'] = null;
+        $novo_chamado['usuario_id']       = $usuario_id;
+        $novo_chamado['status']           = 1;            //TODO CRIAR CLASSE PARA ENUM  E APAGAR A TABELA STATUS
+        $novo_chamado['versao']           = 1;            //TODO CRIAR CLASSE PARA ENUM  E APAGAR A TABELA STATUS
+        $novo_chamado['anexos']           = null;         //TODO No futuro aceitar varios anexos
+
+        Chamado::create($novo_chamado);
+
+        return redirect()->route('chamados_index')->with('success', 'Chamado criado com sucesso');
     }
 
 }

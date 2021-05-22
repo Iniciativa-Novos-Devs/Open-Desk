@@ -10,9 +10,12 @@ class ChamadoProblemaAreaSelect extends Component
 {
     public $atividades_area;
     public $atividade_id = null;
+    public $problema_id = null;
 
     public function mount()
     {
+        $this->atividade_id     = old('atividade_id') ?? null;
+        $this->problema_id      = old('problema_id')  ?? null;
         $this->atividades_area  = Atividade::select('id', 'nome', 'area_id')->get();
     }
 

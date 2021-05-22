@@ -7,7 +7,7 @@ use App\Models\Area;
 use App\Models\Atividade;
 use Illuminate\Database\Seeder;
 
-class AtiviadeSeeder extends Seeder
+class AtividadeSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -23,11 +23,13 @@ class AtiviadeSeeder extends Seeder
             if(!$areas)
                 return;
 
-            foreach (range(1, 50) as $k)
+            $areas_array = $areas->toArray();
+
+            foreach (range(1, 10) as $k)
             {
-                $area = (Arr::random($areas->toArray()));
+                $area = (Arr::random($areas_array));
                 $atividade = [
-                    'nome'      => 'Atividade fake '. $area['nome'] .' '. \Str::random(10),
+                    'nome'      => 'Atividade fake '. $area['nome'] .' '. \Str::random(5),
                     'area_id'   => $area['id'],
                 ];
 

@@ -14,7 +14,7 @@ class AreaSeeder extends Seeder
      */
     public function run()
     {
-        if(env('APP_DEBUG'))
+        if(env('APP_ENV') == 'local')
         {
             $areas = [
                 [

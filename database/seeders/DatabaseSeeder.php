@@ -19,7 +19,9 @@ class DatabaseSeeder extends Seeder
         if(env('APP_DEBUG'))//Seeders apenas de dev
         {
             $this->call(AreaSeeder::class);
-            $this->call(AtiviadeSeeder::class);
+            $this->call(TipoProblemaSeeder::class);
+            $this->call(ProblemaSeeder::class);
+            $this->call(AtividadeSeeder::class);
         }
     }
 }

@@ -18,7 +18,10 @@
         <div class="row p-0 m-0">
             <div class="col-8 mt-0 _bg-danger">
                 <div class="row">
-                    <form class="col-12">
+                    <form class="col-12" method="POST" action="{{ route('chamados_store') }}">
+
+                        @csrf
+
                         @livewire('chamado-problema-area-select')
 
                         <div class="row">

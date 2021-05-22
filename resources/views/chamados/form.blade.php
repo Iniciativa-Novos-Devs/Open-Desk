@@ -23,11 +23,11 @@
 
                         <div class="row">
                             <div class="col-12 my-3">
-                                <textarea name="" id="" cols="30" rows="10" class="form-control template-ds"></textarea>
+                                <textarea name="observacao" id="" cols="30" rows="10" class="form-control template-ds"></textarea>
                             </div>
 
                             <div class="col-8 my-3">
-                                <input type="file" class="form-control" name="" id="">
+                                <input type="file" class="form-control" name="imagem_id" disabled id="">
                             </div>
 
                             <div class="col-4 my-3">

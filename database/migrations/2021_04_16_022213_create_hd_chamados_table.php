@@ -23,7 +23,7 @@ class CreateHdChamadosTable extends Migration
             $table->unsignedBigInteger('usuario_id')->index('hd_chamados_usuario_id_foreign');
             $table->unsignedBigInteger('imagem_id')->nullable();
             $table->unsignedBigInteger('status_id')->index('hd_chamados_status_id_foreign');
-            $table->longText('observacao')->nullable();
+            $table->longText('observacao');
             $table->string('versao', 10)->nullable();
         });
     }

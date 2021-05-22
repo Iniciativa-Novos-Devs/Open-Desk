@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Chamado;
 use App\Models\Problema;
 use Illuminate\Http\Request;
 
@@ -63,4 +64,31 @@ class ChamadoController extends Controller
     {
         return view('chamados.form');
     }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'tipo_problema_id'  => 'required|numeric|exists:hd_tipo_problemas,id',
+            'area_id'           => 'required|numeric|exists:hd_areas,id',
+            'problema_id'       => 'required|numeric|exists:hd_problemas,id',
+            'usuario_id'        => 'required|numeric|exists:hd_usuarios,id',
+            'imagem_id'         => 'nullable|numeric|exists:hd_imagens,id',
+            'observacao'        => 'required|min:10|max:500',
+            'versao'            => 'required|string|min:10',
+        ]);
+
+        Chamado::create([
+            'tipo_problema_id'  => $request->input('tipo_problema_id'),
+            'area_id'           => $request->input('area_id'),
+            'problema_id'       => $request->input('problema_id'),
+            'usuario_id'        => $request->input('usuario_id'),
+            'imagem_id'         => $request->input('imagem_id'),
+            'observacao'        => $request->input('observacao'),
+            'versao'            => $request->input('versao'),
+            'status_id'         => 1, //TODO CRIAR CLASSE PARA ENUM  E APAGAR A TABELA STATUS
+        ]);
+
+        return redirect()->route('atividades_index')->with('success', 'Atividade criada com sucesso');
+    }
+
 }

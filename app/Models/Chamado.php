@@ -14,5 +14,16 @@ class Chamado extends Model
     protected $dates = [
         'deleted_at'
     ];
-    
+
+    protected $fillable = [
+        'tipo_problema_id',
+        'area_id',
+        'problema_id',
+        'usuario_id',
+        'imagem_id',
+        'status_id',
+        'observacao',
+        'versao',
+    ];
+
 }

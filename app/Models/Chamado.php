@@ -17,9 +17,9 @@ class Chamado extends Model
         'deleted_at',
     ];
 
-    // protected $casts = [
-    //     'status' => 'integer',
-    // ];
+    protected $casts = [
+        'status' => 'integer',
+    ];
 
     protected $fillable = [
         'tipo_problema_id',

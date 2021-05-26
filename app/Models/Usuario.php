@@ -11,6 +11,8 @@ class Usuario extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    protected $table = 'hd_usuarios';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -20,6 +22,11 @@ class Usuario extends Authenticatable
         'name',
         'email',
         'password',
+        'email_verified_at',
+        'telefone_1',
+        'telefone_1_wa',
+        'ue',
+        'versao',
     ];
 
     /**
@@ -29,7 +36,6 @@ class Usuario extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
     /**
@@ -39,5 +45,16 @@ class Usuario extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'telefone_1_wa'     => 'boolean',
     ];
+
+    /**
+     * Get all of the comments for the Usuario
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function chamados()
+    {
+        return $this->hasMany(Chamado::class, 'usuario_id', 'id');
+    }
 }

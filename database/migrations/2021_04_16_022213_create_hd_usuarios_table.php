@@ -20,10 +20,10 @@ class CreateHdUsuariosTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->string('telefone_1');
-            $table->tinyInteger('telefone_1_wa');
-            $table->string('ue')->index('hd_usuarios_ue_foreign');
+            $table->string('password')->nullable();
+            $table->string('telefone_1')->nullable();
+            $table->boolean('telefone_1_wa')->nullable()->default(false);
+            $table->string('ue')->nullable()->index('hd_usuarios_ue_foreign');
             $table->string('versao', 10)->nullable();
         });
     }

@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             $this->call(TipoProblemaSeeder::class);
             $this->call(ProblemaSeeder::class);
             $this->call(AtividadeSeeder::class);
+            $this->call(UsuarioSeeder::class);
         }
     }
 }

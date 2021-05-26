@@ -45,35 +45,12 @@
 
                     <div class="col-12">
                         <div class="row">
-                            <div class="col-12 mb-3">
-                                <select class="form-select" aria-label="Default select example">
-                                    <option selected>Open this select menu</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                </select>
+                            <div class="col-12">
+                                @livewire('chamado-list', ['max_limit_start' => 5,])
                             </div>
                         </div>
 
-                        <table class="table">
-                            <tbody>
-                                <tr>
-                                    <th>head</th>
-                                    <th>head</th>
-                                    <th>head</th>
-                                </tr>
-                                <tr>
-                                    <td>value</td>
-                                    <td>value</td>
-                                    <td>value</td>
-                                </tr>
-                                <tr>
-                                    <td>value</td>
-                                    <td>value</td>
-                                    <td>value</td>
-                                </tr>
-                            </tbody>
-                        </table>
+
                     </div>
                 </div>
             </div>
@@ -117,6 +94,5 @@
             </div>
         </div>
     </div>
-
 
 @endsection

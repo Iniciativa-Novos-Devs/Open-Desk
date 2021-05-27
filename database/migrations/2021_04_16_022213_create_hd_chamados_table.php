@@ -24,6 +24,10 @@ class CreateHdChamadosTable extends Migration
             $table->unsignedBigInteger('status')->index('hd_chamados_status');
             $table->longText('observacao');
             $table->string('versao', 10)->nullable();
+
+            // $table->foreign('tipo_problema_id')->references('id')->on('hd_tipo_problemas')->onUpdate('RESTRICT')->onDelete('CASCADE');
+            // $table->foreign('problema_id')->references('id')->on('hd_problemas')->onUpdate('RESTRICT')->onDelete('CASCADE');
+            // $table->foreign('usuario_id')->references('id')->on('hd_usuarios')->onUpdate('RESTRICT')->onDelete('CASCADE');
         });
     }
 

@@ -20,8 +20,9 @@ class DatabaseSeeder extends Seeder
         {
             $this->call(AreaSeeder::class);
             $this->call(TipoProblemaSeeder::class);
-            $this->call(ProblemaSeeder::class);
             $this->call(AtividadeSeeder::class);
+            $this->call(ProblemaSeeder::class);
+            $this->call(UnidadeSeeder::class);
             $this->call(UsuarioSeeder::class);
         }
     }

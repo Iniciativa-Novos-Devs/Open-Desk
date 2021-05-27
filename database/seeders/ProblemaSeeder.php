@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Problema;
-use App\Models\TipoProblema;
+use App\Models\Atividade;
 use Illuminate\Database\Seeder;
 
 class ProblemaSeeder extends Seeder
@@ -15,21 +15,26 @@ class ProblemaSeeder extends Seeder
      */
     public function run()
     {
-        $tipo_problemas = TipoProblema::select('id')->limit(30)->get();
+        $atividades = Atividade::select('id')->limit(30)->get();
 
-        if(!$tipo_problemas)
+        if(!$atividades)
             return;
 
-        $tipo_problemas_array = $tipo_problemas->toArray();
+        $atividades_array = $atividades->toArray();
 
-        foreach (range(1, 20) as $i)
+        if($atividades_array)
         {
-            $tipo_problema = (\Arr::random($tipo_problemas_array));
+            foreach (range(1, 20) as $i)
+            {
+                $atividade = (\Arr::random($atividades_array));
 
-            Problema::create([
-                'descricao'   =>  'Problema '. \Str::random(8),
-                'atividade_area_id' => $tipo_problema['id'],
-            ]);
-        }
+                Problema::create([
+                    'descricao'         => 'Problema '. \Str::random(8),
+                    'atividade_area_id' => $atividade['id'],
+                ]);
+            }
+        }else
+        dump(PHP_EOL.'Nenhuma atividade encontrada. '. __FILE__.':'.__LINE__.PHP_EOL);
+
     }
 }

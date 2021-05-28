@@ -14,28 +14,23 @@ class AreaSeeder extends Seeder
      */
     public function run()
     {
-        if(env('APP_ENV') == 'local')
+        $areas = [
+            [
+                'sigla'  => 'DPAT',
+                'nome'   => 'Patrimônio',
+            ],
+            [
+                'sigla'  => 'NTC',
+                'nome'   => 'Núcleo de tomada de contas',
+            ],
+        ];
+
+        foreach ($areas as $area)
         {
-            $areas = [
-                [
-                    'sigla'  => 'DPAT',
-                    'nome'   => 'Patrimônio',
-                ],
-                [
-                    'sigla'  => 'NTC',
-                    'nome'   => 'Núcleo de tomada de contas',
-                ],
-            ];
-
-            foreach ($areas as $area)
-            {
-                Area::updateOrCreate(
-                    ['sigla' => $area['sigla']],
-                    $area
-                );
-            }
-
+            Area::updateOrCreate(
+                ['sigla' => $area['sigla']],
+                $area
+            );
         }
-
     }
 }

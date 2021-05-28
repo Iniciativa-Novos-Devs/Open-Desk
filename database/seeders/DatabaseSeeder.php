@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
         // $this->call(UserSeeder::class);// 7.x e anteriores
 
-        if(env('APP_DEBUG'))//Seeders apenas de dev
+        if(env('APP_ENV') != 'production')//Seeders apenas de ambiente for diferente de production
         {
             $this->call(AreaSeeder::class);
             $this->call(TipoProblemaSeeder::class);

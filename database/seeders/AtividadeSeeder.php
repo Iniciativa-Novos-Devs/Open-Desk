@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Arr;
+use Str;
 use App\Models\Area;
 use App\Models\Atividade;
 use Illuminate\Database\Seeder;
@@ -16,30 +17,25 @@ class AtividadeSeeder extends Seeder
      */
     public function run()
     {
-        if(env('APP_DEBUG'))
+        $areas = Area::select('id')->limit(30)->get();
+
+        if(!$areas)
+            return;
+
+        $areas_array = $areas->toArray();
+
+        if($areas_array)
         {
-            $areas = Area::limit(10)->get();
-
-            if(!$areas)
-                return;
-
-            $areas_array = $areas->toArray();
-
-            foreach (range(1, 10) as $k)
+            foreach (range(1, 20) as $i)
             {
-                $area = (Arr::random($areas_array));
-                $atividade = [
-                    'nome'      => 'Atividade fake '. $area['nome'] .' '. \Str::random(5),
-                    'area_id'   => $area['id'],
-                ];
+                $area = (\Arr::random($areas_array));
 
-                Atividade::updateOrCreate(
-                    ['nome' => $atividade['nome']],
-                    $atividade
-                );
+                Atividade::create([
+                    'nome'    => Str::random(5),
+                    'area_id' => $area['id'],
+                ]);
             }
-
-        }
-
+        }else
+        dump(PHP_EOL.'Nenhuma area encontrada. '. __FILE__.':'.__LINE__.PHP_EOL);
     }
 }

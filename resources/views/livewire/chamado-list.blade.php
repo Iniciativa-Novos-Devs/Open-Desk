@@ -2,12 +2,11 @@
     <div class="col-12 ">
         <div class="row">
             <div class="col-8">
-                <select class="form-select" aria-label="Default select example">
-                    <option selected value="">Todos os chamados</option>
-                    <option value="1">Abertos</option>
-                    <option value="2">Pendente</option>
-                    <option value="3">Em atendimento</option>
-                    <option value="4">Fechados</option>
+                <select class="form-select" aria-label="Default select example" wire:model="selected_status">
+                    <option value="">Todos os chamados</option>
+                    @foreach (\App\Enums\StatusEnum::$humans as $enum => $status)
+                    <option value="{{ $enum }}">{{ $status }}</option>
+                    @endforeach
                 </select>
             </div>
             <div class="col-4">

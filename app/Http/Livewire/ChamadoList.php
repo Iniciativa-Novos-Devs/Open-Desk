@@ -10,6 +10,10 @@ use App\Enums\StatusEnum;
 class ChamadoList extends Component
 {
     protected $select_items;
+
+    public $order_by      = 'id';
+    public $order_dir     = 'DESC';
+    public $items_by_page = 10;
     public $max_limit_start;
     public $selected_status;
 
@@ -29,7 +33,12 @@ class ChamadoList extends Component
 
     protected function getChamados()
     {
-        $chamados = Chamado::limit($this->max_limit_start);
+        $chamados = Chamado::limit($this->max_limit_start)
+                    ->orderBy($this->order_by, $this->order_dir)
+                    ->with(['usuario' => function($query) {
+                        $query->select('id','name');
+                    }]);
+
         $chamados = $chamados->select($this->getSelectItems([], true));
 
         $usuario = $this->getUsuario();
@@ -64,5 +73,16 @@ class ChamadoList extends Component
 
         if($return_it)
             return $this->select_items;
+    }
+
+    public function changeOrderBy(string $order_by = null)
+    {
+        //Valida se um campo pelo qual deseja ordenar existe na model
+        $model              = new Chamado;
+        $dates              = array_merge(array_keys($model->getAttributes()), $model->getDates());
+        $accepted_order_by  = array_merge($model->getFillable(), $dates);
+
+        $this->order_by     = in_array($order_by, $accepted_order_by) ? $order_by : 'id';
+        $this->order_dir    = $this->order_dir == 'DESC' ? 'ASC' : 'DESC';
     }
 }

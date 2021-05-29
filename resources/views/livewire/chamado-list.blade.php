@@ -9,9 +9,9 @@
                     @endforeach
                 </select>
             </div>
-            <div class="col-4">
+            {{-- <div class="col-4">
                 <input class="form-control" id="chamados_search" placeholder="Digite para pesquisar...">
-            </div>
+            </div> --}}
         </div>
     </div>
 
@@ -23,17 +23,27 @@
         <table class="table">
             <tbody>
                 <tr>
-                    <th>#</th>
-                    <th>Usuario</th>
-                    <th>Observação</th>
-                    <th>Criação</th>
-                    <th>Estado</th>
+                    <th scope="col" class="cursor-pointer" wire:click="changeOrderBy('id')" >
+                    #
+                    </th>
+                    <th scope="col" class="cursor-pointer" wire:click="changeOrderBy('usuario_id')" >
+                    Usuario
+                    </th>
+                    <th scope="col" class="cursor-pointer" wire:click="changeOrderBy('observacao')" >
+                    Observação
+                    </th>
+                    <th scope="col" class="cursor-pointer" wire:click="changeOrderBy('created_at')" >
+                    Criação
+                    </th>
+                    <th scope="col" class="cursor-pointer" wire:click="changeOrderBy('status')" >
+                    Estado
+                    </th>
                 </tr>
 
                 @foreach ($chamados as $chamado)
                 <tr>
                     <td>{{ $chamado->id}}</td>
-                    <td>{{ $chamado->usuario_id}}</td>
+                    <td>{{ $chamado->usuario->name }}</td>
                     <td title="{{ \Str::limit($chamado->observacao, 180, '...') }}">
                         {{ \Str::limit($chamado->observacao, 40, '...') }}
                     </td>

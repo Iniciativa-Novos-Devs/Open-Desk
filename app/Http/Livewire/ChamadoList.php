@@ -14,26 +14,26 @@ class ChamadoList extends Component
     public $order_by      = 'id';
     public $order_dir     = 'DESC';
     public $items_by_page = 10;
-    public $max_limit_start;
     public $selected_status;
 
-    public function mount(array $select = [], int $max_limit_start = 10)
+    public function mount(array $select = [], int $items_by_page = 10)
     {
+        // dd($items_by_page);
         $this->select_items     = $this->getSelectItems($select, true);
-        $this->max_limit_start  = $max_limit_start > 0 && $max_limit_start < 200 ? $max_limit_start : 10;
+        $this->items_by_page  = $items_by_page > 0 && $items_by_page < 200 ? $items_by_page : 10;
         $this->selected_status  = null;
     }
 
     public function render()
     {
         return view('livewire.chamado-list', [
-            'chamados' => $this->getChamados()->paginate(10),
+            'chamados' => $this->getChamados()->paginate($this->items_by_page),
         ]);
     }
 
     protected function getChamados()
     {
-        $chamados = Chamado::limit($this->max_limit_start)
+        $chamados = Chamado::limit($this->items_by_page)
                     ->orderBy($this->order_by, $this->order_dir)
                     ->with(['usuario' => function($query) {
                         $query->select('id','name');

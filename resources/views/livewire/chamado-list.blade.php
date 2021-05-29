@@ -53,6 +53,33 @@
                 @endforeach
 
             </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="100%">
+                        <div class="row m-0 p-0">
+                            <div class="col-6 mt-3">
+                                {{ $chamados->links('livewire::bootstrap') }}
+                            </div>
+                            <div class="col-4 align-middle mt-3">
+                                <span class="w-100 align-middle">
+                                    <strong>{{ $items_by_page >= $chamados->total() ? $chamados->total() : $items_by_page }}</strong>
+                                    itens do total de
+                                    <strong>{{ $chamados->total().'' }} </strong>
+                                </span>
+                            </div>
+                            <div class="col-2 mt-3 text-right">
+                                <select class="custom-select custom-select-sm m-1 p-1"
+                                    wire:model="items_by_page"
+                                >
+                                @foreach ([ 5, 10, 20, 30, 50, 100, ] as $qtd)
+                                    <option value="{{ $qtd }}">{{ $qtd }}</option>
+                                @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
         </table>
     </div>
 </div>

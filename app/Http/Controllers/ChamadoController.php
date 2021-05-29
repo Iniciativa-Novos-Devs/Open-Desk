@@ -10,8 +10,7 @@ class ChamadoController extends Controller
 {
     public function index(Request $request)
     {
-        return 'aqui é "chamados_index" '
-        .'<a href="'. route('chamados_add') .'">Adicionar chamado</a>';
+        return view('chamados.index');
     }
 
     public function show($chamado_id)
@@ -104,6 +103,9 @@ class ChamadoController extends Controller
         $novo_chamado['anexos']           = null;         //TODO No futuro aceitar varios anexos
 
         Chamado::create($novo_chamado);
+
+        if($request->input('create_another') == 'yes')
+            return redirect()->back()->with('success', 'Chamado criado com sucesso');
 
         return redirect()->route('chamados_index')->with('success', 'Chamado criado com sucesso');
     }

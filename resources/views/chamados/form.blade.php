@@ -29,12 +29,21 @@
                                 <textarea name="observacao" id="" cols="30" rows="10" class="form-control template-ds"></textarea>
                             </div>
 
-                            <div class="col-8 my-3">
+                            <div class="col-12 my-3">
                                 <input type="file" class="form-control" name="imagem_id" disabled id="">
                             </div>
 
-                            <div class="col-4 my-3">
-                                <button type="submit" class="form-control">Cadastrar</button>
+                            <div class="col-12 row">
+                                <div class="col-4">
+                                </div>
+
+                                <div class="col-4">
+                                    <button type="submit" name="create_another" id="create_another" value="yes" class="form-control">Cadastrar e voltar</button>
+                                </div>
+
+                                <div class="col-4">
+                                    <button type="submit" class="form-control">Cadastrar</button>
+                                </div>
                             </div>
                         </div>
                     </form>
@@ -46,11 +55,9 @@
                     <div class="col-12">
                         <div class="row">
                             <div class="col-12">
-                                @livewire('chamado-list', ['max_limit_start' => 5,])
+                                @livewire('chamado-list', ['items_by_page' => 10,])
                             </div>
                         </div>
-
-
                     </div>
                 </div>
             </div>

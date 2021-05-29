@@ -18,6 +18,7 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <li><a class="dropdown-item" href="{{ route('chamados_add') }}">Abrir Chamado</a></li>
+                        <li><a class="dropdown-item" href="{{ route('chamados_index') }}">Listar chamados</a></li>
                         <li><a class="dropdown-item" href="#">Atender chamados</a></li>
                     </ul>
 

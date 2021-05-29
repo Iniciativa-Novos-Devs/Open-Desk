@@ -26,7 +26,9 @@
 
                         <div class="row">
                             <div class="col-12 my-3">
-                                <textarea name="observacao" id="" cols="30" rows="10" class="form-control template-ds"></textarea>
+                                <textarea name="observacao" id="observacao" cols="30" rows="10"
+                                    minlength="10"
+                                    class="form-control template-ds">{{ old('observacao') ?? null }}</textarea>
                             </div>
 
                             <div class="col-12 my-3">

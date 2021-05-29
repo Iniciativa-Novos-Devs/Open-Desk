@@ -57,3 +57,9 @@ Route::group(['prefix' => 'painel'], function () {
 
 });
 
+Route::get('teste', function(){
+    return view('emails.novo_chamado', [
+        'name' => 'Guilherme',
+    ]);
+});
+

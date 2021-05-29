@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Chamado;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
+use App\Mail\NovoChamadoMail;
+use Illuminate\Support\Facades\Mail;
 
 class ChamadoController extends Controller
 {
@@ -102,12 +104,25 @@ class ChamadoController extends Controller
         $novo_chamado['versao']           = 1;            //TODO CRIAR CLASSE PARA ENUM  E APAGAR A TABELA STATUS
         $novo_chamado['anexos']           = null;         //TODO No futuro aceitar varios anexos
 
-        Chamado::create($novo_chamado);
+        $chamado = Chamado::create($novo_chamado);
+
+        if(!$chamado)
+            return redirect()->route('chamados_index')->with('error', 'O chamado não pode ser criado');
+
+        $this->enviaEmailNovoChamado($chamado);
 
         if($request->input('create_another') == 'yes')
             return redirect()->back()->with('success', 'Chamado criado com sucesso');
 
         return redirect()->route('chamados_index')->with('success', 'Chamado criado com sucesso');
+    }
+
+    private function enviaEmailNovoChamado(Chamado $chamado)
+    {
+        $email = $chamado->usuario->email ?? null;
+
+        if($email)
+            Mail::to($email)->send(new NovoChamadoMail($chamado));
     }
 
 }

@@ -18,3 +18,4 @@ public/error_log
 _dev_dir
 
 /*ocker*
+/env_COMPOSER_CACHE_DIR/

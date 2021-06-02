@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\NovoChamadoMailJob;
 use App\Models\Chamado;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
@@ -109,7 +110,7 @@ class ChamadoController extends Controller
         if(!$chamado)
             return redirect()->route('chamados_index')->with('error', 'O chamado não pode ser criado');
 
-        $this->enviaEmailNovoChamado($chamado);
+        dispatch(new NovoChamadoMailJob($chamado));
 
         if($request->input('create_another') == 'yes')
             return redirect()->back()->with('success', 'Chamado criado com sucesso');
@@ -117,8 +118,11 @@ class ChamadoController extends Controller
         return redirect()->route('chamados_index')->with('success', 'Chamado criado com sucesso');
     }
 
-    private function enviaEmailNovoChamado(Chamado $chamado)
+    public static function enviaEmailNovoChamado(Chamado $chamado)
     {
+        sleep(3);
+        info('Alguma coisa aqui');
+        echo __LINE__;
         $email = $chamado->usuario->email ?? null;
 
         if($email)

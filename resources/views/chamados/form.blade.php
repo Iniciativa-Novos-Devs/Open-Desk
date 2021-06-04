@@ -79,35 +79,35 @@
                 <div class="row row p-0 m-0 mt-3">
                     <div class="col-12 mb-1 border faq-container px-0">
                         <select class="form-select mx-0 px-0" size="3" aria-label="size 3 select example">
-                            <option disabled>FAQ 01</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                            <option value="3">Three</option>
-                            <option value="3">Three</option>
-                            <option value="3">Three</option>
-                            <option value="3">Three</option>
-                            <option value="3">Three</option>
-                            <option value="3">Three</option>
-                            <option value="3">Three</option>
-                            <option value="3">Three</option>
+                            <option disabled>FAQ GERAL</option>
+                            <option value="1">Link para o FAQ1</option>
+                            <option value="2">Link para o FAQ2</option>
+                            <option value="3">Link para o FAQ3</option>
+                            <option value="4">Link para o FAQ4</option>
+                            <option value="5">Link para o FAQ5</option>
+                            <option value="6">Link para o FAQ6</option>
+                            <option value="7">Link para o FAQ7</option>
+                            <option value="8">Link para o FAQ8</option>
+                            <option value="9">Link para o FAQ9</option>
+                            <option value="10">Link para o FAQ10</option>
+                            <option value="11">Link para o FAQ11</option>
                         </select>
                     </div>
 
                     <div class="col-12 mb-1 border faq-container px-0">
                         <select class="form-select mx-0 px-0" size="3" aria-label="size 3 select example">
-                            <option disabled>FAQ 02</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                            <option value="3">Three</option>
-                            <option value="3">Three</option>
-                            <option value="3">Three</option>
-                            <option value="3">Three</option>
-                            <option value="3">Three</option>
-                            <option value="3">Three</option>
-                            <option value="3">Three</option>
-                            <option value="3">Three</option>
+                            <option disabled>FAQ ESPECÍFICO DA UNIDADE</option>
+                            <option value="1">Link para o FAQ1</option>
+                            <option value="2">Link para o FAQ2</option>
+                            <option value="3">Link para o FAQ3</option>
+                            <option value="4">Link para o FAQ4</option>
+                            <option value="5">Link para o FAQ5</option>
+                            <option value="6">Link para o FAQ6</option>
+                            <option value="7">Link para o FAQ7</option>
+                            <option value="8">Link para o FAQ8</option>
+                            <option value="9">Link para o FAQ9</option>
+                            <option value="10">Link para o FAQ10</option>
+                            <option value="11">Link para o FAQ11</option>
                         </select>
                     </div>
                 </div>

@@ -73,18 +73,29 @@ class ChamadoController extends Controller
          //TODO fazer validação de usuários aqui
          //permitir que um chamado seja criado por um atendente enviando um udentificador desse usuário
 
-         $user       = auth()->user();
+            $user       = auth()->user();
 
-         if(!$user)
-             return redirect()->route('chamados_index')->with('success', 'Apenas usuario sem permissão para criar chamados');
+            if(!$user)
+                return redirect()->route('chamados_index')->with('success', 'Apenas usuario sem permissão para criar chamados');
 
-         $usuario = Usuario::where('email', $user->email)->first();
+            $usuario = Usuario::where('email', $user->email)->first();
 
-         if(!$usuario)
-             return redirect()->route('chamados_index')->with('success', 'Apenas usuario sem permissão para criar chamados');
+            if(!$usuario)
+                return redirect()->route('chamados_index')->with('success', 'Apenas usuario sem permissão para criar chamados');
 
-         $usuario_id = $usuario->id;
-         */
+            $usuario_id = $usuario->id;
+        */
+
+        if ($request->hasFile('anexos'))
+            $anexos = AnexoController::storeMultiFiles($request->file('anexos'), 'anexos', [
+                'prefix_name'           => 'chamado',
+                'accepted_extensions'   => ['pdf', 'png', 'jpg', 'jpeg', 'PDF', 'PNG', 'JPG', 'JPEG'],
+                // 'restrito_a_grupos'     => [1,5,80],
+                // 'restrito_a_usuarios'   => [5],
+                // 'temporario'            => true,
+                // 'destruir_apos'         => date('Y-m-d H:i:s', strtotime(' +1 days')),
+                // 'created_by_id'         => 80,
+            ]);
 
         $usuario_id = 1; //TODO fazer validação de usuários aqui
 
@@ -102,7 +113,7 @@ class ChamadoController extends Controller
         $novo_chamado['usuario_id']       = $usuario_id;
         $novo_chamado['status']           = 1;            //TODO CRIAR CLASSE PARA ENUM  E APAGAR A TABELA STATUS
         $novo_chamado['versao']           = 1;            //TODO CRIAR CLASSE PARA ENUM  E APAGAR A TABELA STATUS
-        $novo_chamado['anexos']           = null;         //TODO No futuro aceitar varios anexos
+        $novo_chamado['anexos']           = $anexos ?? null;         //TODO No futuro aceitar varios anexos
 
         $chamado = Chamado::create($novo_chamado);
 

@@ -19,13 +19,14 @@ class Chamado extends Model
 
     protected $casts = [
         'status' => 'integer',
+        'anexos' => 'array',
     ];
 
     protected $fillable = [
         'tipo_problema_id',
         'problema_id',
         'usuario_id',
-        'imagem_id',
+        'anexos',
         'status',
         'observacao',
         'versao',

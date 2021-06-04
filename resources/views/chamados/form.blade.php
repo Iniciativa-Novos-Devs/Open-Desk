@@ -18,7 +18,7 @@
         <div class="row p-0 m-0">
             <div class="col-8 mt-0 _bg-danger">
                 <div class="row">
-                    <form class="col-12" method="POST" action="{{ route('chamados_store') }}">
+                    <form class="col-12" method="POST" action="{{ route('chamados_store') }}" enctype="multipart/form-data">
 
                         @csrf
 
@@ -32,7 +32,18 @@
                             </div>
 
                             <div class="col-12 my-3">
-                                <input type="file" class="form-control" name="imagem_id" disabled id="">
+                                <div class="row">
+                                    <div class="col-10">
+                                        <input type="file" class="form-control" name="anexos[]" id="anexo_1">
+                                    </div>
+                                    <div class="col-2">Adicionar</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-10">
+                                        <input type="file" class="form-control" name="anexos[]" id="anexo_2">
+                                    </div>
+                                    <div class="col-2">Adicionar</div>
+                                </div>
                             </div>
 
                             <div class="col-12 row">

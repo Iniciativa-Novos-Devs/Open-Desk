@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        // \App\Models\Usuario::factory(10)->create();
         // $this->call(UserSeeder::class);// 7.x e anteriores
 
         if(env('APP_ENV') != 'production')//Seeders apenas de ambiente for diferente de production

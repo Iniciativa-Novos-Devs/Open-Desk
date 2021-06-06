@@ -22,7 +22,7 @@ Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
-Route::group(['prefix' => 'painel'], function () {
+Route::group(['prefix' => 'painel', 'middleware' => ['auth']], function () {
     //-----------------------------------------------------------------------------------
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -58,8 +58,15 @@ Route::group(['prefix' => 'painel'], function () {
 });
 
 Route::get('teste', function(){
-    return view('emails.novo_chamado', [
-        'name' => 'Guilherme',
-    ]);
+    return Auth::user()->name;
+})->middleware(['auth']);
+
+Route::get('/', function () {
+    return view('welcome');
 });
 
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+require __DIR__.'/auth.php';

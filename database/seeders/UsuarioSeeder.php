@@ -25,22 +25,54 @@ class UsuarioSeeder extends Seeder
 
         if($unidades_array)
         {
-            foreach (range(1, 20) as $i)
-            {
-                $unidade = (\Arr::random($unidades_array));
-
-                Usuario::create([
-                    'name'              => 'Nome '.Str::random(6),
-                    'email'             => Str::random(6).'_fake_mail@domain.'.Str::random(3).'.com',
-                    'password'          => Str::random(10),
+            $usuarios = [
+                [
+                    'name'              => 'Admin',
+                    'email'             => 'adm@adm.com',
+                    'password'          => bcrypt('123'),
                     'email_verified_at' => now(),
                     'telefone_1'        => '41 9888888',
                     'telefone_1_wa'     => true,
-                    'ue'                => $unidade['ue'],
                     'versao'            => 1,
-                ]);
+                ],
+                [
+                    'name'              => 'Admin 2',
+                    'email'             => 'admin@mail.com',
+                    'password'          => bcrypt('power@123'),
+                    'email_verified_at' => now(),
+                    'telefone_1'        => '41 9888888',
+                    'telefone_1_wa'     => true,
+                    'versao'            => 1,
+                ],
+                [
+                    'name'              => 'Usuario 1',
+                    'email'             => 'usuario1@mail.com',
+                    'password'          => bcrypt('power@123'),
+                    'email_verified_at' => now(),
+                    'telefone_1'        => '41 9888888',
+                    'telefone_1_wa'     => true,
+                    'versao'            => 1,
+                ],
+                [
+                    'name'              => 'Usuario 2',
+                    'email'             => 'usuario2@mail.com',
+                    'password'          => bcrypt('power@123'),
+                    'email_verified_at' => now(),
+                    'telefone_1'        => '41 9888888',
+                    'telefone_1_wa'     => true,
+                    'versao'            => 1,
+                ],
+            ];
+
+            foreach ($usuarios as $usuario)
+            {
+
+                $unidade        = (\Arr::random($unidades_array));
+                $usuario['ue']  = $unidade['ue'];
+
+                Usuario::updateOrcreate(['email' => $usuario['email']], $usuario);
             }
         }else
-        dump(PHP_EOL.'Nenhuma unidade encontrada. '. __FILE__.':'.__LINE__.PHP_EOL);
+            dump(PHP_EOL.'Nenhuma unidade encontrada. '. __FILE__.':'.__LINE__.PHP_EOL);
     }
 }

@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class DashboardController extends Controller
+class PainelController extends Controller
 {
     public function index(Request $request)
     {
-        return redirect()->route('painel');
+        return view('dashboard.index');
     }
 }

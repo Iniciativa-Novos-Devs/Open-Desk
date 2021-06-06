@@ -4,6 +4,7 @@ use App\Http\Controllers\AreaController;
 use App\Http\Controllers\AtividadesController;
 use App\Http\Controllers\ChamadoController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PainelController;
 use App\Http\Controllers\ProblemaController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,13 +19,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return redirect()->route('dashboard');
-});
+Route::get('/', [DashboardController::class , 'index']);
+Route::get('/dashboard', [DashboardController::class , 'index'])->name('dashboard');
 
 Route::group(['prefix' => 'painel', 'middleware' => ['auth']], function () {
     //-----------------------------------------------------------------------------------
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/', [PainelController::class, 'index'])->name('painel');
 
 
     //-----------------------------------------------------------------------------------
@@ -61,12 +61,8 @@ Route::get('teste', function(){
     return Auth::user()->name;
 })->middleware(['auth']);
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth'])->name('dashboard');
 
 require __DIR__.'/auth.php';

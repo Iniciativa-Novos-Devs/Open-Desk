@@ -32,9 +32,9 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        $usuario_admin_local =  false; // Poderia pemitir se o usuario for admin não validar no CPS
+        $cps_enabled = config('cps.enabled', true);
 
-        if(!$usuario_admin_local)
+        if($cps_enabled)
             return redirect()->route('valida_usuario_cps')->with(['success' => 'Validação primária validada com sucesso. Favor colocar seu e-mail e senha do CPS']);
 
         return redirect()->intended(RouteServiceProvider::HOME);

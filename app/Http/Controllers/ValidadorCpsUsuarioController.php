@@ -56,9 +56,9 @@ class ValidadorCpsUsuarioController extends Controller
     public function fakeCpsResponse(Request $request)
     {
         $allowed_emails = [
-            'teste@email.com',
-            'teste2@email.com',
+            'usuario1@mail.com',
             'admin@mail.com',
+            'adm@adm.com',
         ];
 
         $request->validate([
@@ -76,6 +76,18 @@ class ValidadorCpsUsuarioController extends Controller
 
     public function secondLogin()
     {
+        $user = auth()->user();
+
+        if(!$user)
+            return redirect()->route('logout');
+
+        $allow_admin_without_2f = config('cps.allow_admin_without_2f', true);
+        $usuario_admin_local    = !! $user->app_admin ?? false;
+
+        // Caso permita que admin de app possa fazer login sem  validar no CPS.
+        if($allow_admin_without_2f && $usuario_admin_local)
+            return redirect()->intended(RouteServiceProvider::HOME);
+
         return view('auth.2flogin');
     }
 }

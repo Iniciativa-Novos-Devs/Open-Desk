@@ -27,6 +27,7 @@ class Usuario extends Authenticatable
         'telefone_1_wa',
         'ue',
         'versao',
+        'app_admin',
     ];
 
     /**
@@ -46,6 +47,7 @@ class Usuario extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'telefone_1_wa'     => 'boolean',
+        'app_admin'         => 'boolean',
     ];
 
     /**

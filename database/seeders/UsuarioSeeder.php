@@ -34,6 +34,7 @@ class UsuarioSeeder extends Seeder
                     'telefone_1'        => '41 9888888',
                     'telefone_1_wa'     => true,
                     'versao'            => 1,
+                    'app_admin'         => true,
                 ],
                 [
                     'name'              => 'Admin 2',
@@ -43,6 +44,7 @@ class UsuarioSeeder extends Seeder
                     'telefone_1'        => '41 9888888',
                     'telefone_1_wa'     => true,
                     'versao'            => 1,
+                    'app_admin'         => true,
                 ],
                 [
                     'name'              => 'Usuario 1',

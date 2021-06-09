@@ -7,7 +7,7 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarText">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul class="mb-2 navbar-nav me-auto mb-lg-0">
 
                 <li class="nav-item">
                     <a class="nav-link" aria-current="page" href="/">Principal</a>
@@ -40,11 +40,8 @@
                         <li><a class="dropdown-item" href="#">Visualizar chamado</a></li>
                     </ul>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Pricing</a>
-                </li>
             </ul>
-            <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+            <div class="order-3 navbar-collapse collapse w-100 dual-collapse2">
                 <ul class="navbar-nav ms-auto">
                     @auth
                         <li class="nav-item dropdown">

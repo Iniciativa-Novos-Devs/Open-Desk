@@ -6,6 +6,7 @@ use App\Http\Controllers\ChamadoController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PainelController;
 use App\Http\Controllers\ProblemaController;
+use App\Http\Controllers\ValidadorCpsUsuarioController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,7 +55,6 @@ Route::group(['prefix' => 'painel', 'middleware' => ['auth']], function () {
     Route::get('/problemas/edit/{atividade_id}', [ProblemaController::class, 'edit'])->name('problemas_edit');
     Route::get('/problemas/delete/{atividade_id}', [ProblemaController::class, 'delete'])->name('problemas_delete');
     Route::post('/problemas/store', [ProblemaController::class, 'store'])->name('problemas_store');
-
 });
 
 Route::get('teste', function(){
@@ -66,3 +66,7 @@ Route::get('teste', function(){
 // })->middleware(['auth'])->name('dashboard');
 
 require __DIR__.'/auth.php';
+
+Route::get('fake-cps', [ValidadorCpsUsuarioController::class, 'fakeCpsResponse'])->name('fake_url_valida_usuario_cps');
+Route::get('valida-cps', [ValidadorCpsUsuarioController::class, 'secondLogin'])->middleware('auth')->name('valida_usuario_cps');
+Route::post('valida-cps', [ValidadorCpsUsuarioController::class, 'validateCpsUser'])->middleware('auth');

@@ -31,7 +31,7 @@ class AtividadeSeeder extends Seeder
                 $area = (\Arr::random($areas_array));
 
                 Atividade::create([
-                    'nome'    => Str::random(5),
+                    'nome'    => 'Atividade '. Str::random(2),
                     'area_id' => $area['id'],
                 ]);
             }

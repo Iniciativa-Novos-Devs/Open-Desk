@@ -59,4 +59,9 @@ class Usuario extends Authenticatable
     {
         return $this->hasMany(Chamado::class, 'usuario_id', 'id');
     }
+
+    public function atividades()
+    {
+        return $this->belongsToMany(Atividade::class, 'hd_atividade_areas_usuarios', 'usuario_id', 'atividades_area_id');
+    }
 }

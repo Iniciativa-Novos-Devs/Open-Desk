@@ -16,4 +16,9 @@ class Area extends Model
         'nome',
     ];
 
+    public function atividades()
+    {
+        return $this->hasMany(Atividade::class, 'area_id');
+    }
+
 }

@@ -62,7 +62,7 @@ class Usuario extends Authenticatable
 
     public function atividades()
     {
-        return $this->belongsToMany(Atividade::class, 'hd_atividade_areas_usuarios', 'usuario_id', 'atividades_area_id');
+        return $this->belongsToMany(Atividade::class, 'hd_atividade_areas_usuarios', 'usuario_id', 'atividades_area_id')->withPivot('atividades_area_id');
     }
 
     public function roles()

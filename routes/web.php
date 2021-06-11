@@ -6,6 +6,8 @@ use App\Http\Controllers\ChamadoController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PainelController;
 use App\Http\Controllers\ProblemaController;
+use App\Http\Controllers\RoleManagerController;
+use App\Http\Controllers\UsuarioManagerController;
 use App\Http\Controllers\ValidadorCpsUsuarioController;
 use Illuminate\Support\Facades\Route;
 
@@ -50,11 +52,11 @@ Route::group(['prefix' => 'painel', 'middleware' => ['auth']], function () {
 
 
     //-----------------------------------------------------------------------------------
-    Route::get('/problemas/{atividade_id?}', [ProblemaController::class, 'index'])->name('problemas_index');
-    Route::get('/problemas/add/atividade/{atividade_id}', [ProblemaController::class, 'add'])->name('problemas_add');
-    Route::get('/problemas/edit/{atividade_id}', [ProblemaController::class, 'edit'])->name('problemas_edit');
-    Route::get('/problemas/delete/{atividade_id}', [ProblemaController::class, 'delete'])->name('problemas_delete');
-    Route::post('/problemas/store', [ProblemaController::class, 'store'])->name('problemas_store');
+    ProblemaController::routes();
+    //-----------------------------------------------------------------------------------
+    RoleManagerController::routes();
+    //-----------------------------------------------------------------------------------
+    UsuarioManagerController::routes();
 });
 
 Route::get('teste', function(){

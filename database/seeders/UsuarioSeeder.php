@@ -47,6 +47,16 @@ class UsuarioSeeder extends Seeder
                     'app_admin'         => true,
                 ],
                 [
+                    'name'              => 'Atendente 1',
+                    'email'             => 'atendente_1@mail.com',
+                    'password'          => bcrypt('power@123'),
+                    'email_verified_at' => now(),
+                    'telefone_1'        => '41 9888888',
+                    'telefone_1_wa'     => true,
+                    'versao'            => 1,
+                    'app_admin'         => true,
+                ],
+                [
                     'name'              => 'Usuario 1',
                     'email'             => 'usuario1@mail.com',
                     'password'          => bcrypt('power@123'),
@@ -58,6 +68,15 @@ class UsuarioSeeder extends Seeder
                 [
                     'name'              => 'Usuario 2',
                     'email'             => 'usuario2@mail.com',
+                    'password'          => bcrypt('power@123'),
+                    'email_verified_at' => now(),
+                    'telefone_1'        => '41 9888888',
+                    'telefone_1_wa'     => true,
+                    'versao'            => 1,
+                ],
+                [
+                    'name'              => 'Random Usuario 1',
+                    'email'             => \Str::random(7) .'@mail.com',
                     'password'          => bcrypt('power@123'),
                     'email_verified_at' => now(),
                     'telefone_1'        => '41 9888888',

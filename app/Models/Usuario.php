@@ -64,4 +64,9 @@ class Usuario extends Authenticatable
     {
         return $this->belongsToMany(Atividade::class, 'hd_atividade_areas_usuarios', 'usuario_id', 'atividades_area_id');
     }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'hd_usuario_roles', 'usuario_id', 'role_uid');
+    }
 }

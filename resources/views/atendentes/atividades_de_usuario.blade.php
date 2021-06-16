@@ -3,7 +3,7 @@
 @section('content')
     <div class="w-100">
         <div class="col-12">
-            <form method="POST" action="{{ route('add_atividade_ao_usuario', $usuario->id) }}" class="row g-3 w-100">
+            <form method="POST" action="{{ route('atendentes.usuario.add_atividade', $usuario->id) }}" class="row g-3 w-100">
                 @csrf
                 <div class="col-12 d-none">
                     <input type="hidden" name="usuario_id" value="{{ $usuario->id }}">
@@ -35,7 +35,6 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th scope="col">#</th>
                                 <th scope="col">Atividade</th>
                                 <th scope="col">Área</th>
                                 <th scope="col">Ações</th>
@@ -44,7 +43,6 @@
                         <tbody>
                             @foreach ($usuario->atividades as $atividade)
                                 <tr>
-                                    <th scope="row">{{ $atividade->id }}</th>
                                     <td>{{ $atividade->nome }}</td>
                                     <td>{{ $atividade->area->sigla .' - '.  $atividade->area->nome}}</td>
                                     <td>

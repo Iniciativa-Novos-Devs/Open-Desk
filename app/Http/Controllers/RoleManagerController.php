@@ -33,6 +33,6 @@ class RoleManagerController extends Controller
 
     public static function routes()
     {
-        Route::post('add_roles_to_usuario', [self::class, 'addRolesToUsuario'])->name('role_manager_add_roles_to_usuario');
+        Route::post('roles/add_roles_to_usuario', [self::class, 'addRolesToUsuario'])->name('role_manager_add_roles_to_usuario');
     }
 }

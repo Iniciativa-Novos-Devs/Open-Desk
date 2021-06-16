@@ -30,14 +30,12 @@
                         Manutenção
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <li><a class="dropdown-item" href="#">Parametros</a></li>
                         <li><a class="dropdown-item" href="#">Unidades</a></li>
                         <li><a class="dropdown-item" href="#">Usuários</a></li>
                         <li><a class="dropdown-item" href="{{ route('areas_index') }}">Áreas</a></li>
                         <li><a class="dropdown-item" href="{{ route('atividades_index') }}">Atividades</a></li>
                         <li><a class="dropdown-item" href="{{ route('problemas_index') }}">Problemas</a></li>
-                        <li><a class="dropdown-item" href="#">Atendentes</a></li>
-                        <li><a class="dropdown-item" href="#">Visualizar chamado</a></li>
+                        <li><a class="dropdown-item" href="{{ route('atendentes.index') }}">Atendentes</a></li>
                     </ul>
                 </li>
             </ul>

@@ -8,8 +8,17 @@ use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-class UsuarioManagerController extends Controller
+class AtendentesController extends Controller
 {
+    public function index(Request $request)
+    {
+        $atendentes = Usuario::with('atividades.area', 'roles')->paginate(20);
+
+        return view('atendentes.index', [
+            'atendentes'    => $atendentes,
+        ]);
+    }
+
     public function showAtividadesOfUsuario(Request $request, $usuario_id)
     {
         $atividades = Atividade::select('id', 'nome')->get();
@@ -18,7 +27,7 @@ class UsuarioManagerController extends Controller
         if (!$usuario)
             return redirect()->route('dashboard')->with('error', 'Usuário não encontrado');
 
-        return view('usuarios.atividades_de_usuario', [
+        return view('atendentes.atividades_de_usuario', [
             'usuario'    => $usuario,
             'atividades' => $atividades,
         ]);
@@ -52,9 +61,10 @@ class UsuarioManagerController extends Controller
 
     public static function routes()
     {
-        Route::prefix('usuarios')->group(function () {
-            Route::get('atividades_por_usuario/{usuario_id}', [self::class, 'showAtividadesOfUsuario'])->name('atividades_por_usuario');
-            Route::post('adicionar_atividade_ao_usuario/{usuario_id}', [self::class, 'addAtividadeToUsuario'])->name('add_atividade_ao_usuario');
+        Route::prefix('atendentes')->group(function () {
+            Route::get('/', [self::class, 'index'])->name('atendentes.index');
+            Route::get('atividades_por_usuario/{usuario_id}', [self::class, 'showAtividadesOfUsuario'])->name('atendentes.usuario.atividades');
+            Route::post('adicionar_atividade_ao_usuario/{usuario_id}', [self::class, 'addAtividadeToUsuario'])->name('atendentes.usuario.add_atividade');
         });
     }
 }

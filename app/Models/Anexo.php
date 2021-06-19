@@ -27,6 +27,8 @@ class Anexo extends Model
         'temporario',
         'destruir_apos',
         'created_by_id',
+        'name',
+        'size',
     ];
 
     public function created_by()

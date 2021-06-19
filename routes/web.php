@@ -45,18 +45,14 @@ Route::group(['prefix' => 'painel', 'middleware' => ['auth']], function () {
 
 
     //-----------------------------------------------------------------------------------
-    Route::get('/chamados', [ChamadoController::class, 'index'])->name('chamados_index');
-    Route::get('/chamados/add', [ChamadoController::class, 'add'])->name('chamados_add');
-    Route::post('/chamados/store', [ChamadoController::class, 'store'])->name('chamados_store');
-    Route::get('/chamados/{chamado_id}/{chamado_slug?}', [ChamadoController::class, 'show'])->name('chamados_show');
-
-
+    ChamadoController::routes();
     //-----------------------------------------------------------------------------------
     ProblemaController::routes();
     //-----------------------------------------------------------------------------------
     RoleManagerController::routes();
     //-----------------------------------------------------------------------------------
     AtendentesController::routes();
+    //-----------------------------------------------------------------------------------
 });
 
 Route::get('teste', function(){

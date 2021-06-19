@@ -8,6 +8,7 @@ use App\Models\Usuario;
 use Illuminate\Http\Request;
 use App\Mail\NovoChamadoMail;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Route;
 
 class ChamadoController extends Controller
 {
@@ -18,11 +19,11 @@ class ChamadoController extends Controller
 
     public function show($chamado_id)
     {
-        $chamado    = [
-            'titulo'   => 'Chamado '. $chamado_id,
-            'usuario'  => 'Fulano',
-            'conteudo' => 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Provident magni illum doloribus ut obcaecati tenetur. Rerum maiores quo non quidem nisi blanditiis sed cupiditate, minus quisquam eaque provident cumque a?',
-        ];
+        $chamado    = Chamado::with('usuario', 'tipo_problema', 'problema')->where('id', $chamado_id)->first();
+        //TODO criar relação "histórico"
+
+        if(!$chamado)
+            return redirect()->route('chamados_index')->with('error', 'Chamado não encontrado');
 
         $historico  = [
             [
@@ -103,11 +104,13 @@ class ChamadoController extends Controller
         $request->validate([
             'problema_id'       => 'required|numeric|exists:hd_problemas,id',
             'observacao'        => 'required|min:10|max:500',
+            'title'             => 'required|min:5|max:100',
         ]);
 
         $novo_chamado = [
             'problema_id'       => $request->input('problema_id'),
-            'observacao'        => $request->input('observacao'),
+            'observacao'        => htmlentities($request->input('observacao')),
+            'title'             => $request->input('title'),
         ];
 
         $novo_chamado['tipo_problema_id'] = null;
@@ -138,6 +141,14 @@ class ChamadoController extends Controller
 
         if($email)
             Mail::to($email)->send(new NovoChamadoMail($chamado));
+    }
+
+    public static function routes()
+    {
+        Route::get('/chamados', [ChamadoController::class, 'index'])->name('chamados_index');
+        Route::get('/chamados/add', [ChamadoController::class, 'add'])->name('chamados_add');
+        Route::post('/chamados/store', [ChamadoController::class, 'store'])->name('chamados_store');
+        Route::get('/chamados/{chamado_id}/{chamado_slug?}', [ChamadoController::class, 'show'])->name('chamados_show');
     }
 
 }

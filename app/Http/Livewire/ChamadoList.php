@@ -36,7 +36,7 @@ class ChamadoList extends Component
         $chamados = Chamado::limit($this->items_by_page)
                     ->orderBy($this->order_by, $this->order_dir)
                     ->with(['usuario' => function($query) {
-                        $query->select('id','name');
+                        $query->select('id','name',);
                     }]);
 
         $chamados = $chamados->select($this->getSelectItems([], true));
@@ -65,8 +65,8 @@ class ChamadoList extends Component
             'problema_id',
             'usuario_id',
             'status',
-            'observacao',
             'created_at',
+            'title',
         ];
 
         $this->select_items = array_merge($required_select_items, ($select_array_from_param_data ?? []));

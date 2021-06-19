@@ -33,6 +33,7 @@ class NovoChamadoMailJob implements ShouldQueue
      */
     public function handle()
     {
-        ChamadoController::enviaEmailNovoChamado($this->chamado);
+        if(config('chamados.email.delivery_emails', true))
+            ChamadoController::enviaEmailNovoChamado($this->chamado);
     }
 }

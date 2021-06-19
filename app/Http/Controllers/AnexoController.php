@@ -40,6 +40,7 @@ class AnexoController extends Controller
 
         $original_name       = $file->getClientOriginalName();
         $mime_type           = $file->getMimeType();
+        $size                = $file->getSize();
         $original_extension  = $file->getClientOriginalExtension();
         $original_name       = str_replace('.'.$original_extension, '', $original_name);
 
@@ -53,9 +54,12 @@ class AnexoController extends Controller
         if($path)
         {
             $options_to_store_on_db = [
+                'size'      => $size,
+                'name'      => $original_name ?? $new_name,
                 'mime_type' => $mime_type,
                 'extension' => $original_extension,
             ];
+
             $options_to_store_on_db = array_merge($options_to_store_on_db, $options);
 
             $on_data_base = self::storeOnDataBase($path, $options_to_store_on_db);
@@ -79,6 +83,8 @@ class AnexoController extends Controller
         $anexo['temporario']          = $options['temporario']          ?? false;
         $anexo['destruir_apos']       = $options['destruir_apos']       ?? null;
         $anexo['created_by_id']       = $options['created_by_id']       ?? null;
+        $anexo['size']                = $options['size']       ?? null;
+        $anexo['name']                = $options['name']       ?? null;
         $anexo['path']                = $file_path;
 
         $novo_anexo = Anexo::updateOrCreate([

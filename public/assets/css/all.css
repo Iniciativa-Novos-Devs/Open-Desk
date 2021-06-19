@@ -1,3 +1,12 @@
 .outline-none { outline:none !important; }
 
 .cursor-pointer { cursor: pointer !important; }
+
+blockquote {
+    margin: 0 0 1rem;
+    background: #80808059;
+    padding: 10px;
+    margin-left: 2px;
+    border-radius: 7px;
+    width: fit-content;
+}

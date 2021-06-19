@@ -50,6 +50,8 @@ Route::group(['prefix' => 'painel', 'middleware' => ['auth']], function () {
     Route::post('/chamados/store', [ChamadoController::class, 'store'])->name('chamados_store');
     Route::get('/chamados/{chamado_id}/{chamado_slug?}', [ChamadoController::class, 'show'])->name('chamados_show');
 
+    //-----------------------------------------------------------------------------------
+    Route::get('/atendimentos', [ChamadoController::class, 'index'])->name('atendimento_index');
 
     //-----------------------------------------------------------------------------------
     ProblemaController::routes();

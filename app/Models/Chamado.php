@@ -30,7 +30,18 @@ class Chamado extends Model
         'status',
         'observacao',
         'versao',
+        'title',
     ];
+
+    public function tipo_problema()
+    {
+        return $this->belongsTo(TipoProblema::class, 'tipo_problema_id', 'id');
+    }
+
+    public function problema()
+    {
+        return $this->belongsTo(Problema::class, 'problema_id', 'id');
+    }
 
     public function usuario()
     {

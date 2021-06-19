@@ -8,6 +8,7 @@ use App\Http\Controllers\PainelController;
 use App\Http\Controllers\ProblemaController;
 use App\Http\Controllers\RoleManagerController;
 use App\Http\Controllers\AtendentesController;
+use App\Http\Controllers\AtendimentoController;
 use App\Http\Controllers\ValidadorCpsUsuarioController;
 use Illuminate\Support\Facades\Route;
 
@@ -45,20 +46,17 @@ Route::group(['prefix' => 'painel', 'middleware' => ['auth']], function () {
 
 
     //-----------------------------------------------------------------------------------
-    Route::get('/chamados', [ChamadoController::class, 'index'])->name('chamados_index');
-    Route::get('/chamados/add', [ChamadoController::class, 'add'])->name('chamados_add');
-    Route::post('/chamados/store', [ChamadoController::class, 'store'])->name('chamados_store');
-    Route::get('/chamados/{chamado_id}/{chamado_slug?}', [ChamadoController::class, 'show'])->name('chamados_show');
 
-    //-----------------------------------------------------------------------------------
-    Route::get('/atendimentos', [ChamadoController::class, 'index'])->name('atendimento_index');
-
+    ChamadoController::routes();
     //-----------------------------------------------------------------------------------
     ProblemaController::routes();
     //-----------------------------------------------------------------------------------
     RoleManagerController::routes();
     //-----------------------------------------------------------------------------------
     AtendentesController::routes();
+    //-----------------------------------------------------------------------------------
+    AtendimentoController::routes();
+    //-----------------------------------------------------------------------------------
 });
 
 Route::get('teste', function(){

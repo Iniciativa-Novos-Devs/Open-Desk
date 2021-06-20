@@ -19,7 +19,7 @@
                     <td>{{ $area->sigla }}</td>
                     <td>
                         <a class="btn btn-sm btn-outline-info"
-                        href="{{ route('areas_show', $area->id) }}">
+                        href="{{ route('areas_show', [$area->id, \Str::slug($area->sigla.'-'.$area->nome)]) }}">
                         Mais
                         </a>
                     </td>

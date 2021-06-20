@@ -22,24 +22,22 @@ class AtendentesController extends Controller
 
     public function showAreasOfUsuario(Request $request, $usuario_id)
     {
-        $usuario    = Usuario::where('id', $usuario_id)->with('areas', 'areas.atividades')->first();
+        $atendente    = Usuario::where('id', $usuario_id)->with('areas', 'areas.atividades')->first();
 
-        if (!$usuario)
+        if (!$atendente)
             return redirect()->route('dashboard')->with('error', 'Usuário não encontrado');
 
-        $areas = Area::select('id', 'nome', 'sigla')->get();
+        $areas = Area::whereNotIn('id', $atendente->areas->pluck('id'))->select('id', 'nome', 'sigla')->get();
 
         return view('atendentes.areas_de_usuario', [
-            'usuario' => $usuario,
-            'areas'   => $areas,
+            'atendente' => $atendente,
+            'areas'     => $areas,
         ]);
     }
 
 
-    public function addAtividadeToUsuario(Request $request, $usuario_id)
+    public function addAtividadeToUsuario(Request $request)
     {
-        $request['usuario_id'] = $usuario_id ?? $request->input('usuario_id');
-
         $request->validate([
             'area_id'       => 'required|exists:\App\Models\Area,id',
             'usuario_id'    => 'required|exists:\App\Models\Usuario,id',
@@ -66,7 +64,7 @@ class AtendentesController extends Controller
         Route::prefix('atendentes')->group(function () {
             Route::get('/', [self::class, 'index'])->name('atendentes.index');
             Route::get('areas_por_usuario/{usuario_id}', [self::class, 'showAreasOfUsuario'])->name('atendentes.usuario.areas');
-            Route::post('adicionar_atividade_ao_usuario/{usuario_id}', [self::class, 'addAtividadeToUsuario'])->name('atendentes.usuario.add_area');
+            Route::post('adicionar_atividade_ao_usuario', [self::class, 'addAtividadeToUsuario'])->name('atendentes.usuario.add_area');
         });
     }
 }

@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/all.css') }}">
 
     <title>
-        @yield('title', config('sistema.site_title'))
+        <x-title value="" />
     </title>
 
     @yield('head_content')

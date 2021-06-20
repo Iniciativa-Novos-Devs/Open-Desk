@@ -1,12 +1,15 @@
 @extends('layouts.page')
 
+@section('title', 'Áreas de atendimento -  '. $atendente->name)
+@section('title_header', 'Áreas de atendimento -  '. $atendente->name)
+
 @section('content')
     <div class="w-100">
         <div class="col-12">
-            <form method="POST" action="{{ route('atendentes.usuario.add_area', $usuario->id) }}" class="row g-3 w-100">
+            <form method="POST" action="{{ route('atendentes.usuario.add_area') }}" class="row g-3 w-100">
                 @csrf
                 <div class="col-12 d-none">
-                    <input type="hidden" name="usuario_id" value="{{ $usuario->id }}">
+                    <input type="hidden" name="usuario_id" value="{{ $atendente->id }}">
                 </div>
 
                 <div class="col-md-6">
@@ -23,7 +26,7 @@
 
                 <div class="pt-4 col-md-6">
                     <button class="btn btn-md btn-primary">
-                        Cadastrar área para o usuário {{ $usuario->name }}
+                        Cadastrar área para o usuário {{ $atendente->name }}
                     </button>
                 </div>
             </form>
@@ -41,7 +44,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($usuario->areas as $area)
+                            @foreach ($atendente->areas as $area)
                                 <tr>
                                     <td>{{ $area->nome }}</td>
                                     <td>{{ $area->sigla }}</td>

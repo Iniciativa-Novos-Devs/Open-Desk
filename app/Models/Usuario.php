@@ -60,9 +60,9 @@ class Usuario extends Authenticatable
         return $this->hasMany(Chamado::class, 'usuario_id', 'id');
     }
 
-    public function atividades()
+    public function areas()
     {
-        return $this->belongsToMany(Atividade::class, 'hd_atividade_areas_usuarios', 'usuario_id', 'atividades_area_id')->withPivot('atividades_area_id');
+        return $this->belongsToMany(Area::class, 'hd_areas_usuarios', 'usuario_id', 'area_id')->withPivot('area_id');
     }
 
     public function roles()

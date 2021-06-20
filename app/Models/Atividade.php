@@ -21,10 +21,4 @@ class Atividade extends Model
     {
         return $this->belongsTo(Area::class, 'area_id', 'id');
     }
-
-
-    public function usuarios()
-    {
-        return $this->belongsToMany(Usuario::class, 'hd_atividade_areas_usuarios', 'atividades_area_id', 'usuario_id');
-    }
 }

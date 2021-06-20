@@ -11,7 +11,7 @@ class Problema extends Model
 
     protected $table = 'hd_problemas';
     protected $fillable = [
-        'descricao' ,
+        'descricao',
         'atividade_area_id',
     ];
 

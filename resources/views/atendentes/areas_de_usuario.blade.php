@@ -3,19 +3,19 @@
 @section('content')
     <div class="w-100">
         <div class="col-12">
-            <form method="POST" action="{{ route('atendentes.usuario.add_atividade', $usuario->id) }}" class="row g-3 w-100">
+            <form method="POST" action="{{ route('atendentes.usuario.add_area', $usuario->id) }}" class="row g-3 w-100">
                 @csrf
                 <div class="col-12 d-none">
                     <input type="hidden" name="usuario_id" value="{{ $usuario->id }}">
                 </div>
 
                 <div class="col-md-6">
-                    <label for="add_atividade" class="form-label w-100">
-                        Adicionar atividade ao usuário
-                        <select name="atividades_area_id" id="add_atividade" class="form-control form-select" required>
-                            <option value="">Selecione uma nova atividade</option>
-                            @foreach ($atividades as $atividade)
-                                <option value="{{ $atividade->id }}">{{ $atividade->nome }}</option>
+                    <label for="add_area" class="form-label w-100">
+                        Adicionar área ao usuário
+                        <select name="area_id" id="add_area" class="form-control form-select" required>
+                            <option value="">Selecione uma nova área</option>
+                            @foreach ($areas as $area)
+                                <option value="{{ $area->id }}">{{ $area->nome .' - '. $area->sigla }}</option>
                             @endforeach
                         </select>
                     </label>
@@ -23,7 +23,7 @@
 
                 <div class="pt-4 col-md-6">
                     <button class="btn btn-md btn-primary">
-                        Cadastrar atividade para o usuário {{ $usuario->name }}
+                        Cadastrar área para o usuário {{ $usuario->name }}
                     </button>
                 </div>
             </form>
@@ -35,19 +35,19 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th scope="col">Atividade</th>
                                 <th scope="col">Área</th>
+                                <th scope="col">Sigla</th>
                                 <th scope="col">Ações</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($usuario->atividades as $atividade)
+                            @foreach ($usuario->areas as $area)
                                 <tr>
-                                    <td>{{ $atividade->nome }}</td>
-                                    <td>{{ $atividade->area->sigla .' - '.  $atividade->area->nome}}</td>
+                                    <td>{{ $area->nome }}</td>
+                                    <td>{{ $area->sigla }}</td>
                                     <td>
                                         <button class="btn btn-sm btn-danger">
-                                            Remover Atividade
+                                            Remover Área [TODO]
                                         </button>
                                     </td>
                                 </tr>

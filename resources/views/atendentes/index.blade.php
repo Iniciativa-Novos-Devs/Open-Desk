@@ -25,8 +25,8 @@
                                         <div class="flex-row-reverse d-flex">
                                             <div class="btn-group btn-group-sm">
                                                 <div class="mx-1">
-                                                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('atendentes.usuario.atividades', $atendente->id) }}">
-                                                        Atividades
+                                                    <a class="btn btn-sm btn-outline-secondary" href="{{ route('atendentes.usuario.areas', $atendente->id) }}">
+                                                        Áreas
                                                     </a>
                                                 </div>
                                                 <div class="mx-1">

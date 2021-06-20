@@ -27,7 +27,7 @@ class AddSizeAndNameColumnToAnexosTable extends Migration
     public function down()
     {
         Schema::table('hd_anexos', function (Blueprint $table) {
-            $table->dropColumns('name', 'size');
+            $table->dropColumn(['name', 'size']);
         });
     }
 }

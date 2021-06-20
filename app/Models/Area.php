@@ -21,4 +21,8 @@ class Area extends Model
         return $this->hasMany(Atividade::class, 'area_id');
     }
 
+    public function atendentes()
+    {
+        return $this->belongsToMany(Usuario::class, 'hd_areas_usuarios', 'area_id', 'usuario_id');
+    }
 }

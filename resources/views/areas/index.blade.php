@@ -1,5 +1,9 @@
 @extends('layouts.page')
 
+
+@section('title', 'Áreas')
+@section('title_header', 'Áreas')
+
 @section('content')
 <div class="w-100">
     <table class="table">

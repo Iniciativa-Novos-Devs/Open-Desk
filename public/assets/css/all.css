@@ -10,3 +10,7 @@ blockquote {
     border-radius: 7px;
     width: fit-content;
 }
+
+.no-focus:focus, *:focus {
+    outline: none !important;
+}

@@ -9,11 +9,11 @@ class AtendimentoController extends Controller
 {
     public function index(Request $request)
     {
-        return view('atendimento.index');
+        return view('atendimentos.index');
     }
 
     public static function routes()
     {
-        Route::get('/atendimentos', [ChamadoController::class, 'index'])->name('atendimentos_index');
+        Route::get('/atendimentos', [self::class, 'index'])->name('atendimentos_index');
     }
 }

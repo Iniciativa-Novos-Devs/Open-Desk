@@ -11,10 +11,11 @@ class AtendimentosChamadoList extends Component
 {
     protected $select_items;
 
-    public $order_by      = 'id';
-    public $order_dir     = 'DESC';
-    public $items_by_page = 10;
-    public $selected_status;
+    public $order_by            = 'id';
+    public $order_dir           = 'DESC';
+    public $items_by_page       = 10;
+    public $selected_status     = null;
+    public $keep_accordion_open = false;//TODO colocar na sessão e recuperar (se o usuario quer manter sempre expandido a listagem de chamados)
 
     public function mount(array $select = [], int $items_by_page = 10)
     {

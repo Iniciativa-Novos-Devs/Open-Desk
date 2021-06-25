@@ -15,4 +15,6 @@ blockquote {
     outline: none !important;
 }
 
+.d-none, .force.d-none{display: none !important;}
+
 .logo-container { max-width: 8%;}

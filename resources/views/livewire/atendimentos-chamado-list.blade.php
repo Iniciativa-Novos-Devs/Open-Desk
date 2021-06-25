@@ -129,11 +129,13 @@
                 </ul>
             </div>
 
-            <div class="col-12">
+            <div class="pb-3 col-12">
                 <div class="form-group w-100">
                     <label for="nota_atendimento">Observação do atendimento</label>
-                    <textarea class="form-control" id="nota_atendimento" cols="10" rows="3"
-                        style="min-height: 6rem; max-height: 14rem;"></textarea>
+                    <textarea
+                        class="mb-3 form-control" id="nota_atendimento" cols="10" rows="3"
+                        placeholder="Aqui vai sua observação..."
+                        style="min-height: 6rem; max-height: 14rem; background-color: #211e1e21;"></textarea>
                 </div>
             </div>
         </div>

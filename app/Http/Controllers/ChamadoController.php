@@ -71,22 +71,20 @@ class ChamadoController extends Controller
 
     public function store(Request $request)
     {
-        /**
-         //TODO fazer validação de usuários aqui
-         //permitir que um chamado seja criado por um atendente enviando um udentificador desse usuário
+        //TODO fazer validação de usuários aqui
+        //permitir que um chamado seja criado por um atendente enviando um udentificador desse usuário
 
-            $user       = auth()->user();
+        $user       = auth()->user();
 
-            if(!$user)
-                return redirect()->route('chamados_index')->with('success', 'Apenas usuario sem permissão para criar chamados');
+        if(!$user)
+            return redirect()->route('chamados_index')->with('success', 'Acesso não autorizado');
 
-            $usuario = Usuario::where('email', $user->email)->first();
+        $usuario = Usuario::where('email', $user->email)->first();
 
-            if(!$usuario)
-                return redirect()->route('chamados_index')->with('success', 'Apenas usuario sem permissão para criar chamados');
+        if(!$usuario)//TODO validar se o usuário tem a permissão de criar chamados
+            return redirect()->route('chamados_index')->with('success', 'Usuario sem permissão para criar chamados');
 
-            $usuario_id = $usuario->id;
-        */
+        $usuario_id = $usuario->id;
 
         if ($request->hasFile('anexos'))
             $anexos = AnexoController::storeMultiFiles($request->file('anexos'), 'anexos', [
@@ -98,8 +96,6 @@ class ChamadoController extends Controller
                 // 'destruir_apos'         => date('Y-m-d H:i:s', strtotime(' +1 days')),
                 // 'created_by_id'         => 80,
             ]);
-
-        $usuario_id = 1; //TODO fazer validação de usuários aqui
 
         $request->validate([
             'problema_id'       => 'required|numeric|exists:hd_problemas,id',

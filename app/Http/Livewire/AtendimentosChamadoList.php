@@ -2,7 +2,9 @@
 
 namespace App\Http\Livewire;
 
+use App\CacheManagers\UsuarioCache;
 use \Illuminate\Session\SessionManager;
+use Auth;
 use App\Models\Chamado;
 use App\Models\Usuario;
 use Livewire\Component;
@@ -44,21 +46,15 @@ class AtendimentosChamadoList extends Component
 
         $chamados = $chamados->select($this->getSelectItems([], true));
 
-        $usuario = $this->getUsuario();
-
         if($this->selected_status && StatusEnum::getState($this->selected_status))
             $chamados->where('status', $this->selected_status);
-
-        if($usuario)
-            $chamados->where('usuario_id', $usuario->id);
 
         return $chamados;
     }
 
     protected function getUsuario()
     {
-        //TODO fazer buscar o usuario logado
-        return Usuario::first();
+        return UsuarioCache::byLoggedUser();
     }
 
     protected function getSelectItems(array $select_array_from_param_data = [], bool $return_it = false)

@@ -9,6 +9,7 @@ use App\Http\Controllers\ProblemaController;
 use App\Http\Controllers\RoleManagerController;
 use App\Http\Controllers\AtendentesController;
 use App\Http\Controllers\AtendimentoController;
+use App\Http\Controllers\UserPreferencesController;
 use App\Http\Controllers\ValidadorCpsUsuarioController;
 use Illuminate\Support\Facades\Route;
 
@@ -56,6 +57,8 @@ Route::group(['prefix' => 'painel', 'middleware' => ['auth']], function () {
     AtendentesController::routes();
     //-----------------------------------------------------------------------------------
     AtendimentoController::routes();
+    //-----------------------------------------------------------------------------------
+    UserPreferencesController::routes();
     //-----------------------------------------------------------------------------------
 });
 

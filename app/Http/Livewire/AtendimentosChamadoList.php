@@ -7,6 +7,7 @@ use App\Models\Chamado;
 use App\Models\Usuario;
 use Livewire\Component;
 use App\Enums\StatusEnum;
+use App\Http\Controllers\UserPreferencesController;
 
 class AtendimentosChamadoList extends Component
 {
@@ -23,7 +24,7 @@ class AtendimentosChamadoList extends Component
         $this->select_items         = $this->getSelectItems($select, true);
         $this->items_by_page        = $items_by_page > 0 && $items_by_page < 200 ? $items_by_page : 10;
         $this->selected_status      = null;
-        $this->keep_accordion_open  = session()->get('user_preferences.atendente.chamados.keep_accordion_open', false);
+        $this->keep_accordion_open  = session()->get('user_preferences.atendente.chamados_a_atender.keep_accordion_open', false);
     }
 
     public function render()
@@ -88,17 +89,9 @@ class AtendimentosChamadoList extends Component
         $this->order_dir    = $this->order_dir == 'DESC' ? 'ASC' : 'DESC';
     }
 
-    public function changeKeepAccordionOpenState()
+    public function changeChamadosAccordionOpenState()
     {
-        $this->keep_accordion_open  = session()->get('user_preferences.atendente.chamados.keep_accordion_open', 'NO_DATA');
-
-        if($this->keep_accordion_open === 'NO_DATA')
-        {
-            session()->put('user_preferences.atendente.chamados.keep_accordion_open', ($this->keep_accordion_open = false));
-            return;
-        }
-
-        session()->put('user_preferences.atendente.chamados.keep_accordion_open', !$this->keep_accordion_open);
-        $this->keep_accordion_open = session()->get('user_preferences.atendente.chamados.keep_accordion_open', 'NO_DATA');
+        (new UserPreferencesController)->changeBooleanState('atendente.chamados_a_atender.keep_accordion_open');
+        $this->keep_accordion_open  = session()->get('user_preferences.atendente.chamados_a_atender.keep_accordion_open', false);
     }
 }

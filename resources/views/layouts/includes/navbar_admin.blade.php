@@ -21,7 +21,8 @@
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <li><a class="dropdown-item" href="{{ route('chamados_add') }}">Abrir Chamado</a></li>
                         <li><a class="dropdown-item" href="{{ route('chamados_index') }}">Listar chamados</a></li>
-                        <li><a class="dropdown-item" href="{{ route('atendimentos_index') }}#detalhes_do_chamado">Atender chamados</a></li>
+                        <li><a class="dropdown-item"
+                                href="{{ route('atendimentos_index') }}#detalhes_do_chamado">Atender chamados</a></li>
                     </ul>
 
                 <li class="nav-item dropdown">
@@ -49,14 +50,24 @@
                                 <i class="bi bi-person-circle"></i>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="#profile">
-                                    {{ __('Profile') }}
-                                    <i class="bi bi-person-badge-fill"></i>
-                                </a></li>
-                                <li><a class="dropdown-item" href="{{ route('logout') }}">
-                                    {{ __('Logout') }}
-                                    <i class="bi bi-box-arrow-left"></i>
-                                </a></li>
+                                <li>
+                                    <a class="dropdown-item" href="#profile">
+                                        {{ __('Profile') }}
+                                        <i class="bi bi-person-badge-fill"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('user.preferences') }}">
+                                        {{ __('preferences') }}
+                                        <i class="bi bi-person-badge-fill"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('logout') }}">
+                                        {{ __('Logout') }}
+                                        <i class="bi bi-box-arrow-left"></i>
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     @else

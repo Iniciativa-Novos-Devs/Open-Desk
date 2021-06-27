@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use \Illuminate\Session\SessionManager;
 use App\Models\Chamado;
 use App\Models\Usuario;
 use Livewire\Component;
@@ -15,14 +16,14 @@ class AtendimentosChamadoList extends Component
     public $order_dir           = 'DESC';
     public $items_by_page       = 10;
     public $selected_status     = null;
-    public $keep_accordion_open = false;//TODO colocar na sessão e recuperar (se o usuario quer manter sempre expandido a listagem de chamados)
+    public $keep_accordion_open = false;
 
-    public function mount(array $select = [], int $items_by_page = 10)
+    public function mount(SessionManager $session, array $select = [], int $items_by_page = 10)
     {
-        // dd($items_by_page);
-        $this->select_items     = $this->getSelectItems($select, true);
-        $this->items_by_page  = $items_by_page > 0 && $items_by_page < 200 ? $items_by_page : 10;
-        $this->selected_status  = null;
+        $this->select_items         = $this->getSelectItems($select, true);
+        $this->items_by_page        = $items_by_page > 0 && $items_by_page < 200 ? $items_by_page : 10;
+        $this->selected_status      = null;
+        $this->keep_accordion_open  = session()->get('user_preferences.atendente.chamados.keep_accordion_open', false);
     }
 
     public function render()
@@ -85,5 +86,19 @@ class AtendimentosChamadoList extends Component
 
         $this->order_by     = in_array($order_by, $accepted_order_by) ? $order_by : 'id';
         $this->order_dir    = $this->order_dir == 'DESC' ? 'ASC' : 'DESC';
+    }
+
+    public function changeKeepAccordionOpenState()
+    {
+        $this->keep_accordion_open  = session()->get('user_preferences.atendente.chamados.keep_accordion_open', 'NO_DATA');
+
+        if($this->keep_accordion_open === 'NO_DATA')
+        {
+            session()->put('user_preferences.atendente.chamados.keep_accordion_open', ($this->keep_accordion_open = false));
+            return;
+        }
+
+        session()->put('user_preferences.atendente.chamados.keep_accordion_open', !$this->keep_accordion_open);
+        $this->keep_accordion_open = session()->get('user_preferences.atendente.chamados.keep_accordion_open', 'NO_DATA');
     }
 }

@@ -1,4 +1,16 @@
 <div class="row">
+    @if (env('APP_DEBUG', false))
+        <div class="col-12">
+            <h6>Preferencias do usuario</h6>
+            <pre>
+                {{ json_encode(session()->get('user_preferences', ''), 128) }}
+            </pre>
+        </div>
+    @endif
+
+    <div class="col-12">
+        <a href="{{ route('chamados_add') }}">Adicionar chamado</a>
+    </div>
 
     <div class="py-2 accordion col-12" id="accordion_chamados_table">
         <div class="accordion-item">
@@ -16,7 +28,7 @@
                         <div class="form-check form-switch">
                             <label class="form-check-label" for="keep_accordion_open">Manter aberto</label>
                             <input class="form-check-input" type="checkbox" id="keep_accordion_open"
-                                wire:model="keep_accordion_open"
+                                wire:change="changeKeepAccordionOpenState()"
                                 {{ $keep_accordion_open ? 'checked' : '' }}
                                 value="1">
                         </div>

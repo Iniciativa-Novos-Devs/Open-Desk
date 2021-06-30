@@ -31,6 +31,8 @@ class Chamado extends Model
         'observacao',
         'versao',
         'title',
+        'atendente_id',
+        'unidade_id',
     ];
 
     public function tipo_problema()
@@ -46,6 +48,16 @@ class Chamado extends Model
     public function usuario()
     {
         return $this->belongsTo(Usuario::class, 'usuario_id', 'id');
+    }
+
+    public function atendente()
+    {
+        return $this->belongsTo(Usuario::class, 'atendente_id', 'id');
+    }
+
+    public function unidade()
+    {
+        return $this->belongsTo(Unidade::class, 'unidade_id', 'id');
     }
 
 }

@@ -20,7 +20,7 @@
             {{ $chamado->created_at->format('d/m/Y H:i:s') }} </span>
 
         <div class="p-2 my-3 border rounded border-dark w-100">
-            {!! html_entity_decode($chamado->observacao) !!}
+            {!! html_entity_decode($chamado->observacao ?? null) !!}
         </div>
 
         <div class="p-2 my-3 border rounded border-dark w-100">

@@ -7,13 +7,17 @@ class StatusEnum
     public const ABERTOS        = 1;
     public const PENDENTE       = 2;
     public const EM_ATENDIMENTO = 3;
-    public const FECHADOS       = 4;
+    public const TRANSFERIDO    = 4;
+    public const PAUSADO        = 5;
+    public const FECHADO        = 6;
 
     public static $humans        = [
         1 => 'Aberto',
         2 => 'Pendente',
         3 => 'Em atendimento',
-        4 => 'Fechado',
+        4 => 'Transferido',
+        5 => 'Pausado',
+        6 => 'Fechado',
     ];
 
     public static function getState(int $state_enum)

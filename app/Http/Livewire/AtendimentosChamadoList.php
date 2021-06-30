@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use App\CacheManagers\UsuarioCache;
 use \Illuminate\Session\SessionManager;
 use Auth;
+use Illuminate\Support\Facades\Cache;
 use App\Models\Chamado;
 use App\Models\Usuario;
 use Livewire\Component;
@@ -20,19 +21,33 @@ class AtendimentosChamadoList extends Component
     public $items_by_page       = 10;
     public $selected_status     = null;
     public $keep_accordion_open = false;
+    public $atendente           = null;
+    public $em_atendimento      = null;
+    public $cache_keys          = [];
 
     public function mount(SessionManager $session, array $select = [], int $items_by_page = 10)
     {
+        //TODO colocar lógica que permita apenas atenddentes ver essa tela
+
         $this->select_items         = $this->getSelectItems($select, true);
         $this->items_by_page        = $items_by_page > 0 && $items_by_page < 200 ? $items_by_page : 10;
         $this->selected_status      = null;
         $this->keep_accordion_open  = session()->get('user_preferences.atendente.chamados_a_atender.keep_accordion_open', false);
+        $this->cache_keys           = session()->get('cache_keys', []);
+        $this->atendente            = $this->getUsuario();
+        $this->startEmAtendimento();
     }
 
     public function render()
     {
         return view('livewire.atendimentos-chamado-list', [
-            'chamados' => $this->getChamados()->paginate($this->items_by_page),
+            'chamados' => $this->getChamados()
+                ->whereNotIn('status', [
+                    StatusEnum::PAUSADO,
+                    StatusEnum::FECHADO,
+                    StatusEnum::EM_ATENDIMENTO,
+                ])
+                ->paginate($this->items_by_page),
         ]);
     }
 
@@ -89,5 +104,46 @@ class AtendimentosChamadoList extends Component
     {
         (new UserPreferencesController)->changeBooleanState('atendente.chamados_a_atender.keep_accordion_open');
         $this->keep_accordion_open  = session()->get('user_preferences.atendente.chamados_a_atender.keep_accordion_open', false);
+    }
+
+    public function startEmAtendimento(bool $update_cache = null)
+    {
+        $this->cache_keys['em_atendimento'] = 'em_atendimento_atendente_id_'.$this->atendente->id;
+
+        if($update_cache)
+            Cache::forget($this->cache_keys['em_atendimento']);
+
+        $this->em_atendimento = Cache::remember($this->cache_keys['em_atendimento'], (5*60) /*secs*/, function () {
+            return Chamado::where('status', StatusEnum::EM_ATENDIMENTO)
+                ->with([
+                    'unidade' => function($query) {
+                    $query->select('id','nome',);
+                    },
+                    'usuario' => function($query) {
+                    $query->select('id','name',);
+                    },
+                    ])
+                ->where('atendente_id', $this->atendente->id)
+                ->first();
+        });
+    }
+
+    public function clearCache($cache_key = null)
+    {
+        $this->cache_keys = session()->get('cache_keys', []);
+
+        if(!$cache_key)
+        {
+            foreach ($this->cache_keys as $key)
+            {
+                Cache::forget($key);
+                unset($this->cache_keys[$key]);
+                session()->forget($key);
+            }
+
+            $this->cache_keys = session()->get('cache_keys', []);
+        }
+        else
+            Cache::forget($this->cache_keys[$cache_key] ?? null);
     }
 }

@@ -1,6 +1,10 @@
 <div class="row">
     <div class="col-12">
         <a href="{{ route('chamados_add') }}">Adicionar chamado</a>
+        <button
+            wire:click="clearCache()"
+            class="btn btn-sm btn-danger"
+            type="button">Limpar cache</button>
     </div>
 
     <div class="py-2 accordion col-12" id="accordion_chamados_table">
@@ -129,9 +133,9 @@
             <div class="col-12">
                 <ul class="py-0 list-group list-group-flush">
                     <li class="py-0 list-group-item d-flex justify-content-start">
-                        <strong>Chamado: </strong><span class="mx-1 text-left text-muted">xxxx</span>
+                        <strong>Chamado: </strong><span class="mx-1 text-left text-muted">{{ $this->em_atendimento->id ?? null }}</span>
                         <span class="mx-3"></span>
-                        <strong>Unidade: </strong><span class="mx-1 text-left text-muted">zzzz</span>
+                        <strong>Unidade: </strong><span class="mx-1 text-left text-muted">{{ $this->em_atendimento->unidade->nome ?? null }}</span>
                     </li>
                     <li class="py-0 list-group-item">
 
@@ -144,18 +148,20 @@
                                         <button class="accordion-button collapsed" type="button"
                                             data-bs-toggle="collapse" data-bs-target="#collapse_detalhe_chamado"
                                             aria-expanded="false" aria-controls="collapse_detalhe_chamado">
-                                            Titulo do chamado | Solicitante | <span class="text-muted"> 2021-04-20
-                                                10:31:00 </span>
+                                            {{ $this->em_atendimento->title ?? null }}
+                                            | {{ $this->em_atendimento->usuario->name ?? null }}
+                                            | <span class="text-muted">
+                                                @if ($this->em_atendimento->created_at)
+                                                    {!! '&nbsp;'.$this->em_atendimento->created_at->format('d/m/Y H:i:s') !!}
+                                                @endif
+                                            </span>
                                         </button>
                                     </h2>
                                     <div id="collapse_detalhe_chamado" class="accordion-collapse collapse"
                                         aria-labelledby="detalhe_chamado_headingThree"
                                         data-bs-parent="#accordion_detalhe_chamado" style="">
                                         <div class="accordion-body">
-                                            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aliquam amet
-                                            impedit pariatur culpa possimus quidem fuga incidunt, cumque praesentium,
-                                            dolorum totam repellendus quos in minima, magnam laudantium mollitia.
-                                            Consequuntur, enim.
+                                            {!! '&nbsp;'.html_entity_decode($this->em_atendimento->observacao ?? null) !!}
                                         </div>
                                     </div>
                                 </div>

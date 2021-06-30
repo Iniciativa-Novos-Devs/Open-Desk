@@ -18,11 +18,11 @@ class UnidadeSeeder extends Seeder
         foreach (range(0, 10) as $i)
         {
             Unidade::create([
-                'ue'      => Str::random(2).rand(0, 300).rand(0, 3000),
-                'nome'    => Str::random(10),
+                'ue'      => 'ue '.Str::random(2).rand(0, 300).rand(0, 3000),
+                'nome'    => 'Unidade '.Str::random(10),
                 'cidade'  => 'Sao Paulo',
-                'diretor' => Str::random(5),
-                'dir_adm' => Str::random(6),
+                'diretor' => 'diretor '.Str::random(5),
+                'dir_adm' => 'dir_adm '.Str::random(6),
                 'versao'  => 1,
             ]);
         }

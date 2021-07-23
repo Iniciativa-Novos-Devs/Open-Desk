@@ -15,6 +15,9 @@ class Chamado extends Model
 
     protected $dates = [
         'deleted_at',
+        'paused_at',
+        'finished_at',
+        'transferred_at',
     ];
 
     protected $casts = [
@@ -33,6 +36,9 @@ class Chamado extends Model
         'title',
         'atendente_id',
         'unidade_id',
+        'paused_at',
+        'finished_at',
+        'transferred_at',
     ];
 
     public function tipo_problema()

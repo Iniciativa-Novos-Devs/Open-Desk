@@ -204,18 +204,27 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr class="py-0">
-                        <th class="py-0" scope="row">xxxxx</th>
-                        <td class="py-0">
-                            <button data-toggle="tooltip" data-html="true" title="Unidade: xyz. Detal"
-                                class="py-0 rounded-circle btn btn-sm btn-outline-info">!</button>
-                        </td>
-                        <td class="py-0">05/05/2021 10:25</td>
-                        <td class="py-0">
-                            <button class="p-0 px-1 btn btn-sm btn-success no-focus">Reabrir</button>
-                            <button class="p-0 px-1 btn btn-sm btn-warning no-focus">Transferir</button>
-                        </td>
-                    </tr>
+                    @foreach ($chamados_pausados as $chamado_pausado)
+                        <tr class="py-0">
+                            <th class="py-0" scope="row">{{ $chamado_pausado->title }}</th>
+                            <td class="py-0">
+                                <button data-toggle="tooltip" data-html="true"
+                                    title="Unidade: {!! $chamado_pausado->unidade->nome ?? '' !!}.
+                                    {!! $chamado_pausado->observacao ?? '' !!}"
+                                    class="py-0 rounded-circle btn btn-sm btn-outline-info">!</button>
+                            </td>
+                            <td class="py-0 small">
+                                {{
+                                $chamado_pausado->paused_at ?
+                                $chamado_pausado->paused_at->format('d/m/Y H:i:s') : ''
+                                }}
+                            </td>
+                            <td class="py-0">
+                                <button class="p-0 px-1 btn btn-sm btn-success no-focus">Reabrir</button>
+                                <button class="p-0 px-1 btn btn-sm btn-warning no-focus">Transferir</button>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>

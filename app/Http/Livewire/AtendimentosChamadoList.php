@@ -11,6 +11,7 @@ use App\Models\Usuario;
 use Livewire\Component;
 use App\Enums\StatusEnum;
 use App\Http\Controllers\UserPreferencesController;
+use \App\Libs\Helpers\DateHelpers;
 
 class AtendimentosChamadoList extends Component
 {
@@ -19,6 +20,7 @@ class AtendimentosChamadoList extends Component
     public $order_by            = 'id';
     public $order_dir           = 'DESC';
     public $items_by_page       = 10;
+    public $paused_items_by_page= 10;
     public $selected_status     = null;
     public $keep_accordion_open = false;
     public $atendente           = null;
@@ -48,10 +50,19 @@ class AtendimentosChamadoList extends Component
                     StatusEnum::EM_ATENDIMENTO,
                 ])
                 ->paginate($this->items_by_page),
+
+            'chamados_pausados' => $this->getChamados([
+                    'unidade_id',
+                    'observacao',
+                    'title',
+                    'paused_at',
+                ])
+                ->where('status', StatusEnum::PAUSADO)
+                ->paginate($this->paused_items_by_page),
         ]);
     }
 
-    protected function getChamados()
+    protected function getChamados(array $columns_to_select = [])
     {
         $chamados = Chamado::limit($this->items_by_page)
                     ->orderBy($this->order_by, $this->order_dir)
@@ -59,7 +70,12 @@ class AtendimentosChamadoList extends Component
                         $query->select('id','name',);
                     }]);
 
-        $chamados = $chamados->select($this->getSelectItems([], true));
+        if(in_array('unidade_id', $columns_to_select))
+            $chamados = $chamados->with(['unidade' => function($query) {
+                $query->select('id','nome',);
+            }]);
+
+        $chamados = $chamados->select($this->getSelectItems($columns_to_select, true));
 
         if($this->selected_status && StatusEnum::getState($this->selected_status))
             $chamados->where('status', $this->selected_status);
@@ -117,12 +133,12 @@ class AtendimentosChamadoList extends Component
             return Chamado::where('status', StatusEnum::EM_ATENDIMENTO)
                 ->with([
                     'unidade' => function($query) {
-                    $query->select('id','nome',);
+                        $query->select('id','nome',);
                     },
                     'usuario' => function($query) {
-                    $query->select('id','name',);
+                        $query->select('id','name',);
                     },
-                    ])
+                ])
                 ->where('atendente_id', $this->atendente->id)
                 ->first();
         });

@@ -124,6 +124,9 @@ class AtendimentosChamadoList extends Component
 
     public function startEmAtendimento(bool $update_cache = null)
     {
+        if(!$this->atendente->id ?? null)
+            return;//TODO validar se o usuário é um atendente
+
         $this->cache_keys['em_atendimento'] = 'em_atendimento_atendente_id_'.$this->atendente->id;
 
         if($update_cache)
@@ -161,5 +164,81 @@ class AtendimentosChamadoList extends Component
         }
         else
             Cache::forget($this->cache_keys[$cache_key] ?? null);
+    }
+
+    public function pauseCurrent()
+    {
+        if(!$this->setCurrentAsPaused())
+            return;
+
+        $this->em_atendimento = null;
+        $this->startEmAtendimento(true);
+    }
+
+    protected function setCurrentAsPaused()
+    {
+        if(!$this->em_atendimento)
+            return;
+
+        if(!$this->em_atendimento instanceof Chamado)
+            return;
+
+        return $this->em_atendimento->update([
+            'status'    => StatusEnum::PAUSADO,
+            'paused_at' => now(),
+        ]);
+    }
+
+    public function atenderChamado($chamado_id)
+    {
+        if(!$this->atendente->id ?? null)
+            return;//TODO validar se o usuário é um atendente
+
+        if($this->hasEmAtendimento())
+            return;//TODO informar ao usuário o motivo de não abrir o chamado
+
+        if(!is_numeric($chamado_id))
+            return;//TODO informar ao usuário o motivo de não abrir o chamado
+
+        $chamado = $this->getChamadoById((int) $chamado_id);
+
+        if(!$chamado)
+            return;
+
+        $update = $chamado->update([
+            'status'        => StatusEnum::EM_ATENDIMENTO,
+            'atendente_id'  => $this->atendente->id,
+        ]);
+
+        if(!$update)
+            return;
+
+        $this->em_atendimento = $this->getChamadoById((int) $chamado_id);
+        $this->startEmAtendimento(true);
+    }
+
+    protected function getChamadoById(int $chamado_id)
+    {
+        return Chamado::with([
+                'unidade' => function($query) {
+                    $query->select('id','nome',);
+                },
+                'usuario' => function($query) {
+                    $query->select('id','name',);
+                },
+            ])
+            ->whereNotIn('status', [
+                StatusEnum::FECHADO,
+                StatusEnum::EM_ATENDIMENTO,
+            ])
+            ->where('id', $chamado_id)
+            ->first();
+    }
+
+    public function hasEmAtendimento()
+    {
+        return Chamado::where('status', StatusEnum::EM_ATENDIMENTO)
+            ->where('atendente_id', $this->atendente->id)
+            ->exists();
     }
 }

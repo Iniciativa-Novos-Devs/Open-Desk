@@ -18,3 +18,5 @@ blockquote {
 .d-none, .force.d-none{display: none !important;}
 
 .logo-container { max-width: 8%;}
+
+.select-none { user-select: none !important;}

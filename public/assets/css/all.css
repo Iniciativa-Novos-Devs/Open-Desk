@@ -1,6 +1,13 @@
 .outline-none { outline:none !important; }
 
-.cursor-pointer { cursor: pointer !important; }
+.cursor-default, .f-style.cursor-default{ cursor: pointer !important; }
+.cursor-pointer, .f-style.cursor-pointer{ cursor: pointer !important; }
+.cursor-not-allowed, .f-style.cursor-not-allowed{ cursor: not-allowed !important;}
+
+button.cursor:disabled, button:disabled { cursor: not-allowed !important; pointer-events: all !important; }
+
+li.disabled { cursor: not-allowed; }
+li.disabled a { pointer-events: none; }
 
 blockquote {
     margin: 0 0 1rem;

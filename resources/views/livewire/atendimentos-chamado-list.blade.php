@@ -34,9 +34,9 @@
                             <div class="col-8">
                                 <select class="form-select" aria-label="Default select example"
                                     wire:model="selected_status">
-                                    <option value="">Todos os chamados</option>
+                                    <option value="">Sem filtro</option>
                                     @foreach (\App\Enums\StatusEnum::$humans as $enum => $status)
-                                        <option value="{{ $enum }}">{{ $status }}</option>
+                                        <option value="{{ $enum }}">{{ \Str::plural($status) }}</option>
                                     @endforeach
                                 </select>
                             </div>

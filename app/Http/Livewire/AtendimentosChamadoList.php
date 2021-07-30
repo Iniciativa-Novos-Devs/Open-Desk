@@ -43,21 +43,10 @@ class AtendimentosChamadoList extends Component
     public function render()
     {
         return view('livewire.atendimentos-chamado-list', [
-            'chamados' => $this->getChamados()
-                ->whereNotIn('status', [
-                    StatusEnum::PAUSADO,
-                    StatusEnum::FECHADO,
-                    StatusEnum::EM_ATENDIMENTO,
-                ])
+            'chamados' => $this->getFilteredChamados()
                 ->paginate($this->items_by_page),
 
-            'chamados_pausados' => $this->getChamados([
-                    'unidade_id',
-                    'observacao',
-                    'title',
-                    'paused_at',
-                ])
-                ->where('status', StatusEnum::PAUSADO)
+            'chamados_pausados' =>$this->getPausedChamados()
                 ->paginate($this->paused_items_by_page),
         ]);
     }
@@ -77,10 +66,34 @@ class AtendimentosChamadoList extends Component
 
         $chamados = $chamados->select($this->getSelectItems($columns_to_select, true));
 
+        return $chamados;
+    }
+
+    protected function getFilteredChamados()
+    {
+        $chamados = $this->getChamados();
+
         if($this->selected_status && StatusEnum::getState($this->selected_status))
             $chamados->where('status', $this->selected_status);
+        else
+            $chamados->whereNotIn('status', [
+                StatusEnum::PAUSADO,
+                StatusEnum::FECHADO,
+                StatusEnum::EM_ATENDIMENTO,
+            ]);
 
         return $chamados;
+    }
+
+    protected function getPausedChamados()
+    {
+        return $this->getChamados([
+            'unidade_id',
+            'observacao',
+            'title',
+            'paused_at',
+        ])
+        ->where('status', StatusEnum::PAUSADO);
     }
 
     protected function getUsuario()

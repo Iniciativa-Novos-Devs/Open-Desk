@@ -162,6 +162,7 @@ class AtendimentosChamadoList extends Component
 
     public function clearCache($cache_key = null)
     {
+        $this->toastIt('Cache limpo com sucesso!', 'success', ['preventDuplicates' => true]);
         $this->cache_keys = session()->get('cache_keys', []);
 
         if(!$cache_key)
@@ -196,22 +197,40 @@ class AtendimentosChamadoList extends Component
         if(!$this->em_atendimento instanceof Chamado)
             return;
 
-        return $this->em_atendimento->update([
+        $updated = $this->em_atendimento->update([
             'status'    => StatusEnum::PAUSADO,
             'paused_at' => now(),
         ]);
+
+        if($updated)
+        {
+            $this->toastIt('Chamado #'. $this->em_atendimento->id .' pausado com sucesso!', 'success', ['preventDuplicates' => false]);
+            return $updated;
+        }
+
+        $this->toastIt('Falha ao pausar o chamado #'. $this->em_atendimento->id .'', 'error', ['preventDuplicates' => false]);
     }
 
     public function atenderChamado($chamado_id)
     {
         if(!$this->atendente->id ?? null)
-            return;//TODO validar se o usuário é um atendente
+        {
+            //TODO validar se o usuário é um atendente
+            $this->toastIt('Usuário atual não é um atendente!', 'error', ['preventDuplicates' => true]);
+            return;
+        }
 
         if($this->hasEmAtendimento())
-            return;//TODO informar ao usuário o motivo de não abrir o chamado
+        {
+            $this->toastIt('Já existe um chamado em atendimento!', 'error', ['preventDuplicates' => true]);
+            return;
+        }
 
         if(!is_numeric($chamado_id))
-            return;//TODO informar ao usuário o motivo de não abrir o chamado
+        {
+            $this->toastIt('Falha ao selecionar identificador do chamado!', 'error', ['preventDuplicates' => true]);
+            return;
+        }
 
         $chamado = $this->getChamadoById((int) $chamado_id);
 
@@ -253,5 +272,26 @@ class AtendimentosChamadoList extends Component
         return Chamado::where('status', StatusEnum::EM_ATENDIMENTO)
             ->where('atendente_id', $this->atendente->id)
             ->exists();
+    }
+
+    public function toastIt(string $message, string $toast_type = 'success', array $options = [])
+    {
+        $accepted_types = [
+            'success',
+            'info',
+            'warning',
+            'error',
+        ];
+
+        $default_options = [
+            "closeButton" => true,
+            "debug"       => false,
+            "newestOnTop" => true,
+            "preventDuplicates" => false,
+        ];
+
+        $toast_type = in_array($toast_type, $accepted_types) ? $toast_type : 'success';
+        $options       = array_merge($default_options, $options);
+        $this->emit('newToastMessage', compact('message', 'toast_type', 'options'));
     }
 }

@@ -26,3 +26,34 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+
+/**
+ * Toaster START
+ * https://codeseven.github.io/toastr/demo.html
+ * https://www.npmjs.com/package/toastr
+ */
+
+window.toastr = require('toastr');
+
+window.toastr.options = {
+    "closeButton": true,
+    "debug": false,
+    "newestOnTop": true,
+    "progressBar": true,
+    "positionClass": "toast-top-right",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "15000",
+    "extendedTimeOut": "15000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+}
+
+/**
+ * Toaster END
+ */

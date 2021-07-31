@@ -142,7 +142,12 @@
                     <li class="py-0 list-group-item d-flex justify-content-start">
                         <strong>Chamado: </strong><span class="mx-1 text-left text-muted">{{ $this->em_atendimento->id ?? null }}</span>
                         <span class="mx-3"></span>
-                        <strong>Unidade: </strong><span class="mx-1 text-left text-muted">{{ $this->em_atendimento->unidade->nome ?? null }}</span>
+                        @if ($this->em_atendimento->unidade->nome ?? null)
+                            <strong>Unidade: </strong>
+                            <span class="mx-1 text-left text-muted">
+                                {{ $this->em_atendimento->unidade->nome ?? null }}
+                            </span>
+                        @endif
                     </li>
                     <li class="py-0 list-group-item">
 
@@ -225,21 +230,40 @@
                 </thead>
                 <tbody>
                     @foreach ($chamados_pausados as $chamado_pausado)
+                        @php
+                            $title = strip_tags(html_entity_decode($chamado_pausado->observacao ?? ''));
+                        @endphp
                         <tr class="py-0">
-                            <td class="py-0">
+                            <td
+                                data-toggle="tooltip" data-html="true"
+                                title="{{ \Str::limit(strip_tags(html_entity_decode($chamado_pausado->title)), 200, '...') }}"
+                                class="py-0">
                                 {{ $chamado_pausado->id }} |
-                                {{ $chamado_pausado->title }}
-                            </td>
-                            <td class="py-0">
-                                <button data-toggle="tooltip" data-html="true"
-                                    title="Unidade: {!! $chamado_pausado->unidade->nome ?? '' !!}.
-                                    {!! strip_tags(html_entity_decode($chamado_pausado->observacao ?? '')) !!}"
-                                    class="py-0 rounded-circle btn btn-sm btn-outline-info">!</button>
+                                {{ \Str::limit(strip_tags(html_entity_decode($chamado_pausado->title)), 15, '...') }}
                             </td>
                             <td class="py-0 small">
+                                <button data-toggle="tooltip" data-html="true"
+                                    title="
+                                    {!!
+                                        $chamado_pausado->unidade ?
+                                        'Unidade: '. $chamado_pausado->unidade->nome : ''
+                                    !!}
+                                    {{
+                                        $chamado_pausado->paused_at ?
+                                        'Pausado em: '. $chamado_pausado->paused_at->format('d/m/Y H:i:s') : ''
+                                    }}
+                                    "
+                                    class="py-0 rounded-circle btn btn-sm btn-outline-info">!</button>
+                            </td>
+                            <td data-toggle="tooltip" data-html="true"
+                                title="{{
+                                    $chamado_pausado->paused_at ?
+                                    $chamado_pausado->paused_at->format('d/m/Y H:i:s') : ''
+                                }}"
+                                class="py-0">
                                 {{
-                                $chamado_pausado->paused_at ?
-                                $chamado_pausado->paused_at->format('d/m/Y H:i:s') : ''
+                                    $chamado_pausado->paused_at ?
+                                    $chamado_pausado->paused_at->format('d/m H:i') : ''
                                 }}
                             </td>
                             <td class="py-0">

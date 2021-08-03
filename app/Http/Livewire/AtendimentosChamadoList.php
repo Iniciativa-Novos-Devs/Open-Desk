@@ -78,7 +78,7 @@ class AtendimentosChamadoList extends Component
         else
             $chamados->whereNotIn('status', [
                 StatusEnum::PAUSADO,
-                StatusEnum::FECHADO,
+                StatusEnum::ENCERRADO,
                 StatusEnum::EM_ATENDIMENTO,
             ]);
 
@@ -260,7 +260,7 @@ class AtendimentosChamadoList extends Component
                 },
             ])
             ->whereNotIn('status', [
-                StatusEnum::FECHADO,
+                StatusEnum::ENCERRADO,
                 StatusEnum::EM_ATENDIMENTO,
             ])
             ->where('id', $chamado_id)

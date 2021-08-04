@@ -362,4 +362,9 @@ class AtendimentosChamadoList extends Component
             StatusEnum::EM_ATENDIMENTO,
         ], $and_this);
     }
+
+    public function confirm($message, $callback, ...$argv)
+    {
+        $this->emit('confirm', compact('message', 'callback', 'argv'));
+    }
 }

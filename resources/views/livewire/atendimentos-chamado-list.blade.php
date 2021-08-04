@@ -220,7 +220,8 @@
                 <button type="button" class="my-1 rounded btn btn-warning">Transferir</button>
                 <button
                     class="my-1 rounded btn btn-danger"
-                    wire:click="closeCurrent()"
+                    {{-- wire:click="closeCurrent()" --}}
+                    wire:click="confirm('Deseja encerrar o chamado?', 'closeCurrent', '')"
                     {{ !($this->em_atendimento ?? null) ? 'disabled' : '' }}
                     type="button">Encerrar</button>
             </div>
@@ -291,3 +292,4 @@
         </div>
     </div>
 </div>
+<x-wire-confirm-alert/>

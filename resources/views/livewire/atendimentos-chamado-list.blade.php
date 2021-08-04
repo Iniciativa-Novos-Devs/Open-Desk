@@ -71,6 +71,9 @@
                                     <th scope="col" class="py-0 cursor-pointer" wire:click="changeOrderBy('status')">
                                         Estado
                                     </th>
+                                    <th scope="col" class="py-0">
+                                        Ações
+                                    </th>
                                 </tr>
 
                                 @foreach ($chamados as $chamado)
@@ -87,13 +90,15 @@
                                         <td class="py-0">{{ \App\Enums\StatusEnum::getState((int) $chamado->status) }}
                                         </td>
                                         <td class="py-0">
-                                            <button
-                                                class="p-0 px-1 btn btn-sm btn-success no-focus"
-                                                wire:click="atenderChamado({{ $chamado->id }})"
-                                                type="button">
-                                            Atender
-                                        </button>
-                                            <button class="p-0 px-1 btn btn-sm btn-warning no-focus">Transferir</button>
+                                            @if (!in_array($chamado->status, $this->cantOpenIfStatusIn()))
+                                                <button
+                                                    class="p-0 px-1 btn btn-sm btn-success no-focus"
+                                                    wire:click="atenderChamado({{ $chamado->id }})"
+                                                    type="button">
+                                                    Atender
+                                                </button>
+                                                <button class="p-0 px-1 btn btn-sm btn-warning no-focus">Transferir</button>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
@@ -188,11 +193,11 @@
 
             <div class="pb-3 col-12">
                 <div class="form-group w-100">
-                    <label for="nota_atendimento">Observação do atendimento</label>
+                    <label for="nota_atendimento">Registro do atendimento</label>
                     <textarea class="mb-3 form-control" id="nota_atendimento" cols="10" rows="3"
                         {{ ($this->em_atendimento ?? null) ? '' : 'disabled' }}
                         placeholder="Aqui vai sua observação..."
-                        style="min-height: 6rem; max-height: 14rem; background-color: #211e1e21;"></textarea>
+                        style="min-height: 6rem; max-height: 14rem; background-color: #211e1e21;" wire:model.lazy='log_message'></textarea>
                 </div>
             </div>
             @else
@@ -213,7 +218,11 @@
                 </button>
                 <button type="button" class="my-1 rounded btn btn-info">Compartilhar</button>
                 <button type="button" class="my-1 rounded btn btn-warning">Transferir</button>
-                <button type="button" class="my-1 rounded btn btn-danger">Encerrar</button>
+                <button
+                    class="my-1 rounded btn btn-danger"
+                    wire:click="closeCurrent()"
+                    {{ !($this->em_atendimento ?? null) ? 'disabled' : '' }}
+                    type="button">Encerrar</button>
             </div>
         </div>
 

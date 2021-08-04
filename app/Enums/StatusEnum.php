@@ -4,7 +4,7 @@ namespace App\Enums;
 
 class StatusEnum
 {
-    public const ABERTOS        = 1;
+    public const ABERTO         = 1;
     public const PENDENTE       = 2;
     public const EM_ATENDIMENTO = 3;
     public const TRANSFERIDO    = 4;

@@ -26,6 +26,7 @@ class AtendimentosChamadoList extends Component
     public $atendente           = null;
     public $em_atendimento      = null;
     public $cache_keys          = [];
+    public $log_message          = null;
 
     public function mount(SessionManager $session, array $select = [], int $items_by_page = 10)
     {
@@ -33,7 +34,7 @@ class AtendimentosChamadoList extends Component
 
         $this->select_items         = $this->getSelectItems($select, true);
         $this->items_by_page        = $items_by_page > 0 && $items_by_page < 200 ? $items_by_page : 10;
-        $this->selected_status      = null;
+        $this->selected_status      = StatusEnum::ABERTO;
         $this->keep_accordion_open  = session()->get('user_preferences.atendente.chamados_a_atender.keep_accordion_open', false);
         $this->cache_keys           = session()->get('cache_keys', []);
         $this->atendente            = $this->getUsuario();
@@ -72,6 +73,9 @@ class AtendimentosChamadoList extends Component
     protected function getFilteredChamados()
     {
         $chamados = $this->getChamados();
+
+        if(!$this->selected_status)
+            return $chamados;
 
         if($this->selected_status && StatusEnum::getState($this->selected_status))
             $chamados->where('status', $this->selected_status);
@@ -186,6 +190,7 @@ class AtendimentosChamadoList extends Component
             return;
 
         $this->em_atendimento = null;
+        $this->log_message    = null;
         $this->startEmAtendimento(true);
     }
 
@@ -211,31 +216,83 @@ class AtendimentosChamadoList extends Component
         $this->toastIt('Falha ao pausar o chamado #'. $this->em_atendimento->id .'', 'error', ['preventDuplicates' => false]);
     }
 
+    public function closeCurrent()
+    {
+        if(!$this->log_message)
+        {
+            $this->toastIt('Favor colocar um registro do atendimento antes de encerrar. [ln~'.__LINE__.']', 'error', ['preventDuplicates' => true]);
+            return;
+        }
+
+        if(strlen($this->log_message) < 10)
+        {
+            $this->toastIt('O registro do atendimento precisa ter no mínimo 10 caracteres. [ln~'.__LINE__.']', 'error', ['preventDuplicates' => true]);
+            return;
+        }
+
+        if(!$this->setCurrentAsClosed())
+            return;
+
+        $this->em_atendimento = null;
+        $this->log_message    = null;
+        $this->startEmAtendimento(true);
+    }
+
+    protected function setCurrentAsClosed()
+    {
+        if(!$this->em_atendimento)
+            return;
+
+        if(!$this->em_atendimento instanceof Chamado)
+            return;
+
+        $updated = $this->em_atendimento->update([
+            'status'        => StatusEnum::ENCERRADO,
+            'conclusion'    => $this->log_message,
+            'finished_at'   => now(),
+        ]);
+
+        if($updated)
+        {
+            $this->toastIt('Chamado #'. $this->em_atendimento->id .' encerrado com sucesso!', 'success', ['preventDuplicates' => false]);
+            return $updated;
+        }
+
+        $this->toastIt('Falha ao encerrar o chamado #'. $this->em_atendimento->id, 'error', ['preventDuplicates' => false]);
+    }
+
     public function atenderChamado($chamado_id)
     {
         if(!$this->atendente->id ?? null)
         {
             //TODO validar se o usuário é um atendente
-            $this->toastIt('Usuário atual não é um atendente!', 'error', ['preventDuplicates' => true]);
+            $this->toastIt('Usuário atual não é um atendente! [ln~'.__LINE__.']', 'error', ['preventDuplicates' => true]);
             return;
         }
 
         if($this->hasEmAtendimento())
         {
-            $this->toastIt('Já existe um chamado em atendimento!', 'error', ['preventDuplicates' => true]);
+            $this->toastIt('Já existe um chamado em atendimento! [ln~'.__LINE__.']', 'error', ['preventDuplicates' => true]);
             return;
         }
 
         if(!is_numeric($chamado_id))
         {
-            $this->toastIt('Falha ao selecionar identificador do chamado!', 'error', ['preventDuplicates' => true]);
+            $this->toastIt('Falha ao selecionar identificador do chamado! [ln~'.__LINE__.']', 'error', ['preventDuplicates' => true]);
             return;
         }
 
-        $chamado = $this->getChamadoById((int) $chamado_id);
+        $chamado = $this->getChamadoById((int) $chamado_id)
+            ->whereNotIn('status', [
+                StatusEnum::ENCERRADO,
+                StatusEnum::EM_ATENDIMENTO,
+            ])->first();
 
         if(!$chamado)
+        {
+            $this->toastIt('Falha ao abrir o chamado! [ln~'.__LINE__.']', 'error', ['preventDuplicates' => true]);
             return;
+        }
 
         $update = $chamado->update([
             'status'        => StatusEnum::EM_ATENDIMENTO,
@@ -243,9 +300,17 @@ class AtendimentosChamadoList extends Component
         ]);
 
         if(!$update)
+        {
+            $this->toastIt('Falha ao atualizar o chamado! [ln~'.__LINE__.']', 'error', ['preventDuplicates' => true]);
             return;
+        }
 
-        $this->em_atendimento = $this->getChamadoById((int) $chamado_id);
+        $this->em_atendimento = $this->getChamadoById((int) $chamado_id)
+            ->whereNotIn('status', [
+                StatusEnum::ENCERRADO,
+                StatusEnum::EM_ATENDIMENTO,
+            ])->first();
+
         $this->startEmAtendimento(true);
     }
 
@@ -259,12 +324,7 @@ class AtendimentosChamadoList extends Component
                     $query->select('id','name',);
                 },
             ])
-            ->whereNotIn('status', [
-                StatusEnum::ENCERRADO,
-                StatusEnum::EM_ATENDIMENTO,
-            ])
-            ->where('id', $chamado_id)
-            ->first();
+            ->where('id', $chamado_id);
     }
 
     public function hasEmAtendimento()
@@ -291,7 +351,15 @@ class AtendimentosChamadoList extends Component
         ];
 
         $toast_type = in_array($toast_type, $accepted_types) ? $toast_type : 'success';
-        $options       = array_merge($default_options, $options);
+        $options    = array_merge($default_options, $options);
         $this->emit('newToastMessage', compact('message', 'toast_type', 'options'));
+    }
+
+    public function cantOpenIfStatusIn(array $and_this = [])
+    {
+        return array_merge([
+            StatusEnum::ENCERRADO,
+            StatusEnum::EM_ATENDIMENTO,
+        ], $and_this);
     }
 }

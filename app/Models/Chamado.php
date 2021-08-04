@@ -39,6 +39,7 @@ class Chamado extends Model
         'paused_at',
         'finished_at',
         'transferred_at',
+        'conclusion',
     ];
 
     public function tipo_problema()

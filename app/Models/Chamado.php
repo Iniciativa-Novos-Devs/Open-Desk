@@ -40,6 +40,7 @@ class Chamado extends Model
         'finished_at',
         'transferred_at',
         'conclusion',
+        'area_id',
     ];
 
     public function tipo_problema()
@@ -50,6 +51,11 @@ class Chamado extends Model
     public function problema()
     {
         return $this->belongsTo(Problema::class, 'problema_id', 'id');
+    }
+
+    public function area()
+    {
+        return $this->belongsTo(Area::class, 'area_id', 'id');
     }
 
     public function usuario()

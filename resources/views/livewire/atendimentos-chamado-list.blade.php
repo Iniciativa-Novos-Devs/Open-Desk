@@ -61,8 +61,11 @@
                                         wire:click="changeOrderBy('usuario_id')">
                                         Usuario
                                     </th>
-                                    <th scope="col" class="py-0 cursor-pointer" wire:click="changeOrderBy('title')">
+                                    <th scope="col" class="py-0 cursor-pointer" wire:click="changeOrderBy('id')">
                                         Observação
+                                    </th>
+                                    <th scope="col" class="py-0 cursor-pointer" wire:click="changeOrderBy('id')">
+                                        Atendente
                                     </th>
                                     <th scope="col" class="py-0 cursor-pointer"
                                         wire:click="changeOrderBy('created_at')">
@@ -86,6 +89,7 @@
                                             title="{{ \Str::limit(strip_tags(html_entity_decode($chamado->title)), 180, '...') }}">
                                             {{ \Str::limit(strip_tags(html_entity_decode($chamado->title)), 40, '...') }}
                                         </td>
+                                        <td class="py-0">{{ $chamado->atendente->name ?? null}}</td>
                                         <td class="py-0">{{ $chamado->created_at->format('d/m/Y H:i:s') }}</td>
                                         <td class="py-0">{{ \App\Enums\StatusEnum::getState((int) $chamado->status) }}
                                         </td>

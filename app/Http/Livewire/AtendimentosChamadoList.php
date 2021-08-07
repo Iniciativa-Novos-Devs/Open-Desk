@@ -44,7 +44,11 @@ class AtendimentosChamadoList extends Component
     public function render()
     {
         return view('livewire.atendimentos-chamado-list', [
-            'chamados' => $this->getFilteredChamados()
+            'chamados' => $this->getFilteredChamados([], [
+                'atendente' => function($query) {
+                    $query->select('id','name',);
+                },
+            ])
                 ->paginate($this->items_by_page),
 
             'chamados_pausados' =>$this->getPausedChamados()
@@ -52,13 +56,15 @@ class AtendimentosChamadoList extends Component
         ]);
     }
 
-    protected function getChamados(array $columns_to_select = [])
+    protected function getChamados(array $columns_to_select = [], array $relationships = [])
     {
         $chamados = Chamado::limit($this->items_by_page)
                     ->orderBy($this->order_by, $this->order_dir)
-                    ->with(['usuario' => function($query) {
-                        $query->select('id','name',);
-                    }]);
+                    ->with([
+                        'usuario' => function($query) {
+                            $query->select('id','name',);
+                        },
+                    ]);
 
         if(in_array('unidade_id', $columns_to_select))
             $chamados = $chamados->with(['unidade' => function($query) {
@@ -67,12 +73,33 @@ class AtendimentosChamadoList extends Component
 
         $chamados = $chamados->select($this->getSelectItems($columns_to_select, true));
 
+        if($relationships)
+            $chamados = $chamados->with($relationships);
+
+        $areas  = $this->getUsuarioAreas();
+
+        if($areas && is_array($areas) && count($areas) > 0)
+            $chamados = $chamados->whereRaw('area_id in('. implode(',', $areas) .') or area_id is null');
+
         return $chamados;
     }
 
-    protected function getFilteredChamados()
+    public function getUsuarioAreas(): Array
     {
-        $chamados = $this->getChamados();
+        if(!$this->atendente)
+            return [];
+
+        $areas = $this->atendente->areas ?? [];
+
+        if(!$areas)
+            return [];
+
+        return array_unique(array_values($areas->pluck('id')->toArray()));
+    }
+
+    protected function getFilteredChamados(array $columns_to_select = [], array $relationships = [])
+    {
+        $chamados = $this->getChamados($columns_to_select, $relationships);
 
         if(!$this->selected_status)
             return $chamados;
@@ -89,20 +116,20 @@ class AtendimentosChamadoList extends Component
         return $chamados;
     }
 
-    protected function getPausedChamados()
+    protected function getPausedChamados(array $columns_to_select = [], array $relationships = [])
     {
         return $this->getChamados([
             'unidade_id',
             'observacao',
             'title',
             'paused_at',
-        ])
+        ], $relationships)
         ->where('status', StatusEnum::PAUSADO);
     }
 
     protected function getUsuario()
     {
-        return UsuarioCache::byLoggedUser();
+        return UsuarioCache::byLoggedUser(['areas', 'roles']);
     }
 
     protected function getSelectItems(array $select_array_from_param_data = [], bool $return_it = false)
@@ -111,6 +138,7 @@ class AtendimentosChamadoList extends Component
             'id',
             'problema_id',
             'usuario_id',
+            'atendente_id',
             'status',
             'created_at',
             'title',
@@ -156,6 +184,9 @@ class AtendimentosChamadoList extends Component
                         $query->select('id','nome',);
                     },
                     'usuario' => function($query) {
+                        $query->select('id','name',);
+                    },
+                    'atendente' => function($query) {
                         $query->select('id','name',);
                     },
                 ])

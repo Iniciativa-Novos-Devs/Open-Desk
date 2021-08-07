@@ -29,10 +29,10 @@ class UsuarioCache
         });
     }
 
-    public static function byLoggedUser()
+    public static function byLoggedUser(array $relationships = null)
     {
         if(Auth::user()->id ?? null)
-            return self::byId(Auth::user()->id);
+            return self::byId(Auth::user()->id, $relationships);
 
         return null;
     }

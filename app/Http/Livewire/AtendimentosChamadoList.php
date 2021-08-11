@@ -12,6 +12,8 @@ use Livewire\Component;
 use App\Enums\StatusEnum;
 use App\Http\Controllers\UserPreferencesController;
 use \App\Libs\Helpers\DateHelpers;
+use App\Models\Area;
+use App\Models\UsuarioRole;
 
 class AtendimentosChamadoList extends Component
 {
@@ -26,7 +28,8 @@ class AtendimentosChamadoList extends Component
     public $atendente           = null;
     public $em_atendimento      = null;
     public $cache_keys          = [];
-    public $log_message          = null;
+    public $log_message         = null;
+    public $area_destino        = null;
 
     public function mount(SessionManager $session, array $select = [], int $items_by_page = 10)
     {
@@ -95,6 +98,18 @@ class AtendimentosChamadoList extends Component
             return [];
 
         return array_unique(array_values($areas->pluck('id')->toArray()));
+    }
+
+    public function getAllAreas(bool $update_cache = false)
+    {
+        $this->cache_keys['all_areas'] = 'all_areas';
+
+        if($update_cache)
+            Cache::forget($this->cache_keys['all_areas']);
+
+        return Cache::remember($this->cache_keys['all_areas'], (5*60) /*secs*/, function () {
+            return Area::select('id', 'sigla', 'nome')->get();
+        });
     }
 
     protected function getFilteredChamados(array $columns_to_select = [], array $relationships = [])
@@ -397,5 +412,14 @@ class AtendimentosChamadoList extends Component
     public function confirm($message, $callback, ...$argv)
     {
         $this->emit('confirm', compact('message', 'callback', 'argv'));
+    }
+
+    public function tranferirChamado()
+    {
+        if(!$this->em_atendimento ?? null)
+            return;
+
+        $value = 'teste '. $this->em_atendimento->id;
+        $this->emit('tranferirChamadoEvent', compact('value'));
     }
 }

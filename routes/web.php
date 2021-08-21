@@ -71,6 +71,30 @@ Route::group(['middleware' => ['redirect_to_base_host']], function () {
     require __DIR__.'/auth.php';
 });
 
+Route::group(['prefix' => 'alpine', 'middleware' => ['redirect_to_base_host']], function () {
+
+    Route::get('select', function() {
+        return view('alpine.select');
+    })->name('alpine.select');
+
+    Route::get('select_async', function() {
+        return view('alpine.select_async');
+    })->name('alpine.select_async');
+
+    Route::get('api/text', function () {
+        return response()->json("Texto vindo da api ". rand(100, 300));
+    })->name('alpine.api_text');
+
+    Route::get('api/pessoas', function () {
+        return [
+            ['id' => 1,'nome' => 'Tiago'],
+            ['id' => 2,'nome' => 'Joao'],
+            ['id' => 3,'nome' => 'Pedro'],
+            ['id' => 4,'nome' => 'Paulo'],
+        ];
+    })->name('alpine.api_pessoas');
+});
+
 Route::get('fake-cps', [ValidadorCpsUsuarioController::class, 'fakeCpsResponse'])->name('fake_url_valida_usuario_cps');
 Route::get('valida-cps', [ValidadorCpsUsuarioController::class, 'secondLogin'])->middleware('auth')->name('valida_usuario_cps');
 Route::post('valida-cps', [ValidadorCpsUsuarioController::class, 'validateCpsUser'])->middleware('auth');

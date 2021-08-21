@@ -70,126 +70,6 @@
             </div>
         </div>
 
-        <script>
-            function makeSelectItem(transferencia_por, options_data)
-            {
-                if(!window.isJson)
-                    return;
-
-                if(!isJson(options_data))
-                    return;
-
-                options_data = JSON.parse(options_data);
-
-                if(options_data.title)
-                    document.querySelectorAll('[transfer_target="title"]').forEach(function (el){
-                        el.innerText = options_data.title;
-                    });
-
-                if(options_data.title)
-                    document.querySelectorAll('[transfer_target="label"]').forEach(function (el){
-                        el.innerText = options_data.label;
-                    });
-            }
-
-            function removeExtraBackDrops(all = false)
-            {
-                // modal-backdrop fade show
-                var backdrops = document.querySelectorAll('div.modal-backdrop.show');
-
-                if(backdrops.length > 1)
-                backdrops.forEach(function (el, key){
-                    if(all == true)
-                        el.remove();
-                    else
-                        if(key != 0)
-                            el.remove();
-                });
-            }
-
-            function reOpenTransferirChamadoModal(remove_fade = false)
-            {
-                if(!window.__transferModal)
-                    return;
-
-                // window.__transferModal.hide();
-
-                if(window.removeExtraBackDrops)
-                    removeExtraBackDrops();
-
-                if(window.createAndStartTransferirChamadoModal)
-                    createAndStartTransferirChamadoModal(remove_fade);
-            }
-
-            function createAndStartTransferirChamadoModal(remove_fade = false)
-            {
-                var modal_options = {
-                    backdrop: true,
-                    keyboard: true,
-                    focus: true,
-                };
-                window.__transferModalEl = document.getElementById('transferirChamadoModal');
-
-
-                if(remove_fade)
-                    window.__transferModalEl.classList.remove('fade');
-                    // window.__transferModalEl.classList.add('fade');
-
-                window.__transferModalEl.addEventListener('shown.bs.modal', function(event) {
-                    console.log('shown');
-                    if(window.removeExtraBackDrops)
-                        removeExtraBackDrops();
-                });
-                window.__transferModalEl.addEventListener('show.bs.modal', function(event) {
-                    console.log('show');
-                    if(window.removeExtraBackDrops)
-                        removeExtraBackDrops();
-                });
-                window.__transferModalEl.addEventListener('hidden.bs.modal', function(event) {
-                    console.log('hidden');
-                    if(window.removeExtraBackDrops)
-                        removeExtraBackDrops();
-                });
-                window.__transferModalEl.addEventListener('hide.bs.modal', function(event) {
-                    console.log('hide');
-                    if(window.removeExtraBackDrops)
-                        removeExtraBackDrops();
-                });
-
-                window.__transferModal = new bootstrap.Modal(window.__transferModalEl, modal_options);
-                window.__transferModal.show();
-            }
-
-            document.addEventListener('DOMContentLoaded', (event) => {
-                createAndStartTransferirChamadoModal();
-
-                if (window.Livewire)
-                {
-                    Livewire.on('closeModalTransferenciaPorEvent', e => {
-                        if(window.__transferModal)
-                            window.__transferModal.hide();
-
-                        removeExtraBackDrops(true);
-                    });
-
-                    Livewire.on('tranferirChamadoEvent', e => {
-                        console.log(e.value);
-                        createAndStartTransferirChamadoModal();
-                    });
-
-                    Livewire.on('transferenciaPorEvent', e => {
-                        console.log('transferencia_por', e.transferencia_por);
-                        console.log('sss');
-                        reOpenTransferirChamadoModal(true);
-                        reOpenTransferirChamadoModal(true);
-
-                        if(window.makeSelectItem)
-                            makeSelectItem(e.transferencia_por, e.options_data)
-                    });
-                }
-            });
-        </script>
-
     </div>
 
     <div class="col-12">
@@ -471,5 +351,128 @@
             </table>
         </div>
     </div>
+
+
+
+    <script>
+        function makeSelectItem(transferencia_por, options_data)
+        {
+            if(!window.isJson)
+                return;
+
+            if(!isJson(options_data))
+                return;
+
+            options_data = JSON.parse(options_data);
+
+            if(options_data.title)
+                document.querySelectorAll('[transfer_target="title"]').forEach(function (el){
+                    el.innerText = options_data.title;
+                });
+
+            if(options_data.title)
+                document.querySelectorAll('[transfer_target="label"]').forEach(function (el){
+                    el.innerText = options_data.label;
+                });
+        }
+
+        function removeExtraBackDrops(all = false)
+        {
+            // modal-backdrop fade show
+            var backdrops = document.querySelectorAll('div.modal-backdrop.show');
+
+            if(backdrops.length > 1)
+            backdrops.forEach(function (el, key){
+                if(all == true)
+                    el.remove();
+                else
+                    if(key != 0)
+                        el.remove();
+            });
+        }
+
+        function reOpenTransferirChamadoModal(remove_fade = false)
+        {
+            if(!window.__transferModal)
+                return;
+
+            // window.__transferModal.hide();
+
+            if(window.removeExtraBackDrops)
+                removeExtraBackDrops();
+
+            if(window.createAndStartTransferirChamadoModal)
+                createAndStartTransferirChamadoModal(remove_fade);
+        }
+
+        function createAndStartTransferirChamadoModal(remove_fade = false)
+        {
+            var modal_options = {
+                backdrop: true,
+                keyboard: true,
+                focus: true,
+            };
+
+            window.__transferModalEl = document.getElementById('transferirChamadoModal');
+
+            if(remove_fade)
+                window.__transferModalEl.classList.remove('fade');
+                // window.__transferModalEl.classList.add('fade');
+
+            window.__transferModalEl.addEventListener('shown.bs.modal', function(event) {
+                console.log('shown');
+                if(window.removeExtraBackDrops)
+                    removeExtraBackDrops();
+            });
+            window.__transferModalEl.addEventListener('show.bs.modal', function(event) {
+                console.log('show');
+                if(window.removeExtraBackDrops)
+                    removeExtraBackDrops();
+            });
+            window.__transferModalEl.addEventListener('hidden.bs.modal', function(event) {
+                console.log('hidden');
+                if(window.removeExtraBackDrops)
+                    removeExtraBackDrops();
+            });
+            window.__transferModalEl.addEventListener('hide.bs.modal', function(event) {
+                console.log('hide');
+                if(window.removeExtraBackDrops)
+                    removeExtraBackDrops();
+            });
+
+            window.__transferModal = new bootstrap.Modal(window.__transferModalEl, modal_options);
+            window.__transferModal.show();
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            createAndStartTransferirChamadoModal();
+
+            if (window.Livewire)
+            {
+                Livewire.on('closeModalTransferenciaPorEvent', e => {
+                    if(window.__transferModal)
+                        window.__transferModal.hide();
+
+                    removeExtraBackDrops(true);
+                });
+
+                Livewire.on('tranferirChamadoEvent', e => {
+                    console.log(e.value);
+                    createAndStartTransferirChamadoModal();
+                });
+
+                Livewire.on('transferenciaPorEvent', e => {
+                    console.log('transferencia_por', e.transferencia_por);
+                    console.log('sss');
+                    reOpenTransferirChamadoModal(true);
+                    reOpenTransferirChamadoModal(true);
+
+                    if(window.makeSelectItem)
+                        makeSelectItem(e.transferencia_por, e.options_data)
+                });
+            }
+        });
+    </script>
+
 </div>
 <x-wire-confirm-alert />

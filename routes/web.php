@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\AtividadesController;
 use App\Http\Controllers\ChamadoController;
@@ -27,7 +28,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [DashboardController::class , 'index']);
 Route::get('/dashboard', [DashboardController::class , 'index'])->name('dashboard');
 
-Route::group(['prefix' => 'painel', 'middleware' => ['auth']], function () {
+Route::group(['prefix' => 'painel', 'middleware' => ['auth', 'redirect_to_base_host']], function () {
     //-----------------------------------------------------------------------------------
     Route::get('/', [PainelController::class, 'index'])->name('painel');
 
@@ -66,11 +67,9 @@ Route::get('teste', function(){
     return Auth::user()->name;
 })->middleware(['auth']);
 
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth'])->name('dashboard');
-
-require __DIR__.'/auth.php';
+Route::group(['middleware' => ['redirect_to_base_host']], function () {
+    require __DIR__.'/auth.php';
+});
 
 Route::get('fake-cps', [ValidadorCpsUsuarioController::class, 'fakeCpsResponse'])->name('fake_url_valida_usuario_cps');
 Route::get('valida-cps', [ValidadorCpsUsuarioController::class, 'secondLogin'])->middleware('auth')->name('valida_usuario_cps');

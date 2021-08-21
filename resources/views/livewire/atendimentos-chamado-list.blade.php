@@ -6,7 +6,8 @@
         </button>
 
         <!-- Modal -->
-        <div class="modal fade" id="transferirChamadoModal" tabindex="-1" aria-labelledby="transferirChamadoModalLabel" aria-hidden="true">
+        <div class="modal fade" id="transferirChamadoModal" tabindex="-1" aria-labelledby="transferirChamadoModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-lg modal-dialog-scrollable">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -15,25 +16,36 @@
                     </div>
                     <div class="modal-body">
                         <div class="w-100">
-                            <div class="mb-3">
-                                <label for="add_area" class="form-label w-100">
-                                    Selecionar Área
-                                    <select name="area_id" id="add_area" class="form-control form-select">
-                                        <option value="">Selecione uma nova área</option>
-                                        @foreach ($this->getAllAreas() as $area)
-                                            <option value="{{ $area->id }}">{{ $area->nome .' - '. $area->sigla }}</option>
-                                        @endforeach
-                                    </select>
-                                </label>
+                            <h4 class="mb-3 text-center">Transferir para</h4>
+                            <h6 class="mb-3 text-center">{{ $transferencia_por }}</h6>
+                            <div class="mb-3 d-flex justify-content-center">
+
+                                <div class="cursor-pointer f-style form-check form-check-inline">
+                                    <label class="cursor-pointer form-check-label f-style" for="transferencia_por_area">
+                                        <input class="form-check-input" type="radio" name="transferencia_por" value="area"
+                                            wire:click="transferenciaPor('area')"
+                                            {{ ($transferencia_por ?? null) == 'area' ? 'checked' : '' }}
+                                            id="transferencia_por_area" value="area">
+                                        Área</label>
+                                </div>
+                                <div class="cursor-pointer f-style form-check form-check-inline">
+                                    <label class="cursor-pointer form-check-label f-style" for="transferencia_por_atendente">
+                                        <input class="form-check-input" type="radio" name="transferencia_por" value="atendente"
+                                            wire:click="transferenciaPor('atendente')"
+                                            {{ ($transferencia_por ?? null) == 'atendente' ? 'checked' : '' }}
+                                            id="transferencia_por_atendente" value="atendente">
+                                        Atendente</label>
+                                </div>
                             </div>
 
                             <div class="mb-3">
-                                <label for="add_atendente" class="form-label w-100">
-                                    Selecionar Área
-                                    <select name="atendente_id" id="add_atendente" class="form-control form-select">
-                                        <option value="">Selecione um atendente</option>
+                                <label for="add_area" class="form-label w-100">
+                                    <span transfer_target="label"></span>
+                                    <select name="area_id" id="add_area" class="form-control form-select">
+                                        <option value="" transfer_target="label"></option>
                                         @foreach ($this->getAllAreas() as $area)
-                                            <option value="{{ $area->id }}">{{ $area->nome .' - '. $area->sigla }}</option>
+                                            <option value="{{ $area->id }}">{{ $area->nome . ' - ' . $area->sigla }}
+                                            </option>
                                         @endforeach
                                     </select>
                                 </label>
@@ -59,7 +71,58 @@
         </div>
 
         <script>
-            document.addEventListener('DOMContentLoaded', (event) => {
+            function makeSelectItem(transferencia_por, options_data)
+            {
+                if(!window.isJson)
+                    return;
+
+                if(!isJson(options_data))
+                    return;
+
+                options_data = JSON.parse(options_data);
+
+                if(options_data.title)
+                    document.querySelectorAll('[transfer_target="title"]').forEach(function (el){
+                        el.innerText = options_data.title;
+                    });
+
+                if(options_data.title)
+                    document.querySelectorAll('[transfer_target="label"]').forEach(function (el){
+                        el.innerText = options_data.label;
+                    });
+            }
+
+            function removeExtraBackDrops(all = false)
+            {
+                // modal-backdrop fade show
+                var backdrops = document.querySelectorAll('div.modal-backdrop.show');
+
+                if(backdrops.length > 1)
+                backdrops.forEach(function (el, key){
+                    if(all == true)
+                        el.remove();
+                    else
+                        if(key != 0)
+                            el.remove();
+                });
+            }
+
+            function reOpenTransferirChamadoModal(remove_fade = false)
+            {
+                if(!window.__transferModal)
+                    return;
+
+                // window.__transferModal.hide();
+
+                if(window.removeExtraBackDrops)
+                    removeExtraBackDrops();
+
+                if(window.createAndStartTransferirChamadoModal)
+                    createAndStartTransferirChamadoModal(remove_fade);
+            }
+
+            function createAndStartTransferirChamadoModal(remove_fade = false)
+            {
                 var modal_options = {
                     backdrop: true,
                     keyboard: true,
@@ -67,29 +130,61 @@
                 };
                 window.__transferModalEl = document.getElementById('transferirChamadoModal');
 
+
+                if(remove_fade)
+                    window.__transferModalEl.classList.remove('fade');
+                    // window.__transferModalEl.classList.add('fade');
+
                 window.__transferModalEl.addEventListener('shown.bs.modal', function(event) {
                     console.log('shown');
+                    if(window.removeExtraBackDrops)
+                        removeExtraBackDrops();
                 });
                 window.__transferModalEl.addEventListener('show.bs.modal', function(event) {
                     console.log('show');
+                    if(window.removeExtraBackDrops)
+                        removeExtraBackDrops();
                 });
                 window.__transferModalEl.addEventListener('hidden.bs.modal', function(event) {
                     console.log('hidden');
+                    if(window.removeExtraBackDrops)
+                        removeExtraBackDrops();
                 });
                 window.__transferModalEl.addEventListener('hide.bs.modal', function(event) {
                     console.log('hide');
+                    if(window.removeExtraBackDrops)
+                        removeExtraBackDrops();
                 });
 
                 window.__transferModal = new bootstrap.Modal(window.__transferModalEl, modal_options);
                 window.__transferModal.show();
+            }
 
-                if(window.Livewire)
+            document.addEventListener('DOMContentLoaded', (event) => {
+                createAndStartTransferirChamadoModal();
+
+                if (window.Livewire)
                 {
+                    Livewire.on('closeModalTransferenciaPorEvent', e => {
+                        if(window.__transferModal)
+                            window.__transferModal.hide();
+
+                        removeExtraBackDrops(true);
+                    });
+
                     Livewire.on('tranferirChamadoEvent', e => {
                         console.log(e.value);
+                        createAndStartTransferirChamadoModal();
+                    });
 
-                        if(window.__transferModal)
-                            window.__transferModal.show();
+                    Livewire.on('transferenciaPorEvent', e => {
+                        console.log('transferencia_por', e.transferencia_por);
+                        console.log('sss');
+                        reOpenTransferirChamadoModal(true);
+                        reOpenTransferirChamadoModal(true);
+
+                        if(window.makeSelectItem)
+                            makeSelectItem(e.transferencia_por, e.options_data)
                     });
                 }
             });
@@ -197,10 +292,8 @@
                                                     wire:click="atenderChamado({{ $chamado->id }})" type="button">
                                                     Atender
                                                 </button>
-                                                <button
-                                                    class="p-0 px-1 btn btn-sm btn-warning no-focus"
-                                                    wire:click="tranferirChamado({{ $chamado->id }})"
-                                                    type="button">
+                                                <button class="p-0 px-1 btn btn-sm btn-warning no-focus"
+                                                    wire:click="tranferirChamado({{ $chamado->id }})" type="button">
                                                     Transferir
                                                 </button>
                                             @endif
@@ -321,11 +414,8 @@
                     Pausar
                 </button>
                 <button type="button" class="my-1 rounded btn btn-info">Compartilhar</button>
-                <button
-                    class="my-1 rounded btn btn-warning"
-                    {{ !($this->em_atendimento ?? null) ? 'disabled' : '' }}
-                    wire:click="tranferirChamado()"
-                    type="button">
+                <button class="my-1 rounded btn btn-warning" {{ !($this->em_atendimento ?? null) ? 'disabled' : '' }}
+                    wire:click="tranferirChamado()" type="button">
                     Transferir
                 </button>
                 <button class="my-1 rounded btn btn-danger" {{-- wire:click="closeCurrent()" --}}

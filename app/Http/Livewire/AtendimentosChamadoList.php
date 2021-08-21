@@ -29,7 +29,7 @@ class AtendimentosChamadoList extends Component
     public $em_atendimento      = null;
     public $cache_keys          = [];
     public $log_message         = null;
-    public $area_destino        = null;
+    public $transferencia_por   = null;
 
     public function mount(SessionManager $session, array $select = [], int $items_by_page = 10)
     {
@@ -419,7 +419,41 @@ class AtendimentosChamadoList extends Component
         if(!$this->em_atendimento ?? null)
             return;
 
-        $value = 'teste '. $this->em_atendimento->id;
-        $this->emit('tranferirChamadoEvent', compact('value'));
+        $this->transferencia_por = null;
+
+        $chamado_id = $this->em_atendimento->id;
+        $this->emit('tranferirChamadoEvent', compact('chamado_id'));
+    }
+
+    public function transferenciaPor(string $transferencia_por)
+    {
+        $accept_values = [
+            'area'      => [
+                'formated_title' => 'Área',
+                'formated_label' => 'Selecione uma Área para transferir',
+                'model'          => \App\Models\Area::class,
+            ],
+            'atendente' => [
+                'formated_title' => 'Atendente',
+                'formated_label' => 'Selecione um Atendente para transferir',
+                'model'          => \App\Models\Atendente::class,
+            ],
+        ];
+
+        $options_data = json_encode([
+            'id' => 1, 'label' => 'Algo 1',
+            'id' => 2, 'label' => 'Algo 2',
+            'id' => 3, 'label' => 'Algo 3',
+        ]);
+        //TODO colocar no foreach do JS optins id=add_area
+
+        if(!in_array($transferencia_por, array_keys($accept_values)))
+        {
+            $this->emit('closeModalTransferenciaPorEvent');
+            return;
+        }
+
+        $this->transferencia_por = $transferencia_por;
+        $this->emit('transferenciaPorEvent', compact('transferencia_por', 'options_data'));
     }
 }

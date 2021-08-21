@@ -1,3 +1,4 @@
+[x-cloak] { display: none !important; }
 .outline-none { outline:none !important; }
 
 .cursor-default, .f-style.cursor-default{ cursor: pointer !important; }

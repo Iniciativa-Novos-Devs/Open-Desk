@@ -29,7 +29,9 @@ class AtendimentosChamadoList extends Component
     public $em_atendimento      = null;
     public $cache_keys          = [];
     public $log_message         = null;
-    public $transferencia_por   = null;
+    public $transferencia_para   = null;
+    public $transferencia_para_id  = null;
+    public $options_data        = [];
 
     public function mount(SessionManager $session, array $select = [], int $items_by_page = 10)
     {
@@ -419,41 +421,75 @@ class AtendimentosChamadoList extends Component
         if(!$this->em_atendimento ?? null)
             return;
 
-        $this->transferencia_por = null;
+        $this->transferencia_para = null;
 
         $chamado_id = $this->em_atendimento->id;
         $this->emit('tranferirChamadoEvent', compact('chamado_id'));
     }
 
-    public function transferenciaPor(string $transferencia_por)
+    public function transferenciaPor(string $transferencia_para)
     {
         $accept_values = [
             'area'      => [
                 'formated_title' => 'Área',
-                'formated_label' => 'Selecione uma Área para transferir',
+                'formated_label' => 'Selecione uma área para transferir',
                 'model'          => \App\Models\Area::class,
             ],
             'atendente' => [
                 'formated_title' => 'Atendente',
-                'formated_label' => 'Selecione um Atendente para transferir',
+                'formated_label' => 'Selecione um atendente para transferir',
                 'model'          => \App\Models\Atendente::class,
             ],
         ];
 
-        $options_data = json_encode([
-            'id' => 1, 'label' => 'Algo 1',
-            'id' => 2, 'label' => 'Algo 2',
-            'id' => 3, 'label' => 'Algo 3',
-        ]);
         //TODO colocar no foreach do JS optins id=add_area
 
-        if(!in_array($transferencia_por, array_keys($accept_values)))
+        if(!in_array($transferencia_para, array_keys($accept_values)))
         {
             $this->emit('closeModalTransferenciaPorEvent');
             return;
         }
 
-        $this->transferencia_por = $transferencia_por;
-        $this->emit('transferenciaPorEvent', compact('transferencia_por', 'options_data'));
+        $formated_data = $accept_values[$transferencia_para] ?? [];
+
+        $this->options_data = [
+            'title' => $formated_data['formated_title'] ?? "Selecione um $transferencia_para para transferir",
+            'label' => $formated_data['formated_label'] ?? "Selecione um $transferencia_para para transferir",
+            "options" => [
+                ['id' => 1, 'label' => $transferencia_para .' 1'],
+                ['id' => 2, 'label' => $transferencia_para .' 2'],
+                ['id' => 3, 'label' => $transferencia_para .' 3'],
+            ],
+        ];
+
+        $options_data = json_encode($this->options_data ?? []);
+
+        $this->transferencia_para = $transferencia_para;
+        $this->emit('transferenciaPorEvent', compact('transferencia_para', 'options_data', 'formated_data'));
+    }
+
+    public function alterado()
+    {
+        $this->emit('reOpenModalTransferenciaPorEvent');
+        $this->toastIt("alterado() 'transferencia_para_id' ". $this->transferencia_para.' id:'.$this->transferencia_para_id, 'success', ['preventDuplicates' => true]);
+    }
+
+    public function concluirTransferencia()
+    {
+        if($this->transferencia_para || $this->transferencia_para_id)
+        {
+            $this->toastIt("Dados insuficientes", 'error', ['preventDuplicates' => true]);
+            $this->emit('reOpenModalTransferenciaPorEvent');
+            return;
+        }
+
+        $this->emit('closeModalTransferenciaPorEvent');
+
+        $this->toastIt("concluirTransferencia() 'transferencia_para_id' ". $this->transferencia_para.' id:'.$this->transferencia_para_id, 'success', ['preventDuplicates' => true]);
+    }
+
+    public function getOpcoesParaTranferencia(string $transferencia_para = null)
+    {
+        return $this->options_data ?? [];;
     }
 }

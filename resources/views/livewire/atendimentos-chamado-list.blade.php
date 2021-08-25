@@ -17,38 +17,52 @@
                     <div class="modal-body">
                         <div class="w-100">
                             <h4 class="mb-3 text-center">Transferir para</h4>
-                            <h6 class="mb-3 text-center">{{ $transferencia_por }}</h6>
                             <div class="mb-3 d-flex justify-content-center">
 
                                 <div class="cursor-pointer f-style form-check form-check-inline">
                                     <label class="cursor-pointer form-check-label f-style" for="transferencia_por_area">
-                                        <input class="form-check-input" type="radio" name="transferencia_por" value="area"
-                                            wire:click="transferenciaPor('area')"
-                                            {{ ($transferencia_por ?? null) == 'area' ? 'checked' : '' }}
+                                        <input class="form-check-input" type="radio" name="transferencia_para" value="area"
+                                            wire:change="transferenciaPor('area')"
+                                            {{ ($transferencia_para ?? null) == 'area' ? 'checked' : '' }}
                                             id="transferencia_por_area" value="area">
                                         Área</label>
                                 </div>
                                 <div class="cursor-pointer f-style form-check form-check-inline">
-                                    <label class="cursor-pointer form-check-label f-style" for="transferencia_por_atendente">
-                                        <input class="form-check-input" type="radio" name="transferencia_por" value="atendente"
-                                            wire:click="transferenciaPor('atendente')"
-                                            {{ ($transferencia_por ?? null) == 'atendente' ? 'checked' : '' }}
+                                    <label class="cursor-pointer select-none form-check-label f-style force" for="transferencia_por_atendente">
+                                        <input class="form-check-input" type="radio" name="transferencia_para" value="atendente"
+                                            wire:change="transferenciaPor('atendente')"
+                                            {{ ($transferencia_para ?? null) == 'atendente' ? 'checked' : '' }}
                                             id="transferencia_por_atendente" value="atendente">
                                         Atendente</label>
                                 </div>
                             </div>
 
+                            <div>
+                                @if ($transferencia_para)
+                                    transferencia para: {{ $transferencia_para }}
+                                @endif
+                                @if ($transferencia_para_id)
+                                    ID:{{ $transferencia_para_id }}
+                                @endif
+                            </div>
+
+                            @if ($transferencia_para ?? null)
                             <div class="mb-3">
-                                <label for="add_area" class="form-label w-100">
-                                    <span transfer_target="label"></span>
-                                    <select name="area_id" id="add_area" class="form-control form-select">
-                                        <option value="" transfer_target="label"></option>
-                                        @foreach ($this->getAllAreas() as $area)
-                                            <option value="{{ $area->id }}">{{ $area->nome . ' - ' . $area->sigla }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </label>
+                                    <label for="add_area" class="form-label w-100">
+
+                                        @php
+                                            $opcoesParaTranferencia = $this->getOpcoesParaTranferencia() ?? [];
+                                        @endphp
+                                        <select name="area_id" id="add_area" wire:model="transferencia_para_id" wire:change="alterado()" class="form-control form-select">
+                                            @if ($opcoesParaTranferencia['label'] ?? null)
+                                                <option value="">{{ $opcoesParaTranferencia['label'] }}</option>
+                                            @endif
+                                            @foreach (($opcoesParaTranferencia["options"] ?? []) as $option)
+                                                <option value="{{ $option['id'] }}">{{ $option['label'] }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </label>
                             </div>
 
                             <div class="mb-3">
@@ -60,11 +74,15 @@
                                 <label for="nota_transferencia" class="col-form-label">Nota</label>
                                 <textarea class="form-control" id="nota_transferencia"></textarea>
                             </div>
+                            @endif
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-success">Transferir</button>
+
+                        @if ($transferencia_para ?? null)
+                            <button type="button" class="btn btn-success" wire:click="concluirTransferencia()">Transferir</button>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -355,7 +373,7 @@
 
 
     <script>
-        function makeSelectItem(transferencia_por, options_data)
+        function makeSelectItem(transferencia_para, options_data)
         {
             if(!window.isJson)
                 return;
@@ -365,15 +383,31 @@
 
             options_data = JSON.parse(options_data);
 
+            console.log('aqui', typeof options_data, isJson(options_data), options_data);
+
             if(options_data.title)
                 document.querySelectorAll('[transfer_target="title"]').forEach(function (el){
                     el.innerText = options_data.title;
                 });
 
-            if(options_data.title)
+            if(options_data.label)
                 document.querySelectorAll('[transfer_target="label"]').forEach(function (el){
                     el.innerText = options_data.label;
                 });
+
+            var select_element = document.querySelector('#add_area');
+            select_element = false;
+            if(select_element && options_data.options && options_data.options.length > 0)
+            {
+                var label = options_data.label ? options_data.label : "Selecione um "+ transferencia_para +" para transferir";
+                var _options = `<option value="" transfer_target="label">${label}</option>`;
+                options_data.options.forEach(function(item, key){
+                    _options = _options + `
+                    <option value="${item.id}">${item.label}</option>`;
+                })
+
+                select_element.innerHTML = _options;
+            }
         }
 
         function removeExtraBackDrops(all = false)
@@ -382,13 +416,13 @@
             var backdrops = document.querySelectorAll('div.modal-backdrop.show');
 
             if(backdrops.length > 1)
-            backdrops.forEach(function (el, key){
-                if(all == true)
-                    el.remove();
-                else
-                    if(key != 0)
+                backdrops.forEach(function (el, key){
+                    if(all == true)
                         el.remove();
-            });
+                    else
+                        if(key != 0)
+                            el.remove();
+                });
         }
 
         function reOpenTransferirChamadoModal(remove_fade = false)
@@ -413,6 +447,9 @@
                 focus: true,
             };
 
+            if(typeof window.__show_logs == 'undefined')
+                window.__show_logs = {{ env('APP_DEBUG', false) }};
+
             window.__transferModalEl = document.getElementById('transferirChamadoModal');
 
             if(remove_fade)
@@ -420,22 +457,30 @@
                 // window.__transferModalEl.classList.add('fade');
 
             window.__transferModalEl.addEventListener('shown.bs.modal', function(event) {
-                console.log('shown');
+                if(window.__show_logs)
+                    console.log('shown');
+
                 if(window.removeExtraBackDrops)
                     removeExtraBackDrops();
             });
             window.__transferModalEl.addEventListener('show.bs.modal', function(event) {
-                console.log('show');
+                if(window.__show_logs)
+                    console.log('show');
+
                 if(window.removeExtraBackDrops)
                     removeExtraBackDrops();
             });
             window.__transferModalEl.addEventListener('hidden.bs.modal', function(event) {
-                console.log('hidden');
+                if(window.__show_logs)
+                    console.log('hidden');
+
                 if(window.removeExtraBackDrops)
                     removeExtraBackDrops();
             });
             window.__transferModalEl.addEventListener('hide.bs.modal', function(event) {
-                console.log('hide');
+                if(window.__show_logs)
+                    console.log('hide');
+
                 if(window.removeExtraBackDrops)
                     removeExtraBackDrops();
             });
@@ -453,7 +498,14 @@
                     if(window.__transferModal)
                         window.__transferModal.hide();
 
-                    removeExtraBackDrops(true);
+                    removeExtraBackDrops();
+                });
+
+                Livewire.on('reOpenModalTransferenciaPorEvent', e => {
+                    // if(window.__transferModal)
+                    //     window.__transferModal.hide();
+
+                    reOpenTransferirChamadoModal(true)
                 });
 
                 Livewire.on('tranferirChamadoEvent', e => {
@@ -462,13 +514,12 @@
                 });
 
                 Livewire.on('transferenciaPorEvent', e => {
-                    console.log('transferencia_por', e.transferencia_por);
-                    console.log('sss');
+                    console.log('transferencia_para', e.transferencia_para);
                     reOpenTransferirChamadoModal(true);
                     reOpenTransferirChamadoModal(true);
 
                     if(window.makeSelectItem)
-                        makeSelectItem(e.transferencia_por, e.options_data)
+                        makeSelectItem(e.transferencia_para, e.options_data)
                 });
             }
         });

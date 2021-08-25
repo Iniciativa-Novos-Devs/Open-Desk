@@ -27,4 +27,4 @@ blockquote {
 
 .logo-container { max-width: 8%;}
 
-.select-none { user-select: none !important;}
+.select-none, .force.select-none { user-select: none !important;}

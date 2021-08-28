@@ -57,11 +57,11 @@
                                             @if ($opcoesParaTranferencia['label'] ?? null)
                                                 <option selecione_transferencia_para value="" {{ !$transferencia_para_id ?? null ? 'selected' : '' }} selected>
                                                     {{ $opcoesParaTranferencia['label'] }}
-                                                    {{ !$transferencia_para_id ?? null ? 'selected' : 'NAO SE' }}
                                                 </option>
                                             @endif
                                             @foreach (($opcoesParaTranferencia["options"] ?? []) as $option)
-                                                <option value="{{ $option['id'] }}">{{ $option['label'] }}
+                                                <option value="{{ $option['id'] }}" {{ $transferencia_para_id == $option['id'] ?? null ? 'selected' : '' }}>
+                                                    {{ $option['label'] }}
                                                 </option>
                                             @endforeach
                                         </select>

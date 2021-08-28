@@ -55,7 +55,10 @@
                                         @endphp
                                         <select name="area_id" id="add_area" wire:model="transferencia_para_id" wire:change="alterado()" class="form-control form-select">
                                             @if ($opcoesParaTranferencia['label'] ?? null)
-                                                <option value="">{{ $opcoesParaTranferencia['label'] }}</option>
+                                                <option selecione_transferencia_para value="" {{ !$transferencia_para_id ?? null ? 'selected' : '' }} selected>
+                                                    {{ $opcoesParaTranferencia['label'] }}
+                                                    {{ !$transferencia_para_id ?? null ? 'selected' : 'NAO SE' }}
+                                                </option>
                                             @endif
                                             @foreach (($opcoesParaTranferencia["options"] ?? []) as $option)
                                                 <option value="{{ $option['id'] }}">{{ $option['label'] }}
@@ -78,7 +81,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-outline-danger" wire:click="cancelaTranferencia()">Cancelar</button>
 
                         @if ($transferencia_para ?? null)
                             <button type="button" class="btn btn-success" wire:click="concluirTransferencia()">Transferir</button>
@@ -410,27 +413,50 @@
             }
         }
 
+        function fakeCloseTransferenciaModal()
+        {
+            if(window.__transferModal && window.__transferModal._element )
+                window.__transferModal._element.classList.remove('show');
+        }
+
+        function fakeOpenTransferenciaModal()
+        {
+            if(window.__transferModal && window.__transferModal._element )
+                window.__transferModal._element.classList.add('show');
+        }
+
         function removeExtraBackDrops(all = false)
         {
             // modal-backdrop fade show
-            var backdrops = document.querySelectorAll('div.modal-backdrop.show');
+            var backdrops           = document.querySelectorAll('div.modal-backdrop.show');
+            var has_opended_modal   = window.__transferModal._element.classList.contains('show');
 
-            if(backdrops.length > 1)
-                backdrops.forEach(function (el, key){
-                    if(all == true)
-                        el.remove();
-                    else
-                        if(key != 0)
-                            el.remove();
-                });
+            if(backdrops.length > 0)
+            {
+                if(window.__transferModal && window.__transferModal._backdrop)
+                {
+                    if(has_opended_modal && document.querySelectorAll('div.modal-backdrop.show').length > 1)
+                            document.querySelectorAll('div.modal-backdrop.show')[1].remove();
+
+                    if(has_opended_modal == false)
+                    {
+                        if(document.querySelectorAll('div.modal-backdrop.show').length > 0)
+                        {
+                            backdrops.forEach(function (el, key){
+                                        el.remove();
+                            });
+                        }
+
+                    }
+                }
+
+            }
         }
 
         function reOpenTransferirChamadoModal(remove_fade = false)
         {
             if(!window.__transferModal)
                 return;
-
-            // window.__transferModal.hide();
 
             if(window.removeExtraBackDrops)
                 removeExtraBackDrops();
@@ -447,16 +473,15 @@
                 focus: true,
             };
 
-            if(typeof window.__show_logs == 'undefined')
-                window.__show_logs = {{ env('APP_DEBUG', false) }};
-
             window.__transferModalEl = document.getElementById('transferirChamadoModal');
 
             if(remove_fade)
                 window.__transferModalEl.classList.remove('fade');
-                // window.__transferModalEl.classList.add('fade');
 
             window.__transferModalEl.addEventListener('shown.bs.modal', function(event) {
+
+                removeExtraBackDrops(true);
+
                 if(window.__show_logs)
                     console.log('shown');
 
@@ -481,8 +506,11 @@
                 if(window.__show_logs)
                     console.log('hide');
 
-                if(window.removeExtraBackDrops)
-                    removeExtraBackDrops();
+                    if(window.__transferModal)
+                        window.__transferModal.hide();
+
+                // if(window.removeExtraBackDrops)
+                //     removeExtraBackDrops();
             });
 
             window.__transferModal = new bootstrap.Modal(window.__transferModalEl, modal_options);
@@ -496,14 +524,12 @@
             {
                 Livewire.on('closeModalTransferenciaPorEvent', e => {
                     if(window.__transferModal)
-                        window.__transferModal.hide();
+                        fakeCloseTransferenciaModal();
 
                     removeExtraBackDrops();
                 });
 
                 Livewire.on('reOpenModalTransferenciaPorEvent', e => {
-                    // if(window.__transferModal)
-                    //     window.__transferModal.hide();
 
                     reOpenTransferirChamadoModal(true)
                 });
@@ -518,8 +544,15 @@
                     reOpenTransferirChamadoModal(true);
                     reOpenTransferirChamadoModal(true);
 
-                    if(window.makeSelectItem)
-                        makeSelectItem(e.transferencia_para, e.options_data)
+                    if(
+                        document.querySelector('#add_area') &&
+                        !document.querySelector('#add_area').value &&
+                        document.querySelector('[selecione_transferencia_para]')
+                    )
+                        document.querySelector('[selecione_transferencia_para]').setAttribute('selected', '')
+
+                    // if(window.makeSelectItem)//Remover isso? Ainda será usado???
+                    //     makeSelectItem(e.transferencia_para, e.options_data)
                 });
             }
         });

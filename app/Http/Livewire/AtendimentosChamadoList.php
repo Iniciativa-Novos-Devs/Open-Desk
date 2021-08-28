@@ -476,20 +476,25 @@ class AtendimentosChamadoList extends Component
 
     public function concluirTransferencia()
     {
-        if($this->transferencia_para || $this->transferencia_para_id)
+        if(!$this->transferencia_para || !$this->transferencia_para_id)
         {
             $this->toastIt("Dados insuficientes", 'error', ['preventDuplicates' => true]);
             $this->emit('reOpenModalTransferenciaPorEvent');
             return;
         }
 
-        $this->emit('closeModalTransferenciaPorEvent');
-
         $this->toastIt("concluirTransferencia() 'transferencia_para_id' ". $this->transferencia_para.' id:'.$this->transferencia_para_id, 'success', ['preventDuplicates' => true]);
+
+        $this->emit('closeModalTransferenciaPorEvent');
     }
 
     public function getOpcoesParaTranferencia(string $transferencia_para = null)
     {
-        return $this->options_data ?? [];;
+        return $this->options_data ?? [];
+    }
+
+    public function cancelaTranferencia()
+    {
+        $this->emit('closeModalTransferenciaPorEvent');
     }
 }

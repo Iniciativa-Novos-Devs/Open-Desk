@@ -21,6 +21,19 @@
     <script async src="{{ asset('js/app.js') }}"></script>
     <script async src="{{ asset('assets/js/all.js') }}"></script>
 
+    <script>
+        if(typeof window.__show_logs == 'undefined')
+            window.__show_logs = {{ env('APP_DEBUG', false) }};
+
+        function toggleShowLogs()
+        {
+            window.__show_logs = (typeof window.__show_logs == 'undefined') || window.__show_logs ? false : true;
+
+            console.log("Logs: " + (window.__show_logs ? true : false));
+        }
+
+    </script>
+
     <title>
         <x-title value="" />
     </title>

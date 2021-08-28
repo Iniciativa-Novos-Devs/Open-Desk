@@ -2,9 +2,12 @@
 
 namespace App\Http\Livewire;
 
+use App\CacheManagers\AreaCache;
 use App\CacheManagers\UsuarioCache;
 use \Illuminate\Session\SessionManager;
 use Auth;
+use Str;
+use Arr;
 use Illuminate\Support\Facades\Cache;
 use App\Models\Chamado;
 use App\Models\Usuario;
@@ -433,16 +436,12 @@ class AtendimentosChamadoList extends Component
             'area'      => [
                 'formated_title' => 'Área',
                 'formated_label' => 'Selecione uma área para transferir',
-                'model'          => \App\Models\Area::class,
             ],
             'atendente' => [
                 'formated_title' => 'Atendente',
                 'formated_label' => 'Selecione um atendente para transferir',
-                'model'          => \App\Models\Atendente::class,
             ],
         ];
-
-        //TODO colocar no foreach do JS optins id=add_area
 
         if(!in_array($transferencia_para, array_keys($accept_values)))
         {
@@ -450,16 +449,20 @@ class AtendimentosChamadoList extends Component
             return;
         }
 
-        $formated_data = $accept_values[$transferencia_para] ?? [];
+        $formated_data      = $accept_values[$transferencia_para] ?? [];
+        $formated_options   = $this->getOptionsData($transferencia_para);
+
+        if(!$formated_options)
+        {
+            $this->emit('closeModalTransferenciaPorEvent');
+            $this->toastIt("Sem opções disponíveis para '$transferencia_para'", 'error', ['preventDuplicates' => true]);
+            return;
+        }
 
         $this->options_data = [
             'title' => $formated_data['formated_title'] ?? "Selecione um $transferencia_para para transferir",
             'label' => $formated_data['formated_label'] ?? "Selecione um $transferencia_para para transferir",
-            "options" => [
-                ['id' => 1, 'label' => $transferencia_para .' 1'],
-                ['id' => 2, 'label' => $transferencia_para .' 2'],
-                ['id' => 3, 'label' => $transferencia_para .' 3'],
-            ],
+            "options" => $formated_options,
         ];
 
         $options_data = json_encode($this->options_data ?? []);
@@ -486,6 +489,7 @@ class AtendimentosChamadoList extends Component
         $this->toastIt("concluirTransferencia() 'transferencia_para_id' ". $this->transferencia_para.' id:'.$this->transferencia_para_id, 'success', ['preventDuplicates' => true]);
 
         $this->emit('closeModalTransferenciaPorEvent');
+        //TODO zerar os valores
     }
 
     public function getOpcoesParaTranferencia(string $transferencia_para = null)
@@ -496,5 +500,43 @@ class AtendimentosChamadoList extends Component
     public function cancelaTranferencia()
     {
         $this->emit('closeModalTransferenciaPorEvent');
+        //TODO zerar os valores
+    }
+
+    protected function getOptionsData(string $transferencia_para, bool $clear_cache = false)
+    {
+        $accept_values = ['area', 'atendente'];
+
+        if(!in_array($transferencia_para, $accept_values))
+            return [];
+
+        $cache_key = Str::slug(Arr::query(['methd' => 'getOptionsData', 'transferencia_para' => $transferencia_para]));
+
+        if($clear_cache)
+            Cache::forget($cache_key);
+
+        if($transferencia_para == 'area')
+            return Cache::remember($cache_key, (30 * 60/*secs*/), function () use ($transferencia_para) {
+                $areas = AreaCache::allWhithoutRelationships(['id', 'sigla', 'nome']);
+
+                $data = [];
+                foreach($areas as $area)
+                    $data[] = ['id' => $area->id, 'label' => $area->sigla .' - '. $area->nome];
+
+                return $data ?? [];
+            });
+
+        if($transferencia_para == 'atendente')
+            return Cache::remember($cache_key, (30 * 60/*secs*/), function () use ($transferencia_para) {
+                $areas = AreaCache::allWhithoutRelationships(['id', 'sigla', 'nome']);
+
+                $data = [];
+                foreach($areas as $area)
+                    $data[] = ['id' => $area->id + rand(2, 50)/*FAKE ID*/, 'label' => /*FAKE LABEL*/$area->sigla .' atendente - '. $area->nome];
+
+                return $data ?? [];
+            });
+
+        return [];
     }
 }

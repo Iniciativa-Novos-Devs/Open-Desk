@@ -476,22 +476,54 @@ class AtendimentosChamadoList extends Component
     public function alterado()
     {
         $this->emit('reOpenModalTransferenciaPorEvent');
-        $this->toastIt("alterado() 'transferencia_para_id' ". $this->transferencia_para.' id:'.$this->transferencia_para_id, 'success', ['preventDuplicates' => true]);
+        $this->toastIt("alterado() 'transferencia_para_id' "
+                        . $this->transferencia_para.' id:'
+                        .$this->transferencia_para_id, 'success'
+                        , ['preventDuplicates' => true]);
     }
 
     public function concluirTransferencia()
     {
-        if(!$this->transferencia_para || !$this->transferencia_para_id)
+        $destinos_validos = in_array($this->transferencia_para, ['area', 'atendente']);
+
+        if(!$destinos_validos || !$this->em_atendimento || !$this->transferencia_para || !$this->transferencia_para_id)
         {
             $this->toastIt("Dados insuficientes", 'error', ['preventDuplicates' => true]);
             $this->emit('reOpenModalTransferenciaPorEvent');
             return;
         }
 
-        $this->toastIt("concluirTransferencia() 'transferencia_para_id' ". $this->transferencia_para.' id:'.$this->transferencia_para_id, 'success', ['preventDuplicates' => true]);
+        //TODO Aguardando obter a listagem de atendentes
+        // if($this->transferencia_para == 'area')
+            $updated = $this->em_atendimento->update([
+                'status'        => StatusEnum::TRANSFERIDO,
+                'area_id'       => $this->transferencia_para_id,
+                'atendente_id'  => null,
+            ]);
 
-        $this->emit('closeModalTransferenciaPorEvent');
-        //TODO zerar os valores
+        //TODO Aguardando obter a listagem de atendentes
+        // if($this->transferencia_para == 'atendente')
+        //     $updated = $this->em_atendimento->update([
+        //         'atendente_id' => $this->transferencia_para_id,
+        //     ]);
+
+        if($updated ?? null)
+        {
+            $this->toastIt("concluirTransferencia() 'transferencia_para_id' "
+                            . $this->transferencia_para.' id:'
+                            .$this->transferencia_para_id, 'success',
+                            ['preventDuplicates' => true]);
+
+            $this->emit('closeModalTransferenciaPorEvent');
+
+            $this->em_atendimento = null;
+            $this->log_message    = null;
+            $this->startEmAtendimento(true);
+
+            return;
+        }
+        else
+            $this->toastIt("Falha ao transferir chamado", 'error', ['preventDuplicates' => true]);
     }
 
     public function getOpcoesParaTranferencia(string $transferencia_para = null)

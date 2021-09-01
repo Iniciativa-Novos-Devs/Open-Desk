@@ -109,6 +109,8 @@
             </div>
         </div>
 
+        <div class="backdrop_princial custom-backdrop" style="display: none;"></div>
+
     </div>
 
     <div class="col-12">
@@ -434,13 +436,21 @@
         function fakeCloseTransferenciaModal()
         {
             if(window.__transferModal && window.__transferModal._element )
+            {
                 window.__transferModal._element.classList.remove('show');
+                window.__transferModal._element.style.display = 'none';
+            }
+
+            displayCustomBackdrop(false);
         }
 
         function fakeOpenTransferenciaModal()
         {
             if(window.__transferModal && window.__transferModal._element )
+            {
                 window.__transferModal._element.classList.add('show');
+                window.__transferModal._element.style.display = 'unset';
+            }
         }
 
         function removeExtraBackDrops(all = false)
@@ -471,6 +481,21 @@
             }
         }
 
+        function displayCustomBackdrop(show = false)
+        {
+            show = typeof show == 'boolean' ? show : false;
+
+            var backdrop_princial = document.querySelector('div.backdrop_princial.custom-backdrop');
+
+            if(backdrop_princial)
+            {
+                if(show)
+                    backdrop_princial.style.display = 'unset'
+                else
+                    backdrop_princial.style.display = 'none'
+            }
+        }
+
         function reOpenTransferirChamadoModal(remove_fade = false)
         {
             if(!window.__transferModal)
@@ -486,8 +511,8 @@
         function createAndStartTransferirChamadoModal(remove_fade = false)
         {
             var modal_options = {
-                backdrop: true,
-                keyboard: true,
+                backdrop: false,
+                keyboard: false,
                 focus: true,
             };
 
@@ -503,12 +528,16 @@
                 if(window.__show_logs)
                     console.log('shown');
 
+                displayCustomBackdrop(true);
+
                 if(window.removeExtraBackDrops)
                     removeExtraBackDrops();
             });
             window.__transferModalEl.addEventListener('show.bs.modal', function(event) {
                 if(window.__show_logs)
                     console.log('show');
+
+                displayCustomBackdrop(true);
 
                 if(window.removeExtraBackDrops)
                     removeExtraBackDrops();
@@ -532,6 +561,7 @@
             });
 
             window.__transferModal = new bootstrap.Modal(window.__transferModalEl, modal_options);
+            displayCustomBackdrop(true);
             window.__transferModal.show();
         }
 

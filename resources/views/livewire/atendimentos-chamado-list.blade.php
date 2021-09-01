@@ -37,30 +37,48 @@
                                 </div>
                             </div>
 
-                            <div>
-                                @if ($transferencia_para)
-                                    transferencia para: {{ $transferencia_para }}
-                                @endif
-                                @if ($transferencia_para_id)
-                                    ID:{{ $transferencia_para_id }}
+                            <div class="px-3 m-0">
+                                @if ($transferencia_para && $transferencia_para_id)
+                                <strong> Transferencia para </strong>
+                                    {{ $transferencia_para }}
+                                <strong>( ID: {{ $transferencia_para_id }})</strong>
+                                @else
+                                <br>
                                 @endif
                             </div>
 
                             @if ($transferencia_para ?? null)
                             <div class="mb-3">
-                                    <label for="add_area" class="form-label w-100">
+                                    <label for="option_transferencia_para_id" class="form-label w-100"  x-data="{ select_open: false }">
 
                                         @php
                                             $opcoesParaTranferencia = $this->getOpcoesParaTranferencia() ?? [];
                                         @endphp
-                                        <select name="area_id" id="add_area" wire:model="transferencia_para_id" wire:change="alterado()" class="form-control form-select">
+                                        <div class="my-3 ml-1">
+                                            <button type="button"
+                                                class="btn btn-sm btn-outline-primary"
+                                                x-on:click="select_open = !select_open" >
+                                                <span x-text="select_open ? 'Ocultar seletor' : 'Mostrar seletor'">Mostrar seletor</span>
+                                            </button>
+                                        </div>
+
+                                        <select
+                                            x-on:change="select_open = false"
+                                            x-cloak x-show="select_open"
+                                            {{ $transferencia_para_id && $transferencia_para ? "style=display:none;" : '' }}
+                                            onclick="hideSelectTransfer()"
+                                            name="transferencia_para_id" id="option_transferencia_para_id" wire:model="transferencia_para_id"
+                                            wire:change="alterado()" class="form-control form-select">
                                             @if ($opcoesParaTranferencia['label'] ?? null)
-                                                <option selecione_transferencia_para value="" {{ !$transferencia_para_id ?? null ? 'selected' : '' }} selected>
+                                                <option selecione_transferencia_para value="" {{ !($transferencia_para_id ?? null) ? 'selected' : '' }} >
                                                     {{ $opcoesParaTranferencia['label'] }}
                                                 </option>
                                             @endif
                                             @foreach (($opcoesParaTranferencia["options"] ?? []) as $option)
-                                                <option value="{{ $option['id'] }}" {{ $transferencia_para_id == $option['id'] ?? null ? 'selected' : '' }}>
+                                                <option option
+                                                    value="{{ $option['id'] }}"
+                                                    {{ $transferencia_para_id == $option['id'] ? 'is_selected' : '' }}
+                                                    >
                                                     {{ $option['label'] }}
                                                 </option>
                                             @endforeach
@@ -398,7 +416,7 @@
                     el.innerText = options_data.label;
                 });
 
-            var select_element = document.querySelector('#add_area');
+            var select_element = document.querySelector('#option_transferencia_para_id');
             select_element = false;
             if(select_element && options_data.options && options_data.options.length > 0)
             {
@@ -545,17 +563,29 @@
                     reOpenTransferirChamadoModal(true);
 
                     if(
-                        document.querySelector('#add_area') &&
-                        !document.querySelector('#add_area').value &&
+                        document.querySelector('#option_transferencia_para_id') &&
+                        !document.querySelector('#option_transferencia_para_id').value &&
                         document.querySelector('[selecione_transferencia_para]')
                     )
-                        document.querySelector('[selecione_transferencia_para]').setAttribute('selected', '')
+                        document.querySelector('[selecione_transferencia_para]').setAttribute('selected', '');
+
+                        if(document.querySelector('[is_selected]'))
+                            document.querySelector('[is_selected]').setAttribute('selected', '');
+
+                    if(window.hideSelectTransfer)
+                        hideSelectTransfer();
 
                     // if(window.makeSelectItem)//Remover isso? Ainda será usado???
                     //     makeSelectItem(e.transferencia_para, e.options_data)
                 });
             }
         });
+
+        function hideSelectTransfer()
+        {
+            if(document.querySelector('#option_transferencia_para_id'))
+                document.querySelector('#option_transferencia_para_id').style.display = 'none';
+        }
     </script>
 
 </div>

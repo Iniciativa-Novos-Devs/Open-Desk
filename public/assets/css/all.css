@@ -1,14 +1,35 @@
-[x-cloak] { display: none !important; }
-.outline-none { outline:none !important; }
+[x-cloak] {
+    display: none !important;
+}
 
-.cursor-default, .f-style.cursor-default{ cursor: pointer !important; }
-.cursor-pointer, .f-style.cursor-pointer{ cursor: pointer !important; }
-.cursor-not-allowed, .f-style.cursor-not-allowed{ cursor: not-allowed !important;}
+.outline-none {
+    outline: none !important;
+}
 
-button.cursor:disabled, button:disabled { cursor: not-allowed !important; pointer-events: all !important; }
+.cursor-default, .f-style.cursor-default {
+    cursor: pointer !important;
+}
 
-li.disabled { cursor: not-allowed; }
-li.disabled a { pointer-events: none; }
+.cursor-pointer, .f-style.cursor-pointer {
+    cursor: pointer !important;
+}
+
+.cursor-not-allowed, .f-style.cursor-not-allowed {
+    cursor: not-allowed !important;
+}
+
+button.cursor:disabled, button:disabled {
+    cursor: not-allowed !important;
+    pointer-events: all !important;
+}
+
+li.disabled {
+    cursor: not-allowed;
+}
+
+li.disabled a {
+    pointer-events: none;
+}
 
 blockquote {
     margin: 0 0 1rem;
@@ -23,8 +44,21 @@ blockquote {
     outline: none !important;
 }
 
-.d-none, .force.d-none{display: none !important;}
+.d-none, .force.d-none {
+    display: none !important;
+}
 
-.logo-container { max-width: 8%;}
+.logo-container {
+    max-width: 8%;
+}
 
-.select-none, .force.select-none { user-select: none !important;}
+.select-none, .force.select-none {
+    user-select: none !important;
+}
+
+
+/* Remove o outline dos botoes */
+button { outline: none; }
+.btn:focus { outline: thin dotted; outline: 5px auto -webkit-focus-ring-color; outline-offset: -2px; }
+.btn:focus { outline: none !important; }
+.btn:focus { box-shadow: none; }

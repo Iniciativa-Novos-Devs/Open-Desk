@@ -432,6 +432,8 @@ class AtendimentosChamadoList extends Component
 
     public function transferenciaPor(string $transferencia_para)
     {
+        $this->transferencia_para_id = null;
+
         $accept_values = [
             'area'      => [
                 'formated_title' => 'Área',

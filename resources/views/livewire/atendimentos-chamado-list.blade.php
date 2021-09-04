@@ -12,7 +12,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="transferirChamadoModalLabel">Transferir chamado</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" wire:click="cancelaTranferencia()" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         <div class="w-100">
@@ -38,10 +38,9 @@
                             </div>
 
                             <div class="px-3 m-0">
-                                @if ($transferencia_para && $transferencia_para_id)
-                                <strong> Transferencia para </strong>
-                                    {{ $transferencia_para }}
-                                <strong>( ID: {{ $transferencia_para_id }})</strong>
+                                @if ($transferencia_para && $transferencia_para_id && $transferencia_para_nome)
+                                Transferir para:
+                                <strong> {{ $transferencia_para_nome ?? null}} </strong> ({{ $transferencia_para }})
                                 @else
                                 <br>
                                 @endif
@@ -566,7 +565,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', (event) => {
-            createAndStartTransferirChamadoModal();
+            // createAndStartTransferirChamadoModal();//Está aqui [DURANTE O DEV] apenas para já abrir a modal quando carregar a página
 
             if (window.Livewire)
             {

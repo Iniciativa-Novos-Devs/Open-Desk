@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\CacheManagers\AreaCache;
+use App\CacheManagers\AtendenteCache;
 use App\CacheManagers\UsuarioCache;
 use \Illuminate\Session\SessionManager;
 use Auth;
@@ -32,9 +33,10 @@ class AtendimentosChamadoList extends Component
     public $em_atendimento      = null;
     public $cache_keys          = [];
     public $log_message         = null;
-    public $transferencia_para   = null;
-    public $transferencia_para_id  = null;
     public $options_data        = [];
+    public $transferencia_para      = null;
+    public $transferencia_para_id   = null;
+    public $transferencia_para_nome = null;
 
     public function mount(SessionManager $session, array $select = [], int $items_by_page = 10)
     {
@@ -219,6 +221,9 @@ class AtendimentosChamadoList extends Component
     {
         $this->toastIt('Cache limpo com sucesso!', 'success', ['preventDuplicates' => true]);
         $this->cache_keys = session()->get('cache_keys', []);
+
+        if($this->transferencia_para ?? null)
+            self::getOptionsData($this->transferencia_para, true);
 
         if(!$cache_key)
         {
@@ -432,7 +437,8 @@ class AtendimentosChamadoList extends Component
 
     public function transferenciaPor(string $transferencia_para)
     {
-        $this->transferencia_para_id = null;
+        $this->transferencia_para_id    = null;
+        $this->transferencia_para_nome  = null;
 
         $accept_values = [
             'area'      => [
@@ -476,10 +482,33 @@ class AtendimentosChamadoList extends Component
     public function alterado()
     {
         $this->emit('reOpenModalTransferenciaPorEvent');
-        $this->toastIt("alterado() 'transferencia_para_id' "
-                        . $this->transferencia_para.' id:'
-                        .$this->transferencia_para_id, 'success'
-                        , ['preventDuplicates' => true]);
+
+        $this->transferencia_para_nome = $this->transferencia_para_id
+                                        ? $this->getSelectedToTransferName($this->transferencia_para_id) : null;
+
+        if($this->transferencia_para_nome)
+            $this->toastIt("Alterado para: "
+                            . $this->transferencia_para_nome
+                            .' ('. $this->transferencia_para.')',
+                            'success',
+                            ['preventDuplicates' => true]);
+    }
+
+    public function getSelectedToTransferName($transferencia_para_id)
+    {
+        $options = $this->getOptionsData($this->transferencia_para) ?? [];
+
+        if(!$options || !$transferencia_para_id)
+            return null;
+
+        $first = Arr::where($options, function ($value, $key) use ($transferencia_para_id) {
+            $id = data_get($value, 'id');
+            return $id == $transferencia_para_id;
+        });
+
+        $label = is_array($first) ? (head($first)['label'] ?? null) : null;
+
+        return $label ?? null;
     }
 
     public function concluirTransferencia()
@@ -493,19 +522,19 @@ class AtendimentosChamadoList extends Component
             return;
         }
 
-        //TODO Aguardando obter a listagem de atendentes
-        // if($this->transferencia_para == 'area')
+        if($this->transferencia_para == 'area')
             $updated = $this->em_atendimento->update([
                 'status'        => StatusEnum::TRANSFERIDO,
                 'area_id'       => $this->transferencia_para_id,
                 'atendente_id'  => null,
             ]);
 
-        //TODO Aguardando obter a listagem de atendentes
-        // if($this->transferencia_para == 'atendente')
-        //     $updated = $this->em_atendimento->update([
-        //         'atendente_id' => $this->transferencia_para_id,
-        //     ]);
+        if($this->transferencia_para == 'atendente')
+            $updated = $this->em_atendimento->update([
+                'status'        => StatusEnum::TRANSFERIDO,
+                'area_id'       => null,
+                'atendente_id'  => $this->transferencia_para_id,
+            ]);
 
         if($updated ?? null)
         {
@@ -522,8 +551,8 @@ class AtendimentosChamadoList extends Component
 
             return;
         }
-        else
-            $this->toastIt("Falha ao transferir chamado", 'error', ['preventDuplicates' => true]);
+
+        $this->toastIt("Falha ao transferir chamado", 'error', ['preventDuplicates' => true]);
     }
 
     public function getOpcoesParaTranferencia(string $transferencia_para = null)
@@ -555,18 +584,18 @@ class AtendimentosChamadoList extends Component
 
                 $data = [];
                 foreach($areas as $area)
-                    $data[] = ['id' => $area->id, 'label' => $area->sigla .' - '. $area->nome];
+                    $data[] = ['id' => $area->id, 'label' => '#'. $area->id.' - '.$area->sigla .' - '. $area->nome];
 
                 return $data ?? [];
             });
 
         if($transferencia_para == 'atendente')
             return Cache::remember($cache_key, (30 * 60/*secs*/), function () use ($transferencia_para) {
-                $areas = AreaCache::allWhithoutRelationships(['id', 'sigla', 'nome']);
+                $atendentes = AtendenteCache::all(['id', 'name']);
 
                 $data = [];
-                foreach($areas as $area)
-                    $data[] = ['id' => $area->id + rand(2, 50)/*FAKE ID*/, 'label' => /*FAKE LABEL*/$area->sigla .' atendente - '. $area->nome];
+                foreach($atendentes as $atendente)
+                    $data[] = ['id' => $atendente->id, 'label' => '#'. $atendente->id.' - '.$atendente->name];
 
                 return $data ?? [];
             });

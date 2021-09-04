@@ -2,6 +2,7 @@
 namespace App\CacheManagers;
 
 use App\Models\Usuario;
+use App\Enums\CachedEnums\RoleCachedEnum;
 use Illuminate\Support\Facades\Cache;
 use Str;
 use Arr;
@@ -35,6 +36,31 @@ class UsuarioCache
             return self::byId(Auth::user()->id, $relationships);
 
         return null;
+    }
+
+    public static function all(string $role = null, array $attributes = [], int $limit = null)
+    {
+        $cache_key = Str::slug(Arr::query(['role' => ($role ?? 'all'), 'limit' => ($limit ? $limit : 'no-limit'), 'attributes' => $attributes]));
+
+        if(self::$clear_cache)
+            Cache::forget($cache_key);
+
+        return Cache::remember($cache_key, (60 * 60/*secs*/), function () use ($role, $attributes, $limit) {
+            $query = Usuario::with('roles');
+
+            if($role)
+                $query->whereHas('roles', function ($query) use ($role) {
+                    $query->where('role_uid', RoleCachedEnum::getRoleUid($role, self::$clear_cache));
+                });
+
+            if($attributes)
+                $query->select($attributes);
+
+            if($limit)
+                $query->limit($limit);
+
+            return $query->get();
+        });
     }
 
     public function clearCache(bool $clear_cache = null)

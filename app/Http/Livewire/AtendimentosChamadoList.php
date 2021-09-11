@@ -429,10 +429,23 @@ class AtendimentosChamadoList extends Component
         if(!$this->em_atendimento ?? null)
             return;
 
-        $this->transferencia_para = null;
+        if(!$this->exigeLogMessage(5))
+            return;
 
         $chamado_id = $this->em_atendimento->id;
         $this->emit('tranferirChamadoEvent', compact('chamado_id'));
+    }
+
+    protected function exigeLogMessage(int $min_chars = 5)
+    {
+        if(!$this->log_message || !strlen($this->log_message) >= $min_chars)
+        {
+            $this->toastIt("Favor informar um registro de atendimento com no mínimo $min_chars caracteres.", 'error', ['preventDuplicates' => true]);
+            $this->emit('reOpenModalTransferenciaPorEvent');
+            return false;
+        }
+
+        return true;
     }
 
     public function transferenciaPor(string $transferencia_para)
@@ -522,6 +535,9 @@ class AtendimentosChamadoList extends Component
             return;
         }
 
+        if(!$this->exigeLogMessage(5))
+            return;
+
         if($this->transferencia_para == 'area')
             $updated = $this->em_atendimento->update([
                 'status'        => StatusEnum::TRANSFERIDO,
@@ -545,8 +561,9 @@ class AtendimentosChamadoList extends Component
 
             $this->emit('closeModalTransferenciaPorEvent');
 
-            $this->em_atendimento = null;
-            $this->log_message    = null;
+            $this->em_atendimento           = null;
+            $this->log_message              = null;
+            $this->limpaValoresDasPropriedades();
             $this->startEmAtendimento(true);
 
             return;
@@ -555,15 +572,26 @@ class AtendimentosChamadoList extends Component
         $this->toastIt("Falha ao transferir chamado", 'error', ['preventDuplicates' => true]);
     }
 
+    protected function limpaValoresDasPropriedades()
+    {
+
+        //Transferencia
+        $this->transferencia_para       = null;
+        $this->transferencia_para_id    = null;
+        $this->transferencia_para_nome  = null;
+    }
+
     public function getOpcoesParaTranferencia(string $transferencia_para = null)
     {
         return $this->options_data ?? [];
     }
 
-    public function cancelaTranferencia()
+    public function cancelaTranferencia($limpa_valores = null)
     {
         $this->emit('closeModalTransferenciaPorEvent');
-        //TODO zerar os valores
+
+        if($limpa_valores)
+            $this->limpaValoresDasPropriedades();
     }
 
     protected function getOptionsData(string $transferencia_para, bool $clear_cache = false)

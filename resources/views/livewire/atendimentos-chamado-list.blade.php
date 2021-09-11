@@ -86,19 +86,17 @@
                             </div>
 
                             <div class="mb-3">
-                                <label for="chamado_tags" class="col-form-label">Tags</label>
-                                <input type="text" class="form-control" id="chamado_tags">
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="nota_transferencia" class="col-form-label">Nota</label>
-                                <textarea class="form-control" id="nota_transferencia"></textarea>
+                                <label for="nota_transferencia" class="col-form-label">Registro de atendimento <strong class="text-muted">(leitura)</strong></label>
+                                <textarea id="nota_transferencia"
+                                    placeholder="Informe um registro de atendimento"
+                                    class="form-control {{ (!$this->log_message || !strlen($this->log_message) > 5) ? 'border border-danger' : '' }}"
+                                    disabled readonly>{{ $log_message ?? null}}</textarea>
                             </div>
                             @endif
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-danger" wire:click="cancelaTranferencia()">Cancelar</button>
+                        <button type="button" class="btn btn-outline-danger" wire:click="cancelaTranferencia(true)">Cancelar</button>
 
                         @if ($transferencia_para ?? null)
                             <button type="button" class="btn btn-success" wire:click="concluirTransferencia()">Transferir</button>
@@ -313,7 +311,9 @@
                 <div class="pb-3 col-12">
                     <div class="form-group w-100">
                         <label for="nota_atendimento">Registro do atendimento</label>
-                        <textarea class="mb-3 form-control" id="nota_atendimento" cols="10" rows="3"
+                        <textarea id="nota_atendimento"
+                        class="mb-3 form-control {{ (!$this->log_message || !strlen($this->log_message) > 5) ? 'border border-danger' : '' }}"
+                        cols="10" rows="3"
                             {{ $this->em_atendimento ?? null ? '' : 'disabled' }}
                             placeholder="Aqui vai sua observação..."
                             style="min-height: 6rem; max-height: 14rem; background-color: #211e1e21;"

@@ -1,9 +1,5 @@
 <div class="row">
     <div class="col-12">
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#transferirChamadoModal">
-            Transferir chamado
-        </button>
 
         <!-- Modal -->
         <div class="modal fade" id="transferirChamadoModal" tabindex="-1" aria-labelledby="transferirChamadoModalLabel"
@@ -110,11 +106,6 @@
 
     </div>
 
-    <div class="col-12">
-        <a href="{{ route('chamados_add') }}">Adicionar chamado</a>
-        <button wire:click="clearCache()" class="btn btn-sm btn-danger" type="button">Limpar cache</button>
-    </div>
-
     <div class="py-2 accordion col-12" id="accordion_chamados_table">
         <div class="accordion-item">
             <h2 class="select-none accordion-header" id="chamados_table_headingThree">
@@ -190,7 +181,14 @@
                                 </tr>
 
                                 @foreach ($chamados as $chamado)
-                                    <tr class="py-0">
+                                    @php
+                                        $color_by_status = '';
+                                        $color_by_status = $chamado->status == \App\Enums\StatusEnum::ENCERRADO     ? 'text-muted'  : $color_by_status;
+                                        $color_by_status = $chamado->status == \App\Enums\StatusEnum::TRANSFERIDO   ? 'text-warning': $color_by_status;
+                                        $color_by_status = $chamado->status == \App\Enums\StatusEnum::ABERTO        ? 'text-success': $color_by_status;
+                                        $color_by_status = $chamado->status == \App\Enums\StatusEnum::PENDENTE      ? 'text-success': $color_by_status;
+                                    @endphp
+                                    <tr class="py-0 {{ $color_by_status }} ">
                                         <td class="py-0">{{ $chamado->id }}</td>
                                         <td class="py-0">
                                             <a href="#">{{ $chamado->usuario->name }}</a>
@@ -206,14 +204,18 @@
                                         </td>
                                         <td class="py-0">
                                             @if (!in_array($chamado->status, $this->cantOpenIfStatusIn()))
-                                                <button class="p-0 px-1 btn btn-sm btn-success no-focus"
-                                                    wire:click="atenderChamado({{ $chamado->id }})" type="button">
-                                                    Atender
-                                                </button>
-                                                <button class="p-0 px-1 btn btn-sm btn-warning no-focus"
-                                                    wire:click="tranferirChamado({{ $chamado->id }})" type="button">
-                                                    Transferir
-                                                </button>
+                                                @if (!$chamado->atendente_id || $chamado->atendente_id == $atendente->id)
+                                                    <button class="p-0 px-1 btn btn-sm btn-success no-focus"
+                                                        wire:click="atenderChamado({{ $chamado->id }})" type="button">
+                                                        Atender
+                                                    </button>
+
+                                                    <button class="p-0 px-1 btn btn-sm btn-warning no-focus"
+                                                        wire:click="tranferirChamado({{ $chamado->id }})" type="button">
+                                                        Transferir
+                                                    </button>
+                                                @endif
+
                                             @endif
                                         </td>
                                     </tr>

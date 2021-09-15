@@ -6,8 +6,8 @@
 @endsection
 
 @section('js')
-    //https://ckeditor.com/docs/ckeditor5
-    //https://cdn.ckeditor.com/#ckeditor5
+    {{-- https://ckeditor.com/docs/ckeditor5 --}}
+    {{-- https://cdn.ckeditor.com/#ckeditor5 --}}
 
     <script src="https://cdn.ckeditor.com/ckeditor5/28.0.0/classic/ckeditor.js"></script>
     <script src="https://cdn.ckeditor.com/ckeditor5/28.0.0/classic/translations/pt-br.js"></script>
@@ -33,7 +33,7 @@
                 }
             })
             .then(editor => {
-                console.log(editor);
+                // console.log(editor);
             })
             .catch(error => {
                 console.error(error);

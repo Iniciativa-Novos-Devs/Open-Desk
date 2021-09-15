@@ -1,5 +1,8 @@
 @extends('layouts.app')
 
+{{-- Remove o livewire do componente --}}
+@section('no_livewire', true)
+
 @section('head_content')
 @yield('head')
 @endsection

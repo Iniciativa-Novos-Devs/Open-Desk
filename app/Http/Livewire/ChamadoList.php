@@ -6,48 +6,98 @@ use App\Models\Chamado;
 use App\Models\Usuario;
 use Livewire\Component;
 use App\Enums\StatusEnum;
+use App\Http\Controllers\UserPreferencesController;
+
+use App\CacheManagers\AreaCache;
+use App\CacheManagers\AtendenteCache;
+use App\CacheManagers\UsuarioCache;
+use \Illuminate\Session\SessionManager;
+use Auth;
+use Str;
+use Arr;
+use Illuminate\Support\Facades\Cache;
+use \App\Libs\Helpers\DateHelpers;
+use App\Models\Area;
+use App\Models\UsuarioRole;
+use Livewire\WithPagination;
 
 class ChamadoList extends Component
 {
+    use WithPagination;
+
     protected $select_items;
 
     public $order_by      = 'id';
     public $order_dir     = 'DESC';
     public $items_by_page = 10;
+    public $keep_accordion_open = true;
     public $selected_status;
+    public $atendente           = null;
 
     public function mount(array $select = [], int $items_by_page = 10)
     {
-        // dd($items_by_page);
-        $this->select_items     = $this->getSelectItems($select, true);
-        $this->items_by_page  = $items_by_page > 0 && $items_by_page < 200 ? $items_by_page : 10;
-        $this->selected_status  = null;
+        $this->select_items        = $this->getSelectItems($select, true);
+        $this->items_by_page       = $items_by_page > 0 && $items_by_page < 200 ? $items_by_page : 10;
+        $this->selected_status     = null;
+        $this->atendente           = $this->getUsuario();
+        $this->keep_accordion_open = session()->get('user_preferences.atendente.chamados_a_atender.keep_accordion_open', true);
     }
 
     public function render()
     {
         return view('livewire.chamado-list', [
-            'chamados' => $this->getChamados()->paginate($this->items_by_page),
+            'chamados' => $this->getFilteredChamados([], [
+                'atendente' => function($query) {
+                    $query->select('id','name',);
+                },
+            ])
+            ->paginate($this->items_by_page),
         ]);
     }
 
-    protected function getChamados()
+    protected function getFilteredChamados(array $columns_to_select = [], array $relationships = [])
     {
-        $chamados = Chamado::limit($this->items_by_page)
-                    ->orderBy($this->order_by, $this->order_dir)
-                    ->with(['usuario' => function($query) {
-                        $query->select('id','name',);
-                    }]);
+        $chamados = $this->getChamados($columns_to_select, $relationships);
 
-        $chamados = $chamados->select($this->getSelectItems([], true));
-
-        $usuario = $this->getUsuario();
+        if(!$this->selected_status)
+            return $chamados;
 
         if($this->selected_status && StatusEnum::getState($this->selected_status))
             $chamados->where('status', $this->selected_status);
+        else
+            $chamados->whereNotIn('status', [
+                StatusEnum::PAUSADO,
+                StatusEnum::ENCERRADO,
+                StatusEnum::EM_ATENDIMENTO,
+            ]);
 
-        if($usuario)
-            $chamados->where('usuario_id', $usuario->id);
+        return $chamados;
+    }
+
+    protected function getChamados(array $columns_to_select = [], array $relationships = [])
+    {
+        $chamados = Chamado::limit($this->items_by_page)
+                    ->orderBy($this->order_by, $this->order_dir)
+                    ->with([
+                        'usuario' => function($query) {
+                            $query->select('id','name',);
+                        },
+                    ]);
+
+        if(in_array('unidade_id', $columns_to_select))
+            $chamados = $chamados->with(['unidade' => function($query) {
+                $query->select('id','nome',);
+            }]);
+
+        $chamados = $chamados->select($this->getSelectItems($columns_to_select, true));
+
+        if($relationships)
+            $chamados = $chamados->with($relationships);
+
+        $areas  = $this->getUsuarioAreas();
+
+        if($areas && is_array($areas) && count($areas) > 0)
+            $chamados = $chamados->whereRaw('area_id in('. implode(',', $areas) .') or area_id is null');
 
         return $chamados;
     }
@@ -84,5 +134,32 @@ class ChamadoList extends Component
 
         $this->order_by     = in_array($order_by, $accepted_order_by) ? $order_by : 'id';
         $this->order_dir    = $this->order_dir == 'DESC' ? 'ASC' : 'DESC';
+    }
+
+    public function cantOpenIfStatusIn(array $and_this = [])
+    {
+        return array_merge([
+            StatusEnum::ENCERRADO,
+            StatusEnum::EM_ATENDIMENTO,
+        ], $and_this);
+    }
+
+    public function changeChamadosAccordionOpenState()
+    {
+        (new UserPreferencesController)->changeBooleanState('atendente.chamados_a_atender.keep_accordion_open');
+        $this->keep_accordion_open  = session()->get('user_preferences.atendente.chamados_a_atender.keep_accordion_open', false);
+    }
+
+    public function getUsuarioAreas(): Array
+    {
+        if(!$this->atendente)
+            return [];
+
+        $areas = $this->atendente->areas ?? [];
+
+        if(!$areas)
+            return [];
+
+        return array_unique(array_values($areas->pluck('id')->toArray()));
     }
 }

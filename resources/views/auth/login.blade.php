@@ -1,5 +1,9 @@
 @extends('layouts.basic')
 
+
+{{-- Remove o livewire do componente --}}
+@section('no_livewire', true)
+
 @section('content')
 
     <style>
@@ -19,12 +23,12 @@
 
     </style>
 
-    <div class="row d-flex justify-content-center pt-3">
-        <div class="col-3 pt-3 mt-3 text-center">
+    <div class="pt-3 row d-flex justify-content-center">
+        <div class="pt-3 mt-3 text-center col-3">
             <form method="POST" action="{{ route('login') }}">
                 @csrf
                 <img class="mb-4 display-6" class="Responsive" src=" {{ asset('/imagens/logo.jpg') }}" alt="logo" width="72">
-                <h1 class="h3 mb-3 fw-normal">{{ __('Please sign in') }}</h1>
+                <h1 class="mb-3 h3 fw-normal">{{ __('Please sign in') }}</h1>
 
                 <div class="form-floating">
                     <input type="email" class="form-control" id="input_email" name="email" placeholder="name@example.com" value="{{ old('email') }}" required autofocus>
@@ -37,10 +41,10 @@
                 </div>
 
                 <!-- Remember Me -->
-                <div class="checkbox my-2">
+                <div class="my-2 checkbox">
                     <label for="remember_me" class="inline-flex items-center">
                         <input id="remember_me" type="checkbox"
-                            class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                            class="text-indigo-600 border-gray-300 rounded shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                             name="remember">
                         <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
                     </label>
@@ -52,7 +56,7 @@
 
                 <div class="my-3">
                     @if (Route::has('password.request'))
-                        <a class="underline text-sm text-gray-600 hover:text-gray-900"
+                        <a class="text-sm text-gray-600 underline hover:text-gray-900"
                             href="{{ route('password.request') }}">
                             {{ __('Forgot your password?') }}
                         </a>

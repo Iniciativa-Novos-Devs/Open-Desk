@@ -18,9 +18,12 @@ use App\Http\Controllers\UserPreferencesController;
 use \App\Libs\Helpers\DateHelpers;
 use App\Models\Area;
 use App\Models\UsuarioRole;
+use Livewire\WithPagination;
 
 class AtendimentosChamadoList extends Component
 {
+    use WithPagination;
+
     protected $select_items;
 
     public $order_by            = 'id';

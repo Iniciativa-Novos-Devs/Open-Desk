@@ -12,7 +12,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
-    <script src="//unpkg.com/alpinejs" defer></script>
+    {{-- <script src="//unpkg.com/alpinejs" defer></script> --}}
 
     <!-- toastr css (https://codeseven.github.io/toastr) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
@@ -38,7 +38,12 @@
         <x-title value="" />
     </title>
 
-    @yield('head_content')
+    @hasSection ('no_livewire')
+
+    @else
+        @livewireStyles
+        @powerGridStyles
+    @endif
 </head>
 
 <body @yield('body_class')>
@@ -85,6 +90,13 @@
         });
     </script>
     @yield('js')
+
+    @hasSection ('no_livewire')
+
+    @else
+        @livewireScripts
+        @powerGridScripts
+    @endif
 </body>
 
 </html>

@@ -27,18 +27,20 @@ class ChamadoList extends Component
 
     protected $select_items;
 
-    public $order_by      = 'id';
-    public $order_dir     = 'DESC';
-    public $items_by_page = 10;
+    public $order_by            = 'id';
+    public $order_dir           = 'DESC';
+    public $items_by_page       = 10;
+    public $show_action_buttons = false;
     public $keep_accordion_open = true;
-    public $selected_status;
     public $atendente           = null;
+    public $selected_status;
 
-    public function mount(array $select = [], int $items_by_page = 10)
+    public function mount(array $select = [], int $items_by_page = 10, bool $show_action_buttons = false)
     {
         $this->select_items        = $this->getSelectItems($select, true);
         $this->items_by_page       = $items_by_page > 0 && $items_by_page < 200 ? $items_by_page : 10;
         $this->selected_status     = null;
+        $this->show_action_buttons = $show_action_buttons;
         $this->atendente           = $this->getUsuario();
         $this->keep_accordion_open = session()->get('user_preferences.atendente.chamados_a_atender.keep_accordion_open', true);
     }
@@ -161,5 +163,12 @@ class ChamadoList extends Component
             return [];
 
         return array_unique(array_values($areas->pluck('id')->toArray()));
+    }
+
+    public function emmitAtenderChamado($chamado_id)
+    {
+        // $this->emitTo('atendimentos-chamado-list', 'eventAtenderChamado', ['chamado' => $chamado_id]);
+        if(!!$this->show_action_buttons)
+            $this->emitUp('eventAtenderChamado', $chamado_id);
     }
 }

@@ -106,7 +106,7 @@
 
     </div>
 
-    @livewire('chamado-list', ['items_by_page' => 5,])
+    @livewire('chamado-list', ['items_by_page' => 5, 'show_action_buttons' => true])
 
     <div class="mt-0 col-12 row d-flex justify-content-between" id="detalhes_do_chamado">
         <div class="border col-6 row" style="min-height: 50vh;">

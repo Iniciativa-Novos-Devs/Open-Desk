@@ -54,6 +54,10 @@ class AtendimentosChamadoList extends Component
         $this->startEmAtendimento();
     }
 
+    protected $listeners = [
+        'eventAtenderChamado' => 'atenderChamado'
+    ];
+
     public function render()
     {
         return view('livewire.atendimentos-chamado-list', [

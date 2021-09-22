@@ -74,6 +74,11 @@
                                     <th scope="col" class="py-0 cursor-pointer" wire:click="changeOrderBy('status')">
                                         Estado
                                     </th>
+                                    @if ($show_action_buttons)
+                                        <th scope="col" class="py-0 cursor-pointer">
+                                            Ações
+                                        </th>
+                                    @endif
                                 </tr>
 
                                 @foreach ($chamados as $chamado)
@@ -98,6 +103,17 @@
                                         <td class="py-0">
                                             {{ \App\Enums\StatusEnum::getState((int) $chamado->status) }}
                                         </td>
+                                        @if ($show_action_buttons)
+                                            <td class="py-0">
+                                                @if (!$chamado->atendente_id || $chamado->atendente_id == $this->atendente->id)
+                                                    <button class="p-0 px-1 btn btn-sm btn-success no-focus"
+                                                        wire:click="emmitAtenderChamado({{ $chamado->id }})" type="button">
+                                                        Atender
+                                                    </button>
+                                                @endif
+                                                <button class="p-0 px-1 btn btn-sm btn-warning no-focus">Transferir</button>
+                                            </td>
+                                        @endif
                                     </tr>
                                 @endforeach
 

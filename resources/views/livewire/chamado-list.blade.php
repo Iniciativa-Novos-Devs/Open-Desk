@@ -96,7 +96,7 @@
                                         </td>
                                         <td class="py-0"
                                             title="{{ \Str::limit(strip_tags(html_entity_decode($chamado->title)), 180, '...') }}">
-                                            {{ \Str::limit(strip_tags(html_entity_decode($chamado->title)), 40, '...') }}
+                                            {{ \Str::limit(strip_tags(html_entity_decode($chamado->title)), 20, '...') }}
                                         </td>
                                         <td class="py-0">{{ $chamado->atendente->name ?? null }}</td>
                                         <td class="py-0">{{ $chamado->created_at->format('d/m/Y H:i:s') }}</td>
@@ -105,12 +105,19 @@
                                         </td>
                                         @if ($show_action_buttons)
                                             <td class="py-0">
-                                                @if (!$chamado->atendente_id || $chamado->atendente_id == $this->atendente->id)
+                                                @php
+                                                    $pode_ser_atendido = $this->chamadoPodeSerAtendido($chamado->status) &&
+                                                    (!$chamado->atendente_id || $chamado->atendente_id == $this->atendente->id);
+                                                @endphp
                                                     <button class="p-0 px-1 btn btn-sm btn-success no-focus"
-                                                        wire:click="emmitAtenderChamado({{ $chamado->id }})" type="button">
+                                                        @if ($pode_ser_atendido)
+                                                        wire:click="emmitAtenderChamado({{ $chamado->id }})"
+                                                        @else
+                                                        disabled
+                                                        @endif
+                                                        type="button">
                                                         Atender
                                                     </button>
-                                                @endif
                                                 <button class="p-0 px-1 btn btn-sm btn-warning no-focus">Transferir</button>
                                             </td>
                                         @endif

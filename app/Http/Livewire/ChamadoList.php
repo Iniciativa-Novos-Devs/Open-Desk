@@ -146,6 +146,11 @@ class ChamadoList extends Component
         ], $and_this);
     }
 
+    public function chamadoPodeSerAtendido($chamado_status)
+    {
+        return !in_array($chamado_status, $this->cantOpenIfStatusIn());
+    }
+
     public function changeChamadosAccordionOpenState()
     {
         (new UserPreferencesController)->changeBooleanState('atendente.chamados_a_atender.keep_accordion_open');

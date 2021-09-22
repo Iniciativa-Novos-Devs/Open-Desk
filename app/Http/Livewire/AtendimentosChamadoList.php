@@ -418,14 +418,6 @@ class AtendimentosChamadoList extends Component
         $this->emit('newToastMessage', compact('message', 'toast_type', 'options'));
     }
 
-    public function cantOpenIfStatusIn(array $and_this = [])
-    {
-        return array_merge([
-            StatusEnum::ENCERRADO,
-            StatusEnum::EM_ATENDIMENTO,
-        ], $and_this);
-    }
-
     public function confirm($message, $callback, ...$argv)
     {
         $this->emit('confirm', compact('message', 'callback', 'argv'));

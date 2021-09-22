@@ -237,7 +237,13 @@
                                     wire:click="atenderChamado({{ $chamado_pausado->id }})" type="button">
                                     Reabrir
                                 </button>
-                                <button class="p-0 px-1 btn btn-sm btn-warning no-focus">Transferir</button>
+                                <button
+                                    class="p-0 px-1 btn btn-sm btn-warning no-focus"
+                                    wire:click="flowTransferirChamado({{ $chamado_pausado->id }})"
+                                    {{-- wire:click="$emitTo('atendimentos-chamado-list', 'emmitFlowTransferirChamado', {{ $chamado_pausado->id }})" --}}
+                                    type="button">
+                                    Transferir
+                                </button>
                             </td>
                         </tr>
                     @endforeach

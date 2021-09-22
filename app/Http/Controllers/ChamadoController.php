@@ -130,9 +130,6 @@ class ChamadoController extends Controller
 
     public static function enviaEmailNovoChamado(Chamado $chamado)
     {
-        sleep(3);
-        info('Alguma coisa aqui');
-        echo __LINE__;
         $email = $chamado->usuario->email ?? null;
 
         if($email)

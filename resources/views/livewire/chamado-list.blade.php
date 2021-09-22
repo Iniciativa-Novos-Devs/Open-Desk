@@ -109,16 +109,27 @@
                                                     $pode_ser_atendido = $this->chamadoPodeSerAtendido($chamado->status) &&
                                                     (!$chamado->atendente_id || $chamado->atendente_id == $this->atendente->id);
                                                 @endphp
-                                                    <button class="p-0 px-1 btn btn-sm btn-success no-focus"
-                                                        @if ($pode_ser_atendido)
-                                                        wire:click="emmitAtenderChamado({{ $chamado->id }})"
-                                                        @else
-                                                        disabled
-                                                        @endif
-                                                        type="button">
-                                                        Atender
-                                                    </button>
-                                                <button class="p-0 px-1 btn btn-sm btn-warning no-focus">Transferir</button>
+
+                                                <button class="p-0 px-1 btn btn-sm btn-success no-focus"
+                                                    @if ($pode_ser_atendido)
+                                                    wire:click="emmitAtenderChamado({{ $chamado->id }})"
+                                                    @else
+                                                    disabled
+                                                    @endif
+                                                    type="button">
+                                                    Atender
+                                                </button>
+
+                                                <button
+                                                    class="p-0 px-1 btn btn-sm btn-warning no-focus"
+                                                    @if ($pode_ser_atendido)
+                                                    wire:click="emmitFlowTransferirChamado({{ $chamado->id }})"
+                                                    @else
+                                                    disabled
+                                                    @endif
+                                                    type="button">
+                                                    Transferir
+                                                </button>
                                             </td>
                                         @endif
                                     </tr>

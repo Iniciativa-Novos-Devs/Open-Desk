@@ -55,7 +55,8 @@ class AtendimentosChamadoList extends Component
     }
 
     protected $listeners = [
-        'eventAtenderChamado' => 'atenderChamado'
+        'eventAtenderChamado'           => 'atenderChamado',
+        'eventFlowTransferirChamado'    => 'flowTransferirChamado',
     ];
 
     public function render()
@@ -66,9 +67,9 @@ class AtendimentosChamadoList extends Component
                     $query->select('id','name',);
                 },
             ])
-                ->paginate($this->items_by_page),
+            ->paginate($this->items_by_page),
 
-            'chamados_pausados' =>$this->getPausedChamados()
+            'chamados_pausados' => $this->getPausedChamados()
                 ->paginate($this->paused_items_by_page),
         ]);
     }
@@ -145,15 +146,30 @@ class AtendimentosChamadoList extends Component
         return $chamados;
     }
 
-    protected function getPausedChamados(array $columns_to_select = [], array $relationships = [])
+    protected function getPausedChamados()
     {
-        return $this->getChamados([
-            'unidade_id',
+        return Chamado::where('status', StatusEnum::PAUSADO)
+        ->select(
+            'id',
             'observacao',
             'title',
             'paused_at',
-        ], $relationships)
-        ->where('status', StatusEnum::PAUSADO);
+            'tipo_problema_id',
+            'problema_id',
+            'area_id',
+            'usuario_id',
+            'atendente_id',
+            'unidade_id',
+        )
+        ->orderBy($this->order_by, $this->order_dir)
+        ->with([
+            'usuario' => function($query) {
+                $query->select('id','name',);
+            },
+        ])
+        ->with(['unidade' => function($query) {
+            $query->select('id','nome',);
+        }]);
     }
 
     protected function getUsuario()
@@ -628,5 +644,28 @@ class AtendimentosChamadoList extends Component
             });
 
         return [];
+    }
+
+    public function flowTransferirChamado($chamado_id)
+    {
+        if(!$chamado_id || !is_numeric($chamado_id))
+            return;
+
+        if($this->hasEmAtendimento())
+        {
+            $this->toastIt('Já existe um chamado em atendimento! [ln~'.__LINE__.']', 'error', ['preventDuplicates' => true]);
+            return;
+        }
+
+        if(!$this->em_atendimento)
+            $this->atenderChamado($chamado_id);
+
+        $this->startEmAtendimento(true);
+
+        if($this->em_atendimento->id ?? null == $chamado_id)
+        {
+            $this->log_message = "Transferência direta de chamado";
+            $this->tranferirChamado();
+        }
     }
 }

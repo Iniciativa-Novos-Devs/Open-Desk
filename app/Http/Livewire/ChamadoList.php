@@ -172,8 +172,20 @@ class ChamadoList extends Component
 
     public function emmitAtenderChamado($chamado_id)
     {
+        if(!$chamado_id || !is_numeric($chamado_id))
+            return;
+
         // $this->emitTo('atendimentos-chamado-list', 'eventAtenderChamado', ['chamado' => $chamado_id]);
         if(!!$this->show_action_buttons)
             $this->emitUp('eventAtenderChamado', $chamado_id);
+    }
+
+    public function emmitFlowTransferirChamado($chamado_id)
+    {
+        if(!$chamado_id || !is_numeric($chamado_id))
+            return;
+
+        if(!!$this->show_action_buttons)
+            $this->emitUp('eventFlowTransferirChamado', $chamado_id);
     }
 }

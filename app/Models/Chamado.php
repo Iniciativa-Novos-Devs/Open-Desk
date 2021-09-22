@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\StatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -12,6 +13,10 @@ class Chamado extends Model
     use HasFactory;
 
     protected $table = 'hd_chamados';
+
+    protected $appends = [
+        'status_name',
+    ];
 
     protected $dates = [
         'deleted_at',
@@ -42,6 +47,14 @@ class Chamado extends Model
         'conclusion',
         'area_id',
     ];
+
+    public function getStatusNameAttribute()
+    {
+        if(!$this->status ?? null)
+            return null;
+
+        return StatusEnum::getState($this->status);
+    }
 
     public function tipo_problema()
     {

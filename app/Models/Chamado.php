@@ -23,6 +23,7 @@ class Chamado extends Model
         'paused_at',
         'finished_at',
         'transferred_at',
+        'homologado_em',
     ];
 
     protected $casts = [
@@ -46,6 +47,11 @@ class Chamado extends Model
         'transferred_at',
         'conclusion',
         'area_id',
+        'homologado_por',              //Usuario que homologou
+        'homologado_em',               //Data da homologação
+        'homologacao_avaliacao',       //Avaliação do homologador de 1 a 5
+        'homologacao_observacao_fim',  //Mensagem opcional do homologador
+        'homologacao_observacao_back', //Mensagem obrigatória do homologador CASO O CHAMADO NÃO ESTEJA CONCLUÍDO
     ];
 
     public function getStatusNameAttribute()
@@ -74,6 +80,11 @@ class Chamado extends Model
     public function usuario()
     {
         return $this->belongsTo(Usuario::class, 'usuario_id', 'id');
+    }
+
+    public function homologadoPor()
+    {
+        return $this->belongsTo(Usuario::class, 'homologado_por', 'id');
     }
 
     public function atendente()

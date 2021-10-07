@@ -48,7 +48,11 @@ class ChamadoList extends Component
     public function render()
     {
         return view('livewire.chamado-list', [
-            'chamados' => $this->getFilteredChamados([], [
+            'chamados' => $this->getFilteredChamados([
+                'homologado_em',
+                'atendente_id',
+            ],
+            [
                 'atendente' => function($query) {
                     $query->select('id','name',);
                 },
@@ -84,6 +88,9 @@ class ChamadoList extends Component
                         'usuario' => function($query) {
                             $query->select('id','name',);
                         },
+                        'atendente' => function($query) {
+                            $query->select('id','name',);
+                        },
                     ]);
 
         if(in_array('unidade_id', $columns_to_select))
@@ -114,11 +121,16 @@ class ChamadoList extends Component
     {
         $required_select_items = [
             'id',
-            'problema_id',
-            'usuario_id',
             'status',
             'created_at',
             'title',
+            'tipo_problema_id',
+            'problema_id',
+            'area_id',
+            'usuario_id',
+            'homologado_por',
+            'atendente_id',
+            'unidade_id',
         ];
 
         $this->select_items = array_merge($required_select_items, ($select_array_from_param_data ?? []));

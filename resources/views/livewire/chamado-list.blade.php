@@ -69,7 +69,7 @@
                                     </th>
                                     <th scope="col" class="py-0 cursor-pointer"
                                         wire:click="changeOrderBy('created_at')">
-                                        Criação
+                                        Abertura
                                     </th>
                                     <th scope="col" class="py-0 cursor-pointer" wire:click="changeOrderBy('status')">
                                         Estado
@@ -102,6 +102,18 @@
                                         <td class="py-0">{{ $chamado->created_at->format('d/m/Y H:i:s') }}</td>
                                         <td class="py-0">
                                             {{ \App\Enums\StatusEnum::getState((int) $chamado->status) }}
+
+                                            @if ($chamado->status == \App\Enums\StatusEnum::ENCERRADO)
+                                                @if ($chamado->homologado_em)
+                                                    <button type="button" class="py-0 btn btn-sm btn-success rounded-circle"
+                                                    data-toggle="tooltip" data-html="true" title="Homologado"
+                                                    aria-disabled="true">!</button>
+                                                @else
+                                                    <button type="button" class="py-0 btn btn-sm btn-danger rounded-circle"
+                                                    data-toggle="tooltip" data-html="true" title="Não homologado"
+                                                    aria-disabled="true">!</button>
+                                                @endif
+                                            @endif
                                         </td>
                                         @if ($show_action_buttons)
                                             <td class="py-0">

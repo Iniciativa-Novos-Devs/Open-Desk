@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Area;
 use App\Models\Atividade;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 class AtividadesController extends Controller
 {
@@ -66,7 +67,6 @@ class AtividadesController extends Controller
         return redirect()->route('atividades_index')->with('success', 'Atividade deletada com sucesso');
     }
 
-
     public function store(Request $request)
     {
         $request->validate([
@@ -82,6 +82,14 @@ class AtividadesController extends Controller
         return redirect()->route('atividades_index')->with('success', 'Atividade criada com sucesso');
     }
 
-
+    public static function routes()
+    {
+        Route::get('/atividades', [AtividadesController::class, 'index'])->name('atividades_index');
+        Route::get('/atividades/{id}/edit', [AtividadesController::class, 'edit'])->name('atividades_edit');
+        Route::post('/atividades/{id}/update', [AtividadesController::class, 'update'])->name('atividades_update');
+        Route::get('/atividades/add/{area_id?}', [AtividadesController::class, 'add'])->name('atividades_add');
+        Route::post('/atividades/store', [AtividadesController::class, 'store'])->name('atividades_store');
+        Route::get('/atividades/{id}/delete', [AtividadesController::class, 'delete'])->name('atividades_delete');
+    }
 
 }

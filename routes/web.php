@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\AreaController;
-use App\Http\Controllers\AtividadesController;
 use App\Http\Controllers\ChamadoController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PainelController;
@@ -34,12 +33,10 @@ Route::group(['prefix' => 'painel', 'middleware' => ['auth', 'redirect_to_base_h
 
 
     //-----------------------------------------------------------------------------------
-    Route::get('/atividades', [AtividadesController::class, 'index'])->name('atividades_index');
-    Route::get('/atividades/{id}/edit', [AtividadesController::class, 'edit'])->name('atividades_edit');
-    Route::post('/atividades/{id}/update', [AtividadesController::class, 'update'])->name('atividades_update');
-    Route::get('/atividades/add/{area_id?}', [AtividadesController::class, 'add'])->name('atividades_add');
-    Route::post('/atividades/store', [AtividadesController::class, 'store'])->name('atividades_store');
-    Route::get('/atividades/{id}/delete', [AtividadesController::class, 'delete'])->name('atividades_delete');
+    \App\Http\Controllers\AtividadesController::routes();
+
+    //-----------------------------------------------------------------------------------
+    \App\Http\Controllers\HomologacaoController::routes();
 
 
     //-----------------------------------------------------------------------------------

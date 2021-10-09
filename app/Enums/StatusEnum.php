@@ -10,6 +10,8 @@ class StatusEnum
     public const TRANSFERIDO    = 4;
     public const PAUSADO        = 5;
     public const ENCERRADO      = 6;
+    public const EM_HOMOLOGACAO = 7;
+    public const HOMOLOGADO     = 8;
 
     public static $humans        = [
         1 => 'Aberto',
@@ -18,6 +20,8 @@ class StatusEnum
         4 => 'Transferido',
         5 => 'Pausado',
         6 => 'Encerrado',
+        7 => 'Em homologação',
+        8 => 'Homologado',
     ];
 
     public static function getState(int $state_enum)

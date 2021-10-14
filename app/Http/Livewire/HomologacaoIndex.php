@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Enums\StatusEnum;
 use App\Models\Chamado;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -24,7 +25,7 @@ class HomologacaoIndex extends Component
         if(!$this->usuario)
             return redirect()->route('dashboard')->with('error', 'Usuario não autenticado');
 
-        $this->filtro  = $filtro_input = request()->input('filtro') ?? null;
+        $this->filtro  = $filtro_input = request()->input('filtro') ?? 'pendentes';
     }
 
     public function render()
@@ -38,6 +39,8 @@ class HomologacaoIndex extends Component
     public function getChamados()
     {
         $chamados   = Chamado::where('usuario_id', $this->usuario->id);
+
+        $chamados->whereIn('status', [StatusEnum::EM_HOMOLOGACAO, StatusEnum::HOMOLOGADO]);
 
         $chamados->with([
             'atendente' => function($query) {

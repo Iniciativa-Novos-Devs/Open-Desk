@@ -326,7 +326,7 @@ class AtendimentosChamadoList extends Component
             return;
 
         $updated = $this->em_atendimento->update([
-            'status'        => StatusEnum::ENCERRADO,
+            'status'        => StatusEnum::EM_HOMOLOGACAO,
             'conclusion'    => $this->log_message,
             'finished_at'   => now(),
         ]);

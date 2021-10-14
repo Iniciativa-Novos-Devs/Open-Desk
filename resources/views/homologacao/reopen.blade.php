@@ -1,6 +1,5 @@
 @extends('layouts.page')
 
-@inject('status_enum', 'App\Enums\StatusEnum')
 
 @php
     function humanFileSize($size, $unit="")
@@ -43,14 +42,8 @@
             </div>
 
             <div class="p-2 mt-2">
-                @if ($chamado->status != $status_enum::HOMOLOGADO)
                 <a href="@route('homologacao_homologar', [$chamado->id, 'no'])" class="btn btn-sm btn-outline-danger">Não homologar</a>
                 <a href="@route('homologacao_homologar', [$chamado->id, 'yes'])" class="btn btn-sm btn-success">Homologar</a>
-                @else
-                <h6 class="text-muted">
-                    Chamado homologado {{ $chamado->homologado_em ? 'em: '.$chamado->homologado_em->format('d/m/Y H:i') : '' }}
-                </h6>
-                @endif
             </div>
         </div>
 

@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <link rel="stylesheet" href="{{ asset('assets/css/all.css') }}">
 
+    <script src="{{ asset('assets/js/auto_load_script.js') }}"></script>
     <script async src="{{ asset('js/app.js') }}"></script>
     <script async src="{{ asset('assets/js/all.js') }}"></script>
 
@@ -44,6 +45,8 @@
         @livewireStyles
         @powerGridStyles
     @endif
+
+    @yield('head_content')
 </head>
 
 <body @yield('body_class')>

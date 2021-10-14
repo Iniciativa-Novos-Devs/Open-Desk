@@ -17,8 +17,8 @@ class AddColumnsOfHomologationToHdChamadosTable extends Migration
             $table->bigInteger('homologado_por')->nullable();
             $table->datetime('homologado_em')->nullable();
             $table->integer('homologacao_avaliacao')->nullable();
-            $table->integer('homologacao_observacao_fim')->nullable();
-            $table->integer('homologacao_observacao_back')->nullable();
+            $table->longText('homologacao_observacao_fim')->nullable();
+            $table->longText('homologacao_observacao_back')->nullable();
         });
     }
 

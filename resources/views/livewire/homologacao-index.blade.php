@@ -1,3 +1,5 @@
+@inject('status_enum', 'App\Enums\StatusEnum')
+
 <div class='w-100'>
     <div class="w-100">
         {{-- <h2>
@@ -34,6 +36,11 @@
                         {{ $order_by == 'title' ? '*' :''  }}
                     </th>
                     <th scope="col" class="cursor-pointer"
+                        wire:click="changeOrderBy('status')"
+                    >Status
+                        {{ $order_by == 'status' ? '*' :''  }}
+                    </th>
+                    <th scope="col" class="cursor-pointer"
                         wire:click="changeOrderBy('atendente_id')"
                     >Atendente
                         {{ $order_by == 'atendente_id' ? '*' :''  }}
@@ -58,6 +65,7 @@
                     <tr>
                         <td scope="row">{{ $chamado->id }}</td>
                         <td>{{ $chamado->title }}</td>
+                        <td>{{ $status_enum->getState($chamado->status) }}</td>
                         <td>{{ $chamado->atendente->name ?? null }}</td>
                         <td>{{ $chamado->finished_at ?? null }}</td>
                         <td>{{ $chamado->created_at }}</td>

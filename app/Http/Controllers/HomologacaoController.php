@@ -15,12 +15,12 @@ class HomologacaoController extends Controller
         return view('homologacao.index');
     }
 
-    public function show($chamado_id = null)
+    public function show(Request $request, $chamado_id)
     {
         $user = Auth::user();
 
         if(!$user)
-            return redirect()->route('dashboard')->with('error', 'Usuario não autenticado');
+            return redirect()->route('homologacao_index')->with('error', 'Usuario não autenticado');
 
         $chamado = Chamado::where('usuario_id', $user->id)
                     ->whereIn('status', [StatusEnum::EM_HOMOLOGACAO, StatusEnum::HOMOLOGADO])
@@ -33,7 +33,7 @@ class HomologacaoController extends Controller
                     ->first();
 
         if(!$chamado)
-            return redirect()->route('dashboard')->with('error', 'Chamado não encontrado ou inválido para homologação');
+            return redirect()->route('homologacao_index')->with('error', 'Chamado não encontrado ou inválido para homologação');
 
         $historico  = [
             [
@@ -68,36 +68,93 @@ class HomologacaoController extends Controller
             ],
         ];
         return view('homologacao.show', [
-            'chamado'    => $chamado,
-            'historico'  => $historico,
+            'chamado'   => $chamado,
+            'user'      => $user,
+            'historico' => $historico,
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function homologar(Request $request, $chamado_id, $concluir)
     {
-        dd([__FILE__.':'.__LINE__]);
+        $concluir   = in_array($concluir, ['yes', 'no']) ? $concluir : null;
+
+        if(!$concluir)
+            return redirect()->route('homologacao_show', $chamado_id)
+                    ->with('error', 'Favor escolha entre "homologar" e "não homologar"');
+
+        $concluir   = $concluir === 'yes';
+
+        $user       = Auth::user();
+
+        if(!$user)
+            return redirect()->route('homologacao_index')->with('error', 'Usuario não autenticado');
+
+        $chamado = Chamado::where('usuario_id', $user->id)
+                    ->whereIn('status', [StatusEnum::EM_HOMOLOGACAO, StatusEnum::HOMOLOGADO])
+                    ->where('id', $chamado_id)
+                    ->with([
+                        'homologadoPor' => function($query) {
+                            $query->select('id','name',);
+                        },
+                    ])
+                    ->first();
+
+        if(!$chamado)
+            return redirect()->route('homologacao_index')->with('error', 'Chamado não encontrado ou inválido para homologação');
+
+        if($chamado->status == StatusEnum::HOMOLOGADO)
+            return redirect()->route('homologacao_index')->with('error', "O chamado #{$chamado->id} já foi homologado");
+
+        $view = $concluir ? 'homologacao.rate' : 'homologacao.reopen';
+
+        return view($view, [
+            'chamado'  => $chamado,
+            'user'     => $user,
+            'concluir' => $concluir,
+        ]);
+    }
+
+    public function update(Request $request, $chamado_id)
+    {
+        $user = Auth::user();
+
+        if(!$user)
+            return redirect()->route('login')->with('error', 'Usuario não autenticado');
+
         $request->validate([
-            'nome'      => 'required|min:3|max:50|string',
-            'area_id'   => 'required|numeric|exists:hd_areas,id',
+            'rating'            => 'required|numeric',
+            'homologacao_nota'  => 'nullable|string|min:5',
         ]);
 
-        $atividade = Chamado::where('id', $id)->first();
+        $chamado = Chamado::where('usuario_id', $user->id)
+                    ->where('status', StatusEnum::EM_HOMOLOGACAO)
+                    ->where('id', $chamado_id)
+                    ->with([
+                        'homologadoPor' => function($query) {
+                            $query->select('id','name',);
+                        },
+                    ])
+                    ->first();
 
-        if(!$atividade)
-            return redirect()->route('atividades_index')->with('error', 'Esta atividade não existe');
+        if(!$chamado)
+            return redirect()->route('homologacao_show')->with('error', 'Chamado não encontrado ou inválido para homologação');
 
-        $atividade->update([
-            'nome' => $request->input('nome'),
-            'area_id' => $request->input('area_id'),
+        $chamado->update([
+            'homologacao_avaliacao'      => $request->input('rating'),
+            'homologado_por'             => $user->id,
+            'homologado_em'              => now(),
+            'homologacao_observacao_fim' => htmlentities($request->input('homologacao_nota')),
+            'status'                     => StatusEnum::HOMOLOGADO,
         ]);
 
-        return redirect()->route('atividades_index')->with('success', 'Chamado atualizada com sucesso');
+        return redirect()->route('homologacao_index')->with('success', "Chamado #{$chamado->id} homologado com sucesso");
     }
 
     public static function routes()
     {
         Route::get('/homologacao',                          [self::class, 'index'])->name('homologacao_index');
         Route::get('/homologacao/{chamado_id}',             [self::class, 'show'])->name('homologacao_show');
+        Route::get('/homologacao/{chamado_id}/{concluir}',  [self::class, 'homologar'])->name('homologacao_homologar');
         Route::post('/homologacao/{chamado_id}/update',     [self::class, 'update'])->name('homologacao_update');
     }
 

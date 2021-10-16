@@ -362,10 +362,7 @@ class AtendimentosChamadoList extends Component
         }
 
         $chamado = $this->getChamadoById((int) $chamado_id)
-            ->whereNotIn('status', [
-                StatusEnum::ENCERRADO,
-                StatusEnum::EM_ATENDIMENTO,
-            ])->first();
+            ->whereNotIn('status', $this->cantOpenIfStatusIn())->first();
 
         if(!$chamado)
         {
@@ -385,12 +382,24 @@ class AtendimentosChamadoList extends Component
         }
 
         $this->em_atendimento = $this->getChamadoById((int) $chamado_id)
-            ->whereNotIn('status', [
-                StatusEnum::ENCERRADO,
-                StatusEnum::EM_ATENDIMENTO,
-            ])->first();
+            ->whereNotIn('status', $this->cantOpenIfStatusIn())->first();
 
         $this->startEmAtendimento(true);
+    }
+
+    public function cantOpenIfStatusIn(array $and_this = [])
+    {
+        return array_merge([
+            StatusEnum::ENCERRADO,
+            StatusEnum::EM_ATENDIMENTO,
+            StatusEnum::EM_HOMOLOGACAO,
+            StatusEnum::HOMOLOGADO,
+        ], $and_this);
+    }
+
+    public function chamadoPodeSerAtendido($chamado_status)
+    {
+        return !in_array($chamado_status, $this->cantOpenIfStatusIn());
     }
 
     protected function getChamadoById(int $chamado_id)

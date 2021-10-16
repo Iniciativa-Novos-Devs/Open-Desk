@@ -113,8 +113,7 @@ class ChamadoList extends Component
 
     protected function getUsuario()
     {
-        //TODO fazer buscar o usuario logado
-        return Usuario::first();
+        return Auth::user();
     }
 
     protected function getSelectItems(array $select_array_from_param_data = [], bool $return_it = false)
@@ -131,6 +130,7 @@ class ChamadoList extends Component
             'homologado_por',
             'atendente_id',
             'unidade_id',
+            'homologacao_observacao_back',
         ];
 
         $this->select_items = array_merge($required_select_items, ($select_array_from_param_data ?? []));
@@ -155,6 +155,8 @@ class ChamadoList extends Component
         return array_merge([
             StatusEnum::ENCERRADO,
             StatusEnum::EM_ATENDIMENTO,
+            StatusEnum::EM_HOMOLOGACAO,
+            StatusEnum::HOMOLOGADO,
         ], $and_this);
     }
 

@@ -29,6 +29,9 @@ class HomologacaoController extends Controller
                         'homologadoPor' => function($query) {
                             $query->select('id','name',);
                         },
+                        'atendente' => function($query) {
+                            $query->select('id','name',);
+                        },
                     ])
                     ->first();
 
@@ -82,8 +85,6 @@ class HomologacaoController extends Controller
             return redirect()->route('homologacao_show', $chamado_id)
                     ->with('error', 'Favor escolha entre "homologar" e "não homologar"');
 
-        $concluir   = $concluir === 'yes';
-
         $user       = Auth::user();
 
         if(!$user)
@@ -93,7 +94,7 @@ class HomologacaoController extends Controller
                     ->whereIn('status', [StatusEnum::EM_HOMOLOGACAO, StatusEnum::HOMOLOGADO])
                     ->where('id', $chamado_id)
                     ->with([
-                        'homologadoPor' => function($query) {
+                        'atendente' => function($query) {
                             $query->select('id','name',);
                         },
                     ])
@@ -105,7 +106,7 @@ class HomologacaoController extends Controller
         if($chamado->status == StatusEnum::HOMOLOGADO)
             return redirect()->route('homologacao_index')->with('error', "O chamado #{$chamado->id} já foi homologado");
 
-        $view = $concluir ? 'homologacao.rate' : 'homologacao.reopen';
+        $view = ($concluir === 'yes') ? 'homologacao.rate' : 'homologacao.reopen';
 
         return view($view, [
             'chamado'  => $chamado,
@@ -114,23 +115,38 @@ class HomologacaoController extends Controller
         ]);
     }
 
-    public function update(Request $request, $chamado_id)
+    public function update(Request $request, $chamado_id, $concluir)
     {
         $user = Auth::user();
 
         if(!$user)
             return redirect()->route('login')->with('error', 'Usuario não autenticado');
 
-        $request->validate([
-            'rating'            => 'required|numeric',
-            'homologacao_nota'  => 'nullable|string|min:5',
-        ]);
+        $concluir   = in_array($concluir, ['yes', 'no']) ? $concluir : null;
+
+        if(!$concluir)
+            return redirect()->route('homologacao_show', $chamado_id)
+                    ->with('error', 'Favor escolha entre "homologar" e "não homologar"');
+
+        if($concluir === 'yes')
+        {
+            $validation = [
+                'homologacao_nota'  => 'nullable|string|min:5',
+                'rating'            => 'required|numeric',
+            ];
+        }else{
+            $validation = [
+                'homologacao_nota'  => 'required|string|min:5',
+            ];
+        }
+
+        $request->validate($validation);
 
         $chamado = Chamado::where('usuario_id', $user->id)
                     ->where('status', StatusEnum::EM_HOMOLOGACAO)
                     ->where('id', $chamado_id)
                     ->with([
-                        'homologadoPor' => function($query) {
+                        'atendente' => function($query) {
                             $query->select('id','name',);
                         },
                     ])
@@ -139,23 +155,40 @@ class HomologacaoController extends Controller
         if(!$chamado)
             return redirect()->route('homologacao_show')->with('error', 'Chamado não encontrado ou inválido para homologação');
 
-        $chamado->update([
-            'homologacao_avaliacao'      => $request->input('rating'),
-            'homologado_por'             => $user->id,
-            'homologado_em'              => now(),
-            'homologacao_observacao_fim' => htmlentities($request->input('homologacao_nota')),
-            'status'                     => StatusEnum::HOMOLOGADO,
-        ]);
+        if($concluir === 'yes')
+        {
+            $chamado->update([
+                'homologacao_avaliacao'       => $request->input('rating'),
+                'homologado_por'              => $user->id,
+                'homologado_em'               => now(),
+                'homologacao_observacao_back' => null,
+                'homologacao_observacao_fim'  => htmlentities($request->input('homologacao_nota')),
+                'status'                      => StatusEnum::HOMOLOGADO,
+            ]);
 
-        return redirect()->route('homologacao_index')->with('success', "Chamado #{$chamado->id} homologado com sucesso");
+            return redirect()->route('homologacao_index')->with('success', "Chamado #{$chamado->id} homologado com sucesso");
+        }else{
+            $chamado->update([
+                'homologacao_avaliacao'       => null,
+                'homologado_por'              => null,
+                'homologado_em'               => null,
+                'homologacao_observacao_fim'  => null,
+                'homologacao_observacao_back' => htmlentities($request->input('homologacao_nota')),
+                'status'                      => StatusEnum::ABERTO,
+            ]);
+
+            return redirect()->route('homologacao_index')->with('success', "Chamado #{$chamado->id} reaberto");
+        }
+
+        return redirect()->route('homologacao_index')->with('error', "Falha na homologação do chamado #{$chamado->id}");
     }
 
     public static function routes()
     {
-        Route::get('/homologacao',                          [self::class, 'index'])->name('homologacao_index');
-        Route::get('/homologacao/{chamado_id}',             [self::class, 'show'])->name('homologacao_show');
-        Route::get('/homologacao/{chamado_id}/{concluir}',  [self::class, 'homologar'])->name('homologacao_homologar');
-        Route::post('/homologacao/{chamado_id}/update',     [self::class, 'update'])->name('homologacao_update');
+        Route::get('/homologacao',                                  [self::class, 'index'])->name('homologacao_index');
+        Route::get('/homologacao/{chamado_id}',                     [self::class, 'show'])->name('homologacao_show');
+        Route::get('/homologacao/{chamado_id}/{concluir}',          [self::class, 'homologar'])->name('homologacao_homologar');
+        Route::post('/homologacao/{chamado_id}/update/{concluir}',  [self::class, 'update'])->name('homologacao_update');
     }
 
 }

@@ -1,21 +1,5 @@
 @extends('layouts.page')
 
-@php
-function humanFileSize($size, $unit = '')
-{
-    if ((!$unit && $size >= 1 << 30) || $unit == 'GB') {
-        return number_format($size / (1 << 30), 2) . ' GB';
-    }
-    if ((!$unit && $size >= 1 << 20) || $unit == 'MB') {
-        return number_format($size / (1 << 20), 2) . ' MB';
-    }
-    if ((!$unit && $size >= 1 << 10) || $unit == 'KB') {
-        return number_format($size / (1 << 10), 2) . ' KB';
-    }
-    return number_format($size) . ' bytes';
-}
-@endphp
-
 @section('head_content')
     <link rel="stylesheet" href="@asset('pure-css-star-rating-input/dist/style.css')">
     {{-- <script src="@asset('pure-css-star-rating-input/dist/script.js')"></script> --}}
@@ -37,7 +21,7 @@ function humanFileSize($size, $unit = '')
 
         <h5>Avalie o atendimento</h5>
         <div class="p-2 p-4 my-3 border rounded border-dark w-100">
-            <form class="row" method="POST" action="@route('homologacao_update', $chamado->id)">
+            <form class="row" method="POST" action="@route('homologacao_update', [$chamado->id, $concluir])">
                 @csrf
 
                 <div class="mb-3 col-12">
@@ -79,7 +63,7 @@ function humanFileSize($size, $unit = '')
 
                 <div class="my-3 col-12">
                     <div class="mb-1 w-100">
-                        <h5>Nota opcional para o atendimento</h5>
+                        <h5>Nota opcional para este atendimento</h5>
                     </div>
 
                     <textarea name="homologacao_nota" id="homologacao_nota" cols="30" rows="10" minlength="10"
@@ -87,7 +71,13 @@ function humanFileSize($size, $unit = '')
                 </div>
 
                 <div class="col-12">
-                    <button class="btn btn-md btn-success" type="submit">Homologar</button>
+                    <div class="mb-3 w-100">
+                        <button class="btn btn-md btn-success" type="submit">Homologar</button>
+                    </div>
+
+                    <div class="w-100">
+                        <a href="@route('homologacao_homologar', [$chamado->id, 'no'])" class="text-muted">Caso NÃO queira homologar (rebrir), clique aqui</a>
+                    </div>
                 </div>
             </form>
         </div>
@@ -108,7 +98,7 @@ function humanFileSize($size, $unit = '')
                         <li>
                             Resolvido
                             {{ $chamado->finished_at ? 'em ' . $chamado->finished_at->format('d/m/Y H:i:s') : '' }} por:
-                            <a href="#">{{ $chamado->homologadoPor->name ?? null }}</a>
+                            <a href="#">{{ $chamado->atendente->name ?? null }}</a>
                         </li>
                     </ul>
                 </span>

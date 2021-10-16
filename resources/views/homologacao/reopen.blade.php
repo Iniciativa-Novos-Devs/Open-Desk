@@ -1,26 +1,52 @@
 @extends('layouts.page')
 
+@section('head_content')
+    <link rel="stylesheet" href="@asset('pure-css-star-rating-input/dist/style.css')">
+    {{-- <script src="@asset('pure-css-star-rating-input/dist/script.js')"></script> --}}
 
-@php
-    function humanFileSize($size, $unit="")
-    {
-        if( (!$unit && $size >= 1<<30) || $unit == "GB")
-            return number_format($size/(1<<30),2)." GB";
-        if( (!$unit && $size >= 1<<20) || $unit == "MB")
-            return number_format($size/(1<<20),2)." MB";
-        if( (!$unit && $size >= 1<<10) || $unit == "KB")
-            return number_format($size/(1<<10),2)." KB";
-        return number_format($size)." bytes";
-    }
-@endphp
+    <script>
+        addScriptToAppendAfterLoad("@asset('pure-css-star-rating-input/dist/script.js')")
+    </script>
+@endsection
+
 @section('content')
     <div class="w-100">
         <h5> {{ $chamado->title ?? '(Chamado sem titulo)' }} </h5>
         <span class="text-muted">
             <ul>
-                <li>Aberto em {{ $chamado->created_at->format('d/m/Y H:i:s') }} por: <a href="#">{{ $chamado->usuario->name }}</a></li>
+                <li>Aberto em {{ $chamado->created_at->format('d/m/Y H:i:s') }} por: <a
+                       href="#">{{ $chamado->usuario->name }}</a></li>
             </ul>
         </span>
+
+        <h5>Reabrir o chamado</h5>
+        <div class="p-2 p-4 my-3 border rounded border-dark w-100">
+            <form class="row" method="POST" action="@route('homologacao_update', [$chamado->id, $concluir])">
+                @csrf
+
+                <div class="my-3 col-12">
+                    <div class="mb-1 w-100">
+                        <h5>Informe o motivo pelo qual não homologa este atendimento</h5>
+                        <h6 class="text-muted">O mesmo será reaberto</h6>
+                    </div>
+
+                    <textarea name="homologacao_nota" id="homologacao_nota" cols="30" rows="10" minlength="10"
+                        class="form-control template-ds d-none">{{ old('homologacao_nota') ?? null }}</textarea>
+                </div>
+
+                <div class="col-12">
+                    <div class="mb-3 w-100">
+                        <button class="btn btn-md btn-outline-danger" type="submit">Reabrir este chamado</button>
+                    </div>
+
+                    <div class="w-100">
+                        <a href="@route('homologacao_homologar', [$chamado->id, 'yes'])" class="text-muted">Caso queira homologar (encerrar), clique aqui</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <hr>
 
         <h5>Resolução</h5>
         <div class="p-2 my-3 border rounded border-dark w-100">
@@ -34,89 +60,51 @@
                 <span class="text-muted">
                     <ul>
                         <li>
-                            Resolvido {{ $chamado->finished_at ? 'em '.$chamado->finished_at->format('d/m/Y H:i:s') : '' }} por:
-                            <a href="#">{{ $chamado->homologadoPor->name ?? null}}</a>
+                            Resolvido
+                            {{ $chamado->finished_at ? 'em ' . $chamado->finished_at->format('d/m/Y H:i:s') : '' }} por:
+                            <a href="#">{{ $chamado->atendente->name ?? null }}</a>
                         </li>
                     </ul>
                 </span>
             </div>
-
-            <div class="p-2 mt-2">
-                <a href="@route('homologacao_homologar', [$chamado->id, 'no'])" class="btn btn-sm btn-outline-danger">Não homologar</a>
-                <a href="@route('homologacao_homologar', [$chamado->id, 'yes'])" class="btn btn-sm btn-success">Homologar</a>
-            </div>
-        </div>
-
-        <div class="p-2 my-3 border rounded border-dark w-100">
-            <h6>Anexos {{ $chamado->anexos ? '(' . count($chamado->anexos) . ')' : '' }}</h6>
-            @if ($chamado->anexos)
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Anexo</th>
-                            <th scope="col">Tipo / mime</th>
-                            <th scope="col">Tamanho</th>
-                            <th scope="col">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($chamado->anexos as $anexo)
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>{{ $anexo['name'] ?? null }}</td>
-                                <td>
-                                    {{ ($anexo['extension'] ?? null) . ' | ' . ($mime_type = $anexo['mime_type'] ?? null) }}
-                                </td>
-                                <td>{{ humanFileSize($anexo['size'] ?? null) }}</td>
-                                <td>
-                                    <a href="#apagar" class="btn btn-sm btn-danger">Apagar</a>
-                                    <a href="{{ asset($anexo['path']) }}" target="_blank" class="btn btn-sm btn-info">Ver</a>
-                                    <a href="{{ asset($anexo['path']) }}" target="_blank" download="" class="btn btn-sm btn-info">Baixar</a>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            @endif
         </div>
     </div>
+@endsection
 
-    <hr>
+@section('js')
+    {{-- https://ckeditor.com/docs/ckeditor5 --}}
+    {{-- https://cdn.ckeditor.com/#ckeditor5 --}}
 
-    <h6>Histórico:</h6>
-    <div class="w-100">
-        <div class="accordion" id="accordionExample">
-            @php
-                $index = 1;
-            @endphp
-            @foreach ($historico as $h)
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingThree">
-                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#collapse_{{ $index }}"
-                            aria-expanded="{{ $index == 1 ? 'true' : 'false' }}"
-                            aria-controls="collapse_{{ $index }}">
-                            {{ $h['titulo'] }} |
-                            {{ $h['usuario'] }} |
-                            {{ $index }} |
-                            <span class="text-muted">
-                                {{ $h['data'] }}
-                            </span>
-                        </button>
-                    </h2>
-                    <div id="collapse_{{ $index }}"
-                        class="accordion-collapse collapse {{ $index == 1 ? 'show' : '' }}"
-                        aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                        <div class="accordion-body">
-                            {{ nl2br($h['conteudo']) }}
-                        </div>
-                    </div>
-                </div>
-                @php
-                    $index++;
-                @endphp
-            @endforeach
-        </div>
-    </div>
+    <script src="https://cdn.ckeditor.com/ckeditor5/28.0.0/classic/ckeditor.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/28.0.0/classic/translations/pt-br.js"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/28.0.0/classic/plugins/fontsize.js"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#homologacao_nota'), {
+                language: 'pt-br',
+                height: 1000,
+
+                //https://ckeditor.com/docs/ckeditor5/latest/features/toolbar/toolbar.html
+                toolbar: {
+                    items: [
+                        'heading', '|',
+                        'bold', 'italic', '|',
+                        'link', '|',
+                        'outdent', 'indent', '|',
+                        'bulletedList', 'numberedList', '|',
+                        'insertTable', '|',
+                        'blockQuote', '|',
+                        'undo', 'redo',
+                    ],
+                    shouldNotGroupWhenFull: true,
+                }
+            })
+            .then(editor => {
+                // console.log(editor);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+    </script>
 @endsection

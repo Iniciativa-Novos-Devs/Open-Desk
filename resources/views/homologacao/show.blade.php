@@ -36,7 +36,7 @@
                     <ul>
                         <li>
                             Resolvido {{ $chamado->finished_at ? 'em '.$chamado->finished_at->format('d/m/Y H:i:s') : '' }} por:
-                            <a href="#">{{ $chamado->homologadoPor->name ?? null}}</a>
+                            <a href="#">{{ $chamado->atendente->name ?? null}}</a>
                         </li>
                     </ul>
                 </span>

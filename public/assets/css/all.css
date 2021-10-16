@@ -74,3 +74,6 @@ button { outline: none; }
     height: 100vh;
     background-color: #000;
 }
+
+/* CKEditor */
+.ck.ck-editor__main .ck-editor__editable{ min-height: 25vh; }

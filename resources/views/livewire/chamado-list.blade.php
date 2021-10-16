@@ -113,7 +113,14 @@
                                                     data-toggle="tooltip" data-html="true" title="Não homologado"
                                                     aria-disabled="true">!</button>
                                                 @endif
+                                            @else
+                                                @if ($chamado->homologacao_observacao_back)
+                                                    <button type="button" class="py-0 btn btn-sm btn-danger rounded-circle"
+                                                    data-toggle="tooltip" data-html="true" title="Chamado reaberto"
+                                                    aria-disabled="true">!</button>
+                                                @endif
                                             @endif
+
                                         </td>
                                         @if ($show_action_buttons)
                                             <td class="py-0">

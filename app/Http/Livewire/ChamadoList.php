@@ -39,7 +39,7 @@ class ChamadoList extends Component
     {
         $this->select_items        = $this->getSelectItems($select, true);
         $this->items_by_page       = $items_by_page > 0 && $items_by_page < 200 ? $items_by_page : 10;
-        $this->selected_status     = null;
+        $this->selected_status     = StatusEnum::ABERTO;
         $this->show_action_buttons = $show_action_buttons;
         $this->atendente           = $this->getUsuario();
         $this->keep_accordion_open = session()->get('user_preferences.atendente.chamados_a_atender.keep_accordion_open', true);

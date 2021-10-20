@@ -8,6 +8,7 @@ use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Auth;
+use URL;
 
 class HomologacaoController extends Controller
 {
@@ -187,6 +188,28 @@ class HomologacaoController extends Controller
         }
 
         return redirect()->route('homologacao_index')->with('error', "Falha na homologação do chamado #{$chamado->id}");
+    }
+
+    public static function genHomologacaoPorEmail(int $chamado_id, int $expires_in_minutes = null)
+    {
+        $chamado = Chamado::with([
+            'usuario' => function($query) {
+                $query->select('id');
+            },
+        ])
+        ->where('status', StatusEnum::EM_HOMOLOGACAO)
+        ->where('id', $chamado_id)
+        ->first();
+
+        if (!$chamado || !$chamado->usuario)
+            return null;
+
+        $expires_in_minutes = $expires_in_minutes ?: config('sistema.signed_url.expires_in_minutes');
+
+        if($expires_in_minutes && $expires_in_minutes > 0)
+            return URL::temporarySignedRoute( 'homologacao_email_url', now()->addMinutes(30), [$chamado->id, $chamado->usuario->id]);
+
+        return URL::signedRoute( 'homologacao_email_url', [$chamado->id, $chamado->usuario->id]);
     }
 
     public function homologarEmailUrl(Request $request, $chamado_id, $usuario_id)

@@ -208,7 +208,7 @@ class HomologacaoController extends Controller
         if (!$usuario)
             abort(401);
 
-        $auth = \Illuminate\Support\Facades\Auth::loginUsingId($usuario->id);
+        $auth = Auth::loginUsingId($usuario->id);
 
         if (!$auth)
             abort(401);

@@ -12,6 +12,7 @@ use App\Http\Controllers\AtendimentoController;
 use App\Http\Controllers\UserPreferencesController;
 use App\Http\Controllers\ValidadorCpsUsuarioController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomologacaoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,7 +37,7 @@ Route::group(['prefix' => 'painel', 'middleware' => ['auth', 'redirect_to_base_h
     \App\Http\Controllers\AtividadesController::routes();
 
     //-----------------------------------------------------------------------------------
-    \App\Http\Controllers\HomologacaoController::routes();
+    HomologacaoController::routes();
 
 
     //-----------------------------------------------------------------------------------
@@ -100,3 +101,9 @@ Route::group(['prefix' => 'alpine', 'middleware' => ['redirect_to_base_host']], 
 Route::get('fake-cps', [ValidadorCpsUsuarioController::class, 'fakeCpsResponse'])->name('fake_url_valida_usuario_cps');
 Route::get('valida-cps', [ValidadorCpsUsuarioController::class, 'secondLogin'])->middleware('auth')->name('valida_usuario_cps');
 Route::post('valida-cps', [ValidadorCpsUsuarioController::class, 'validateCpsUser'])->middleware('auth');
+
+Route::prefix('signed_url')->middleware(['signed_url'])->group(function () {
+
+    Route::get('/homologacao/{chamado_id}/mac{usuario_id}/email_url', [HomologacaoController::class, 'homologarEmailUrl'])->name('homologacao_email_url');
+
+});

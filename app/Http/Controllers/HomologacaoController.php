@@ -4,12 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Enums\StatusEnum;
 use App\Models\Chamado;
+use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Auth;
 
 class HomologacaoController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except('homologarEmailUrl');
+    }
+
     public function index(Request $request)
     {
         return view('homologacao.index');
@@ -181,6 +187,33 @@ class HomologacaoController extends Controller
         }
 
         return redirect()->route('homologacao_index')->with('error', "Falha na homologação do chamado #{$chamado->id}");
+    }
+
+    public function homologarEmailUrl(Request $request, $chamado_id, $usuario_id)
+    {
+        $chamado = Chamado::with([
+                'usuario' => function($query) {
+                    $query->select('id','name',);
+                },
+        ])
+        ->where('id', $chamado_id)
+        ->where('usuario_id', $usuario_id)
+        ->first();
+
+        if (!$chamado)
+            return redirect()->route('homologacao_index')->with('error', 'Chamado não encontrado ou inválido para homologação');
+
+        $usuario = $chamado->usuario;
+
+        if (!$usuario)
+            abort(401);
+
+        $auth = \Illuminate\Support\Facades\Auth::loginUsingId($usuario->id);
+
+        if (!$auth)
+            abort(401);
+
+        return redirect()->route('homologacao_show', $chamado_id)->with('info', 'Login efetuado por URL assinada');
     }
 
     public static function routes()

@@ -18,6 +18,14 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+
+        /**
+         * Quando o chamado é encerrado ele é enviado para homologação
+         * É nesse momento que esse evento é disparado
+         */
+        \App\Events\ChamadoEmHomologacaoEvent::class => [
+            \App\Listeners\NotificaUsuarioChamadoEmHomologacao::class,
+        ],
     ];
 
     /**

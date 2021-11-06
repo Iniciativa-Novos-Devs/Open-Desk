@@ -331,6 +331,8 @@ class AtendimentosChamadoList extends Component
             'finished_at'   => now(),
         ]);
 
+        event(new \App\Events\ChamadoEmHomologacaoEvent($this->em_atendimento));
+
         if($updated)
         {
             $this->toastIt('Chamado #'. $this->em_atendimento->id .' encerrado com sucesso!', 'success', ['preventDuplicates' => false]);

@@ -9,12 +9,21 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Auth;
 use URL;
+use Illuminate\Support\Facades\Mail;
 
 class HomologacaoController extends Controller
 {
     public function __construct()
     {
         $this->middleware('auth')->except('homologarEmailUrl');
+    }
+
+    public static function routes()
+    {
+        Route::get('/homologacao',                                  [self::class, 'index'])->name('homologacao_index');
+        Route::get('/homologacao/{chamado_id}',                     [self::class, 'show'])->name('homologacao_show');
+        Route::get('/homologacao/{chamado_id}/{concluir}',          [self::class, 'homologar'])->name('homologacao_homologar');
+        Route::post('/homologacao/{chamado_id}/update/{concluir}',  [self::class, 'update'])->name('homologacao_update');
     }
 
     public function index(Request $request)
@@ -239,12 +248,42 @@ class HomologacaoController extends Controller
         return redirect()->route('homologacao_show', $chamado_id)->with('info', 'Login efetuado por URL assinada');
     }
 
-    public static function routes()
+    public static function sendHomologationRequestEmailToUser(Chamado $chamado)
     {
-        Route::get('/homologacao',                                  [self::class, 'index'])->name('homologacao_index');
-        Route::get('/homologacao/{chamado_id}',                     [self::class, 'show'])->name('homologacao_show');
-        Route::get('/homologacao/{chamado_id}/{concluir}',          [self::class, 'homologar'])->name('homologacao_homologar');
-        Route::post('/homologacao/{chamado_id}/update/{concluir}',  [self::class, 'update'])->name('homologacao_update');
+        $user = $chamado->usuario;
+
+        if (!$user)
+            return false;
+
+        $title          = \Str::limit(strip_tags(html_entity_decode($chamado->title)), 20, '...');
+        $chamado_url    = self::genHomologacaoPorEmail($chamado->id);
+
+        if (!$chamado_url)
+        {
+            return null;
+        }
+
+        $email_data = [
+            'email_subject'  =>  "Chamado #{$chamado->id}. - [Aguardando homologação] - {$title}",
+
+            'email_intro'    =>    "<p>Olá {$user->name},</p>
+                                    <p>Seu chamado foi fechado e aguarda sua homologação.</p>",
+
+            'email_content'  =>  "<p>O chamado <strong>#{$chamado->id} - {$chamado->title} <strong> está em homologação.</p>",
+
+            'email_footer' =>   '<p>Acesse o sistema para mais detalhes.</p>
+                                <p>Atenciosamente,<br>Equipe de Suporte</p>',
+
+            'call_to_actions' => [
+                ['url' => $chamado_url, 'text' => 'Acessar chamado'],
+            ],
+        ];
+
+        $email = $user->email ?? null;
+
+        if($email)
+            Mail::to('tiago@globo.com')
+                ->send(new \App\Mail\GeneralProposalEmail($email_data));
     }
 
 }

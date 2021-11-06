@@ -269,7 +269,7 @@ class HomologacaoController extends Controller
             'email_intro'    =>    "<p>Olá {$user->name},</p>
                                     <p>Seu chamado foi fechado e aguarda sua homologação.</p>",
 
-            'email_content'  =>  "<p>O chamado <strong>#{$chamado->id} - {$chamado->title} <strong> está em homologação.</p>",
+            'email_content'  =>  "<p>O chamado <strong>#{$chamado->id} - {$chamado->title} </strong> está em homologação.</p>",
 
             'email_footer' =>   '<p>Acesse o sistema para mais detalhes.</p>
                                 <p>Atenciosamente,<br>Equipe de Suporte</p>',
@@ -284,6 +284,17 @@ class HomologacaoController extends Controller
         if($email)
             Mail::to('tiago@globo.com')
                 ->send(new \App\Mail\GeneralProposalEmail($email_data));
+    }
+
+    public static function requestHomologationForAll()
+    {
+        Chamado::where('status', StatusEnum::EM_HOMOLOGACAO)
+            ->where('finished_at', '<=', now()->subMinutes(60))
+            ->chunk(50, function ($chamados) {
+                foreach ($chamados as $chamado) {
+                    self::sendHomologationRequestEmailToUser($chamado);
+                }
+            });
     }
 
 }

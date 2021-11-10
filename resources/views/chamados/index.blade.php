@@ -7,7 +7,7 @@
     </div>
 
     <div class="col-12">
-        @livewire('chamado-list', ['items_by_page' => 20,])
+        @livewire('chamado-list', ['items_by_page' => 20, 'apenas_chamados_do_usuario' => true])
     </div>
 </div>
 @endsection

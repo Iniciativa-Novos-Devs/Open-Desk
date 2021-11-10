@@ -20,7 +20,7 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <li><a class="dropdown-item" href="{{ route('chamados_add') }}">Abrir Chamado</a></li>
-                        <li><a class="dropdown-item" href="{{ route('chamados_index') }}">Listar chamados</a></li>
+                        <li><a class="dropdown-item" href="{{ route('chamados_index') }}">Meus chamados</a></li>
                         <li><a class="dropdown-item" href="{{ route('atendimentos_index') }}#detalhes_do_chamado">Atender chamados</a></li>
                         <li><a class="dropdown-item" href="{{ route('homologacao_index') }}">Homologação de chamados</a></li>
                     </ul>

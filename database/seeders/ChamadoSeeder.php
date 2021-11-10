@@ -36,9 +36,7 @@ class ChamadoSeeder extends Seeder
             'usuario_id'                   => Arr::random($usuarios),
             'anexos'                       => null,
             'status'                       => 1,
-            'observacao'                   => "&lt;p&gt;"."Observação do chamado ". Str::random(10)."&lt;/p&gt;",
             'versao'                       => "1",
-            'title'                        => "Titulo do chamado ". Str::random(10),
             'unidade_id'                   => null,
             'atendente_id'                 => null,
             'paused_at'                    => null,
@@ -56,6 +54,8 @@ class ChamadoSeeder extends Seeder
         // Abertos
         foreach (range(1, 10) as $_i)
         {
+            $chamado_data['observacao'] = "&lt;p&gt;"."Observação do chamado ". Str::random(10)."&lt;/p&gt;";
+            $chamado_data['title']      = "Titulo do chamado ". Str::random(10);
             $chamado_data['status'] = StatusEnum::ABERTO;
             Chamado::create($chamado_data);
         }
@@ -63,6 +63,8 @@ class ChamadoSeeder extends Seeder
         // Em atendimento
         foreach (range(1, 10) as $_i)
         {
+            $chamado_data['observacao'] = "&lt;p&gt;"."Observação do chamado ". Str::random(10)."&lt;/p&gt;";
+            $chamado_data['title']      = "Titulo do chamado ". Str::random(10);
             $chamado_data['status'] = StatusEnum::EM_ATENDIMENTO;
             Chamado::create($chamado_data);
         }
@@ -75,6 +77,8 @@ class ChamadoSeeder extends Seeder
             // Em homologação
             foreach (range(1, 10) as $_i)
             {
+                $chamado_data['observacao'] = "&lt;p&gt;"."Observação do chamado ". Str::random(10)."&lt;/p&gt;";
+                $chamado_data['title']      = "Titulo do chamado ". Str::random(10);
                 $chamado_data['status'] = StatusEnum::EM_HOMOLOGACAO;
                 Chamado::create($chamado_data);
             }
@@ -82,6 +86,8 @@ class ChamadoSeeder extends Seeder
             // Em homologados
             foreach (range(1, 10) as $_i)
             {
+                $chamado_data['observacao'] = "&lt;p&gt;"."Observação do chamado ". Str::random(10)."&lt;/p&gt;";
+                $chamado_data['title']      = "Titulo do chamado ". Str::random(10);
                 $chamado_data['status']                 = StatusEnum::HOMOLOGADO;
                 $chamado_data['homologacao_avaliacao']  = rand(1, 5);
                 $chamado_data['homologado_por']         = $chamado_data['usuario_id'];

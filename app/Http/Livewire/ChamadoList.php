@@ -32,16 +32,17 @@ class ChamadoList extends Component
     public $items_by_page       = 10;
     public $show_action_buttons = false;
     public $keep_accordion_open = true;
-    public $atendente           = null;
+    public $usuario           = null;
     public $selected_status;
+    public bool $apenas_chamados_do_usuario = false;
 
-    public function mount(array $select = [], int $items_by_page = 10, bool $show_action_buttons = false)
+    public function mount(array $select = [], int $items_by_page = 10, bool $show_action_buttons = false, bool $apenas_chamados_do_usuario = false)
     {
         $this->select_items        = $this->getSelectItems($select, true);
         $this->items_by_page       = $items_by_page > 0 && $items_by_page < 200 ? $items_by_page : 10;
         $this->selected_status     = StatusEnum::ABERTO;
         $this->show_action_buttons = $show_action_buttons;
-        $this->atendente           = $this->getUsuario();
+        $this->usuario           = $this->getUsuario();
         $this->keep_accordion_open = session()->get('user_preferences.atendente.chamados_a_atender.keep_accordion_open', true);
     }
 
@@ -92,6 +93,9 @@ class ChamadoList extends Component
                             $query->select('id','name',);
                         },
                     ]);
+
+        if($this->apenas_chamados_do_usuario)
+            $chamados->where('usuario_id', $this->usuario->id);
 
         if(in_array('unidade_id', $columns_to_select))
             $chamados = $chamados->with(['unidade' => function($query) {
@@ -173,10 +177,10 @@ class ChamadoList extends Component
 
     public function getUsuarioAreas(): Array
     {
-        if(!$this->atendente)
+        if(!$this->usuario)
             return [];
 
-        $areas = $this->atendente->areas ?? [];
+        $areas = $this->usuario->areas ?? [];
 
         if(!$areas)
             return [];

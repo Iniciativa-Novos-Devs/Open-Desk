@@ -23,6 +23,8 @@ class AtendentesController extends Controller
     public function showAreasOfUsuario(Request $request, $usuario_id)
     {
         $atendente    = Usuario::where('id', $usuario_id)->with('areas', 'areas.atividades')->first();
+        //Considerar...
+        //Role::where('name', 'Atendente')->first()->usuario_roles->first()->usuarios()->limit(1)->get()
 
         if (!$atendente)
             return redirect()->route('dashboard')->with('error', 'Usuário não encontrado');

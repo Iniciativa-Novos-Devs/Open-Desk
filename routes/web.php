@@ -107,3 +107,7 @@ Route::prefix('signed_url')->middleware(['signed_url'])->group(function () {
     Route::get('/homologacao/{chamado_id}/mac{usuario_id}/email_url', [HomologacaoController::class, 'homologarEmailUrl'])->name('homologacao_email_url');
 
 });
+
+Route::get('/register', function(){
+    return redirect()->route('login')->with('error', 'Acesso não autorizado!');
+});

@@ -51,14 +51,8 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <li>
-                                    <a class="dropdown-item" href="#profile">
-                                        {{ __('Profile') }}
-                                        <i class="bi bi-person-badge-fill"></i>
-                                    </a>
-                                </li>
-                                <li>
                                     <a class="dropdown-item" href="{{ route('user.preferences') }}">
-                                        {{ __('preferences') }}
+                                        {{ __('Profile') }}
                                         <i class="bi bi-person-badge-fill"></i>
                                     </a>
                                 </li>

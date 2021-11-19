@@ -51,7 +51,7 @@
                 </div>
 
                 <button class="w-100 btn btn-lg btn-primary" type="submit">
-                    {{ __('Log in') }}
+                    {{ __('Login') }}
                 </button>
 
                 <div class="my-3">

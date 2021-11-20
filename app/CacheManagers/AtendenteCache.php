@@ -1,8 +1,6 @@
 <?php
 namespace App\CacheManagers;
 
-use App\Enums\CachedEnums\RoleCachedEnum;
-use App\Models\Usuario;
 use Illuminate\Support\Facades\Cache;
 use Str;
 use Arr;

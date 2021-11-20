@@ -18,7 +18,6 @@ use Arr;
 use Illuminate\Support\Facades\Cache;
 use \App\Libs\Helpers\DateHelpers;
 use App\Models\Area;
-use App\Models\UsuarioRole;
 use Livewire\WithPagination;
 
 class ChamadoList extends Component
@@ -42,7 +41,7 @@ class ChamadoList extends Component
         $this->items_by_page       = $items_by_page > 0 && $items_by_page < 200 ? $items_by_page : 10;
         $this->selected_status     = StatusEnum::ABERTO;
         $this->show_action_buttons = $show_action_buttons;
-        $this->usuario           = $this->getUsuario();
+        $this->usuario           = $this->getUsuarioLogado();
         $this->keep_accordion_open = session()->get('user_preferences.atendente.chamados_a_atender.keep_accordion_open', true);
     }
 
@@ -115,7 +114,7 @@ class ChamadoList extends Component
         return $chamados;
     }
 
-    protected function getUsuario()
+    protected function getUsuarioLogado()
     {
         return Auth::user();
     }

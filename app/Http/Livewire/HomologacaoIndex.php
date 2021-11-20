@@ -23,7 +23,7 @@ class HomologacaoIndex extends Component
     {
         $this->usuario     = Auth::user();
         if(!$this->usuario)
-            return redirect()->route('dashboard')->with('error', 'Usuario não autenticado');
+            return redirect()->route('dashboard')->with('error', 'Usuario não autenticado');//FIX isso vai dar erro
 
         $this->filtro  = $filtro_input = request()->input('filtro') ?? 'pendentes';
     }

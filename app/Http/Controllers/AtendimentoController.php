@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\Route;
 
 class AtendimentoController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('role:atendente');
+    }
+
     public function index(Request $request)
     {
         return view('atendimentos.index');

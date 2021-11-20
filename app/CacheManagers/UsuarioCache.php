@@ -2,7 +2,6 @@
 namespace App\CacheManagers;
 
 use App\Models\Usuario;
-use App\Enums\CachedEnums\RoleCachedEnum;
 use Illuminate\Support\Facades\Cache;
 use Str;
 use Arr;
@@ -50,7 +49,7 @@ class UsuarioCache
 
             if($role)
                 $query->whereHas('roles', function ($query) use ($role) {
-                    $query->where('role_uid', RoleCachedEnum::getRoleUid($role, self::$clear_cache));
+                    $query->hasRole($role);
                 });
 
             if($attributes)

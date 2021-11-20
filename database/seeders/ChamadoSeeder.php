@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Enums\StatusEnum;
 use \App\Models\Chamado;
-use App\Models\Role;
+use Role;
 use Arr;
 use Illuminate\Database\Seeder;
 use Str;

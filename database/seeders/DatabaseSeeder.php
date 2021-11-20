@@ -18,14 +18,13 @@ class DatabaseSeeder extends Seeder
 
         if(env('APP_ENV') != 'production')//Seeders apenas de ambiente for diferente de production
         {
+            $this->call(RolesAndPermissionsSeeder::class);
             $this->call(AreaSeeder::class);
             $this->call(TipoProblemaSeeder::class);
             $this->call(AtividadeSeeder::class);
             $this->call(ProblemaSeeder::class);
             $this->call(UnidadeSeeder::class);
             $this->call(UsuarioSeeder::class);
-            $this->call(RoleSeeder::class);
-            $this->call(UsuarioRoleSeeder::class);
             $this->call(ChamadoSeeder::class);
         }
     }

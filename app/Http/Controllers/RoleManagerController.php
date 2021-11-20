@@ -10,6 +10,9 @@ class RoleManagerController extends Controller
 {
     public function addRolesToUsuario(Request $request)
     {
+
+        dd(['REFATORAR. Usamos spatie agora',__FILE__.':'.__LINE__]);
+
         $request->validate([
             'roles' => 'required|array',
             'usuario_id' => 'required|exists:\App\Models\Usuario,id',

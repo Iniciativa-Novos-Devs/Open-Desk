@@ -65,9 +65,4 @@ class Usuario extends Authenticatable
     {
         return $this->belongsToMany(Area::class, 'hd_areas_usuarios', 'usuario_id', 'area_id')->withPivot('area_id');
     }
-
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class, 'hd_usuario_roles', 'usuario_id', 'role_uid');
-    }
 }

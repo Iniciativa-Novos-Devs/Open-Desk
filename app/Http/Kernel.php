@@ -64,5 +64,9 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'redirect_to_base_host' => \App\Http\Middleware\RedirectToBaseHostMiddleware::class,
         'signed_url' => \App\Http\Middleware\HasValidSignature::class,
+
+        'role' => \Spatie\Permission\Middlewares\RoleMiddleware::class,
+        'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
+        'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
     ];
 }

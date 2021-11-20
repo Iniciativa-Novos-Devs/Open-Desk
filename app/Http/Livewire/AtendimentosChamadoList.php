@@ -17,7 +17,6 @@ use App\Enums\StatusEnum;
 use App\Http\Controllers\UserPreferencesController;
 use \App\Libs\Helpers\DateHelpers;
 use App\Models\Area;
-use App\Models\UsuarioRole;
 use Livewire\WithPagination;
 
 class AtendimentosChamadoList extends Component
@@ -50,7 +49,8 @@ class AtendimentosChamadoList extends Component
         $this->selected_status      = StatusEnum::ABERTO;
         $this->keep_accordion_open  = session()->get('user_preferences.atendente.chamados_a_atender.keep_accordion_open', false);
         $this->cache_keys           = session()->get('cache_keys', []);
-        $this->atendente            = $this->getUsuario();
+
+        $this->atendente            = $this->validateUserPermissions($this->getUsuarioLogado());
         $this->startEmAtendimento();
     }
 
@@ -72,6 +72,21 @@ class AtendimentosChamadoList extends Component
             'chamados_pausados' => $this->getPausedChamados()
                 ->paginate($this->paused_items_by_page),
         ]);
+    }
+
+    /**
+     * function validateUserPermissions
+     *
+     * @param Usuario $user
+     * @return
+     */
+    protected function validateUserPermissions(Usuario $user)
+    {
+        $pode_acessar_esta_pagina = $user->hasAnyRole(['atendente']);
+
+        abort_if((!$user || !$pode_acessar_esta_pagina), 403, 'Permissão insufiente');
+
+        return $user ?? null;
     }
 
     protected function getChamados(array $columns_to_select = [], array $relationships = [])
@@ -172,9 +187,9 @@ class AtendimentosChamadoList extends Component
         }]);
     }
 
-    protected function getUsuario()
+    protected function getUsuarioLogado()
     {
-        return UsuarioCache::byLoggedUser(['areas', 'roles']);
+        return Auth::user() ?? null;
     }
 
     protected function getSelectItems(array $select_array_from_param_data = [], bool $return_it = false)

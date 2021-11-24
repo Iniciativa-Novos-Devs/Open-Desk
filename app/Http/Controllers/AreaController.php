@@ -5,9 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Area;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
+use Route;
 
 class AreaController extends Controller
 {
+    public static function routes()
+    {
+        Route::get('/areas', [AreaController::class, 'index'])->name('areas_index');
+        Route::get('/areas/{area_id}/{area_slug?}', [AreaController::class, 'show'])->name('areas_show');
+    }
+
     public function index(Request $request)
     {
         $areas = Area::select('id', 'nome', 'sigla')->paginate(20);

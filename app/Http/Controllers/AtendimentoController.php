@@ -12,13 +12,13 @@ class AtendimentoController extends Controller
         $this->middleware('role:atendente');
     }
 
-    public function index(Request $request)
-    {
-        return view('atendimentos.index');
-    }
-
     public static function routes()
     {
         Route::get('/atendimentos', [self::class, 'index'])->name('atendimentos_index');
+    }
+
+    public function index(Request $request)
+    {
+        return view('atendimentos.index');
     }
 }

@@ -74,6 +74,9 @@
     "Current Password": "Senha Atual",
     "New Password": "Nova Senha",
     "Log Out Other Browser Sessions": "Sair de outras sessões do navegador",
+    "Disconnect other devices": "Desconectar outros dispositivos",
+    "Other devices disconnected successfully": "Outros dispositivos desconectados com sucesso",
+    "Cancel": "Cancelar",
     "Log Out": "Deslogar",
     "User does not have the right roles.": "O usuário não tem permissão para este recurso."
 }

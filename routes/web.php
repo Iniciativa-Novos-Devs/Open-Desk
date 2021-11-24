@@ -4,7 +4,6 @@ use Illuminate\Http\Request;
 
 use App\Http\Controllers\PainelController;
 
-use App\Http\Controllers\ValidadorCpsUsuarioController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PainelController::class, 'index']);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dev;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\ValidadorCpsUsuarioController;
 use Route;
 
 class DevTestsRouteController extends Controller

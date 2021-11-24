@@ -139,7 +139,11 @@ class ChamadoController extends Controller
     public static function routes()
     {
         Route::get('/chamados', [ChamadoController::class, 'index'])->name('chamados_index');
-        Route::get('/chamados/add', [ChamadoController::class, 'add'])->name('chamados_add');
+
+        Route::get('/chamados/add', [ChamadoController::class, 'add'])
+        ->middleware('permission:chamados-create|chamados-all') //$user->hasAnyPermission(['edit articles', 'publish articles', 'unpublish articles']);
+        ->name('chamados_add');
+
         Route::post('/chamados/store', [ChamadoController::class, 'store'])->name('chamados_store');
         Route::get('/chamados/{chamado_id}/{chamado_slug?}', [ChamadoController::class, 'show'])->name('chamados_show');
     }

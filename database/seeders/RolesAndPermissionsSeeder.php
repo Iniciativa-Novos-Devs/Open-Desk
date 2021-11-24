@@ -49,6 +49,9 @@ class RolesAndPermissionsSeeder extends Seeder
             'atendente' => [
                 'chamados'      => ['c', 'r', 'u', 'atender'],
             ],
+            'usuario' => [
+                'chamados'      => ['c', 'r', 'u'],
+            ],
         ];
 
         foreach ($roles as $role => $permissions)

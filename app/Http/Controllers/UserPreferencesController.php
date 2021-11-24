@@ -7,6 +7,17 @@ use Route;
 
 class UserPreferencesController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    public static function routes()
+    {
+        Route::post('desconectar-outros-dispositivos', [self::class, 'logoutOtherDevices'])->name('user.logout_other_devices');
+        Route::get('user/preferences', [self::class, 'preferences'])->name('user.preferences');
+    }
+
     public function preferences(Request $request)
     {
         return view('user_preferences.index', [
@@ -28,8 +39,20 @@ class UserPreferencesController extends Controller
         $option_value = session()->get('user_preferences.'. $option_name, 'NO_DATA');
     }
 
-    public static function routes()
+    /**
+     * function logoutOtherDevices
+     *
+     * @param Request $request
+     * @return
+     */
+    public function logoutOtherDevices(Request $request)
     {
-        Route::get('user/preferences', [self::class, 'preferences'])->name('user.preferences');
+        $request->validate([
+            'password' => 'required|string|min:5',
+        ]);
+
+        \Auth::logoutOtherDevices(request('password'));
+
+        return back()->with('success', __('Other devices disconnected successfully'));
     }
 }

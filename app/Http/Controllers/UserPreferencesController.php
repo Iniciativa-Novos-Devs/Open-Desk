@@ -51,7 +51,7 @@ class UserPreferencesController extends Controller
             'password' => 'required|string|min:5',
         ]);
 
-        \Auth::logoutOtherDevices(request('password'));
+        \Auth::logoutOtherDevices($request->input('password'));
 
         return back()->with('success', __('Other devices disconnected successfully'));
     }

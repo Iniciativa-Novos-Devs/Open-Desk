@@ -78,5 +78,12 @@
     "Other devices disconnected successfully": "Outros dispositivos desconectados com sucesso",
     "Cancel": "Cancelar",
     "Log Out": "Deslogar",
-    "User does not have the right roles.": "O usuário não tem permissão para este recurso."
+    "User does not have the right roles.": "O usuário não tem permissão para este recurso.",
+    "Show": "Mostrar",
+    "View": "Ver",
+    "Edit": "Editar",
+    "Actions": "Ações",
+    "Inactivate": "Inativar",
+    "Delete": "Excluir",
+    "See all": "Ver todos"
 }

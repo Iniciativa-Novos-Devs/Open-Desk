@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Admin\UsuarioController;
 use App\Http\Controllers\AreaController;
 use App\Http\Controllers\ChamadoController;
 use App\Http\Controllers\ProblemaController;
@@ -40,6 +41,8 @@ class PainelController extends Controller
             AtendimentoController::routes();
             //-----------------------------------------------------------------------------------
             UserPreferencesController::routes();
+            //-----------------------------------------------------------------------------------
+            UsuarioController::routes();
             //-----------------------------------------------------------------------------------
         });
     }

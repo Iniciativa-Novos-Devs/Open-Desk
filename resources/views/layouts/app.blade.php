@@ -10,13 +10,17 @@
         [x-cloak] { display: none !important; }
     </style>
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet">
+    {{-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"> --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     {{-- <script src="//unpkg.com/alpinejs" defer></script> --}}
 
     <!-- toastr css (https://codeseven.github.io/toastr) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"> --}}
+    <link rel="stylesheet" href="{{ asset('assets/css/toastr.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/all.css') }}">
+
+    {{-- Aqui está carregando o material design bootstrap --}}
+    <link rel="stylesheet" href="{{ asset('css/mdb-build/app.css') }}">
 
     <script src="{{ asset('assets/js/auto_load_script.js') }}"></script>
     <script async src="{{ asset('js/app.js') }}"></script>
@@ -43,7 +47,7 @@
 
     @else
         @livewireStyles
-        @powerGridStyles
+        {{-- @powerGridStyles --}}
     @endif
 
     @yield('head_content')
@@ -98,7 +102,7 @@
 
     @else
         @livewireScripts
-        @powerGridScripts
+        {{-- @powerGridScripts --}}
     @endif
 </body>
 

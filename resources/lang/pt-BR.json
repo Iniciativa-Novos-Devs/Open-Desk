@@ -85,5 +85,18 @@
     "Actions": "Ações",
     "Inactivate": "Inativar",
     "Delete": "Excluir",
-    "See all": "Ver todos"
+    "See all": "Ver todos",
+    "Update": "Atualizar",
+    "Role": "Papel",
+    "Roles": "Papeis",
+    "Permission": "Permissão",
+    "Permissions": "Permissões",
+    "Close": "Fechar",
+    "Add": "Adicionar",
+    "Add New": "Adicionar Novo",
+    "Add New Role": "Adicionar Novo Papel",
+    "Add New Permission": "Adicionar Nova Permissão",
+    "Add New User": "Adicionar Novo Usuário",
+    "Permissions of this role": "Permissões deste papel",
+    "See all permissions of this role": "Ver as permissões deste papel"
 }

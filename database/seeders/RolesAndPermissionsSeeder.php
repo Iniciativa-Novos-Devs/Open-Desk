@@ -73,7 +73,7 @@ class RolesAndPermissionsSeeder extends Seeder
             }
 
             if($formated_permissions ?? [])
-                $role->givePermissionTo($formated_permissions);
+                $role->syncPermissions($formated_permissions);
         }
 
         //Super admin

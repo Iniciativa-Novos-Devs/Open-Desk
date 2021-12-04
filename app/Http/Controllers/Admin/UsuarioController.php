@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\CacheManagers\RoleCache;
 use App\Http\Controllers\Controller;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Role;
 
 class UsuarioController extends Controller
 {
@@ -13,9 +15,11 @@ class UsuarioController extends Controller
     {
         Route::prefix('usuarios')->group(function () {
             Route::get('/', [self::class, 'index'])->name('usuarios.index');
-            Route::get('/show/{usuarios_id}', [self::class, 'show'])->name('usuarios.show');
-            Route::get('/edit/{usuarios_id}', [self::class, 'edit'])->name('usuarios.edit');
-            Route::get('/delete/{usuarios_id}', [self::class, 'destroy'])->name('usuarios.delete');
+            Route::get('/show/{usuario_id}',    [self::class, 'show'])->name('usuarios.show');
+            Route::get('/edit/{usuario_id}',    [self::class, 'edit'])->name('usuarios.edit');
+            Route::get('/delete/{usuario_id}',  [self::class, 'destroy'])->name('usuarios.delete');
+            Route::post('/update/{usuario_id}', [self::class, 'update'])->name('usuarios.update');
+            Route::post('/store',               [self::class, 'store'])->name('usuarios.store');
         });
     }
 
@@ -71,7 +75,7 @@ class UsuarioController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request->all());
     }
 
     /**
@@ -101,14 +105,20 @@ class UsuarioController extends Controller
      */
     public function edit($id)
     {
-        $usuario = Usuario::find($id);
+        $usuario    = Usuario::with('roles')->where('id', $id)->first();
+        $usuario_roles = $usuario->roles->pluck('name');
+
+        $roles = RoleCache::all();
+
         if (!$usuario)
         {
             return redirect()->route('usuarios.index')->with('error', __('User not found'));
         }
 
         return view('admin.usuarios.form', [
-            'usuario' => $usuario,
+            'usuario'       => $usuario,
+            'usuario_roles' => $usuario_roles,
+            'roles'         => $roles,
         ]);
     }
 
@@ -121,7 +131,32 @@ class UsuarioController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $usuario = Usuario::where('id', $id)->first();
+        if (!$usuario)
+        {
+            return redirect()->route('usuarios.index')->with('error', __('User not found'));
+        }
+
+        $user_roles = $request->input('user_roles');
+
+        if($user_roles && is_array($user_roles))
+        {
+            $roles = Role::whereIn('name', $user_roles)->select('name')->get()->pluck('name');
+
+            if($roles)
+                $usuario->syncRoles($roles);
+        }
+
+        $usuario->name = $request->name;
+        $usuario->email = $request->email;
+        $saved = $usuario->save();
+
+        if ($saved)
+        {
+            return redirect()->route('usuarios.index')->with('success', __('User updated successfully'));
+        }
+
+        return redirect()->route('usuarios.index')->with('error', __('User not updated'));
     }
 
     /**

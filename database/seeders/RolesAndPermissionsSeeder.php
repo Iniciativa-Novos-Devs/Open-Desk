@@ -21,12 +21,13 @@ class RolesAndPermissionsSeeder extends Seeder
     {
         // Reset cached roles and permissions
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
+        \App\CacheManagers\RoleCache::all(true, true);
 
         // create permissions
         $permissions = [
             'usuarios'      => ['c', 'r', 'u', 'd', 'a', ],
             'chamados'      => ['c', 'r', 'u', 'd', 'a', 'atender', ],
-            'roles'         => ['c', 'r', 'u', 'd', 'a', ],
+            'roles'         => ['c', 'r', 'u', 'd', 'a', 'assign', ],
             'permissions'   => ['c', 'r', 'u', 'd', 'a', 'assign', ],
         ];
 
@@ -57,6 +58,8 @@ class RolesAndPermissionsSeeder extends Seeder
         foreach ($roles as $role => $permissions)
         {
             $role = Role::updateOrCreate(['name' => $role]);
+
+            $formated_permissions = [];
 
             foreach ($permissions as $_permission => $_actions)
             {

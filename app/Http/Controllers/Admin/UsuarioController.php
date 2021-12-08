@@ -8,6 +8,7 @@ use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Role;
+use Auth;
 
 class UsuarioController extends Controller
 {
@@ -86,12 +87,12 @@ class UsuarioController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $usuario_id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($usuario_id)
     {
-        $usuario = Usuario::find($id);
+        $usuario = Usuario::find($usuario_id);
         if (!$usuario)
         {
             return redirect()->route('usuarios.index')->with('error', __('User not found'));
@@ -105,13 +106,18 @@ class UsuarioController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $usuario_id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($usuario_id)
     {
-        $usuario    = Usuario::with('roles')->where('id', $id)->first();
-        $usuario_roles = $usuario->roles->pluck('name');
+        if ($usuario_id == \Auth::user()->id)
+        {
+            return redirect()->route('usuarios.index')->with('error', __('You can not edit your own user'));
+        }
+
+        $usuario        = Usuario::with('roles')->where('id', $usuario_id)->first();
+        $usuario_roles  = $usuario->roles->pluck('name');
 
         $roles = RoleCache::all();
 
@@ -131,12 +137,12 @@ class UsuarioController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  int  $usuario_id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $usuario_id)
     {
-        $usuario = Usuario::where('id', $id)->first();
+        $usuario = Usuario::where('id', $usuario_id)->first();
         if (!$usuario)
         {
             return redirect()->route('usuarios.index')->with('error', __('User not found'));
@@ -146,7 +152,16 @@ class UsuarioController extends Controller
 
         if($user_roles && is_array($user_roles))
         {
-            $roles = Role::whereIn('name', $user_roles)->select('name')->get()->pluck('name');
+            $user_roles = collect($user_roles);
+
+            if($user_roles->contains('super-admin') && !Auth::user()->hasRole('super-admin'))
+            {
+                $user_roles = $user_roles->filter(function($role) {
+                    return $role != 'super-admin';
+                });
+            }
+
+            $roles = Role::whereIn('name', $user_roles->all())->select('name')->get()->pluck('name');
 
             if($roles)
                 $usuario->syncRoles($roles);
@@ -167,12 +182,12 @@ class UsuarioController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int  $usuario_id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($usuario_id)
     {
-        $usuario = Usuario::find($id);
+        $usuario = Usuario::find($usuario_id);
         if (!$usuario)
         {
             return redirect()->route('usuarios.index')->with('error', __('User not found'));

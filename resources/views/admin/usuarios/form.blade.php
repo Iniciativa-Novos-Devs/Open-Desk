@@ -38,9 +38,11 @@ $action = ($usuario->id ?? null) ? route('usuarios.update', $usuario->id) : rout
                             type="checkbox"
                             name="user_roles[]"
                             value="{{ $role->name }}"
-                            {{ $usuario_roles->contains($role->name) ? 'checked' : '' }}>
+                            {{ $usuario_roles->contains($role->name) ? 'checked' : '' }}
+                            {{ ($role->name != 'super-admin' || $usuario_roles->contains('super-admin')) ? '' : 'disabled' }}
+                            >
 
-                        <label class="form-check-label align-self-center d-flex justify-content-between" for="checkbox_role_id_{{ $role->id }}">
+                        <label class="form-check-label select-none align-self-center d-flex justify-content-between" for="checkbox_role_id_{{ $role->id }}">
                             {{ $role->name }}
                             <button
                                 type="button"

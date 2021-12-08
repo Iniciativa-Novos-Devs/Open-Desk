@@ -42,10 +42,10 @@ class RolesAndPermissionsSeeder extends Seeder
 
         $roles = [
             'admin' => [
-                'usuarios'      => ['a'],
+                'usuarios'      => ['c', 'r', 'u',],
                 'chamados'      => ['a', 'atender'],
-                'roles'         => ['a'],
-                'permissions'   => ['a', 'assign'],
+                // 'roles'         => ['a'],
+                // 'permissions'   => ['a', 'assign'],
             ],
             'atendente' => [
                 'chamados'      => ['c', 'r', 'u', 'atender'],

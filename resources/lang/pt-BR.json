@@ -98,5 +98,6 @@
     "Add New Permission": "Adicionar Nova Permissão",
     "Add New User": "Adicionar Novo Usuário",
     "Permissions of this role": "Permissões deste papel",
-    "See all permissions of this role": "Ver as permissões deste papel"
+    "See all permissions of this role": "Ver as permissões deste papel",
+    "You can not edit your own user": "Você não pode editar seu próprio usuário"
 }

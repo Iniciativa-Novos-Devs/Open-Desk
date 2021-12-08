@@ -1,8 +1,8 @@
 <table class="table table-responsive">
     <thead>
         <tr>
-            @foreach ($columns as $key => $column)
-                <th>@lang($key)</th>
+            @foreach ($columns as $column)
+                <th>@lang($column)</th>
             @endforeach
 
             <th>@lang($actions()['label'])</th>

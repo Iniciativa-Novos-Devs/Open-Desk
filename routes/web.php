@@ -2,8 +2,10 @@
 
 use Illuminate\Http\Request;
 
-use App\Http\Controllers\PainelController;
-use App\Http\Controllers\RedirectController;
+use App\Http\Controllers\Admin\PainelController;
+use App\Http\Controllers\Admin\RedirectController;
+use App\Http\Controllers\Admin\SignedUrlController;
+use App\Http\Controllers\Dev\DevTestsRouteController;
 use Illuminate\Support\Facades\Route;
 
 ##-----------------------------------------------------------------------------------
@@ -26,7 +28,7 @@ PainelController::routes();
 RedirectController::routes();
 
 //URL assinadas (login automático por URL)
-\App\Http\Controllers\SignedUrlController::routes();
+SignedUrlController::routes();
 
 //Para testes em dev
-\App\Http\Controllers\Dev\DevTestsRouteController::routes();
+DevTestsRouteController::routes();

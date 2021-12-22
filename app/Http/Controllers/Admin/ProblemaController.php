@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Atividade;
 use App\Models\Problema;
 use Illuminate\Http\Request;
@@ -9,6 +10,15 @@ use Illuminate\Support\Facades\Route;
 
 class ProblemaController extends Controller
 {
+    public static function routes()
+    {
+        Route::get('/problemas/{atividade_id?}', [ProblemaController::class, 'index'])->name('problemas_index');
+        Route::get('/problemas/add/atividade/{atividade_id}', [ProblemaController::class, 'add'])->name('problemas_add');
+        Route::get('/problemas/edit/{atividade_id}', [ProblemaController::class, 'edit'])->name('problemas_edit');
+        Route::get('/problemas/delete/{atividade_id}', [ProblemaController::class, 'delete'])->name('problemas_delete');
+        Route::post('/problemas/store', [ProblemaController::class, 'store'])->name('problemas_store');
+    }
+
     public function index($atividade_id = null)
     {
         return view('problemas.index', [
@@ -51,14 +61,5 @@ class ProblemaController extends Controller
         $problema->delete();
 
         return redirect()->route('problemas_index')->with('success', 'Problema deletado com sucesso');
-    }
-
-    public static function routes()
-    {
-        Route::get('/problemas/{atividade_id?}', [ProblemaController::class, 'index'])->name('problemas_index');
-        Route::get('/problemas/add/atividade/{atividade_id}', [ProblemaController::class, 'add'])->name('problemas_add');
-        Route::get('/problemas/edit/{atividade_id}', [ProblemaController::class, 'edit'])->name('problemas_edit');
-        Route::get('/problemas/delete/{atividade_id}', [ProblemaController::class, 'delete'])->name('problemas_delete');
-        Route::post('/problemas/store', [ProblemaController::class, 'store'])->name('problemas_store');
     }
 }

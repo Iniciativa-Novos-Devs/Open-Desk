@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\CacheManagers\RoleCache;
 use App\Http\Controllers\Controller;
+use App\CacheManagers\RoleCache;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Jobs\NovoChamadoMailJob;
 use App\Models\Chamado;
 use App\Models\Usuario;

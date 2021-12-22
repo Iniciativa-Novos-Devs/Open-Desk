@@ -1,17 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Admin\UsuarioController;
-use App\Http\Controllers\AreaController;
-use App\Http\Controllers\ChamadoController;
-use App\Http\Controllers\ProblemaController;
-use App\Http\Controllers\RoleManagerController;
-use App\Http\Controllers\AtendentesController;
-use App\Http\Controllers\AtendimentoController;
-use App\Http\Controllers\AtividadesController;
-use App\Http\Controllers\UserPreferencesController;
-use App\Http\Controllers\HomologacaoController;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Route;
 
@@ -34,7 +25,7 @@ class PainelController extends Controller
             //-----------------------------------------------------------------------------------
             ProblemaController::routes();
             //-----------------------------------------------------------------------------------
-            RoleManagerController::routes();
+            RoleController::routes();
             //-----------------------------------------------------------------------------------
             AtendentesController::routes();
             //-----------------------------------------------------------------------------------

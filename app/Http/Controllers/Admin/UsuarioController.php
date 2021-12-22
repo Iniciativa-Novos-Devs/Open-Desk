@@ -26,7 +26,7 @@ class UsuarioController extends Controller
 
     public function __construct()
     {
-        $this->middleware(['role:super-admin|admin','permission:usuarios-all|usuarios-create|usuarios-read|usuarios-update|usuarios-delete']);
+        $this->middleware(['role:super-admin|admin', 'permission:usuarios-all|usuarios-create|usuarios-read|usuarios-update|usuarios-delete']);
     }
 
     /**

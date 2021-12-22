@@ -16,7 +16,8 @@ class PasswordResetTest extends TestCase
     {
         $response = $this->get('/forgot-password');
 
-        $response->assertStatus(200);
+        $response->assertStatus(302);//Recurso desabilitado por segurança
+        $response->assertRedirect(route('login'));
     }
 
     public function test_reset_password_link_can_be_requested()
@@ -25,9 +26,10 @@ class PasswordResetTest extends TestCase
 
         $user = Usuario::factory()->create();
 
-        $this->post('/forgot-password', ['email' => $user->email]);
+        $response = $this->post('/forgot-password', ['email' => $user->email]);
 
-        Notification::assertSentTo($user, ResetPassword::class);
+        $response->assertStatus(302);//Recurso desabilitado por segurança
+        $response->assertRedirect(route('login'));
     }
 
     public function test_reset_password_screen_can_be_rendered()
@@ -36,15 +38,10 @@ class PasswordResetTest extends TestCase
 
         $user = Usuario::factory()->create();
 
-        $this->post('/forgot-password', ['email' => $user->email]);
+        $response = $this->post('/forgot-password', ['email' => $user->email]);
 
-        Notification::assertSentTo($user, ResetPassword::class, function ($notification) {
-            $response = $this->get('/reset-password/'.$notification->token);
-
-            $response->assertStatus(200);
-
-            return true;
-        });
+        $response->assertStatus(302);//Recurso desabilitado por segurança
+        $response->assertRedirect(route('login'));
     }
 
     public function test_password_can_be_reset_with_valid_token()
@@ -53,19 +50,9 @@ class PasswordResetTest extends TestCase
 
         $user = Usuario::factory()->create();
 
-        $this->post('/forgot-password', ['email' => $user->email]);
+        $response = $this->post('/forgot-password', ['email' => $user->email]);
 
-        Notification::assertSentTo($user, ResetPassword::class, function ($notification) use ($user) {
-            $response = $this->post('/reset-password', [
-                'token' => $notification->token,
-                'email' => $user->email,
-                'password' => 'password',
-                'password_confirmation' => 'password',
-            ]);
-
-            $response->assertSessionHasNoErrors();
-
-            return true;
-        });
+        $response->assertStatus(302);//Recurso desabilitado por segurança
+        $response->assertRedirect(route('login'));
     }
 }

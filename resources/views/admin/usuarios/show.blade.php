@@ -1,5 +1,8 @@
 @extends('layouts.page')
 
+@section('title', __('User') . ': '. $usuario->name)
+@section('title_header', __('User') . ': '. $usuario->name)
+
 @section('content')
 <div class="row">
     <div class="col-12">

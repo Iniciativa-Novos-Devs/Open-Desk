@@ -32,8 +32,11 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <li><a class="dropdown-item" href="#">Unidades</a></li>
-                        @canany(['permission:usuarios-all', 'usuarios-create', 'usuarios-read', 'usuarios-update', 'usuarios-delete'])
-                            <li><a class="dropdown-item" href="@route('usuarios.index')">Usuários</a></li>
+                        @canany(['usuarios-all', 'usuarios-create', 'usuarios-read', 'usuarios-update', 'usuarios-delete'])
+                            <li><a class="dropdown-item" href="@route('usuarios.index')">@lang('Users')</a></li>
+                        @endcanany
+                        @canany(['roles-all', 'roles-create', 'roles-read', 'roles-update', 'roles-delete'])
+                            <li><a class="dropdown-item" href="@route('roles.index')">@lang('Roles')</a></li>
                         @endcanany
                         <li><a class="dropdown-item" href="{{ route('areas_index') }}">Áreas</a></li>
                         <li><a class="dropdown-item" href="{{ route('atividades_index') }}">Atividades</a></li>

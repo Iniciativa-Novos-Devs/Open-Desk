@@ -49,7 +49,7 @@ class UsuarioSeeder extends Seeder
                     'telefone_1'        => '41 9888888',
                     'telefone_1_wa'     => true,
                     'versao'            => 1,
-                    'roles'             => ['admin'],
+                    'roles'             => ['admin', 'super-admin'],
                     'permissions'       => [],
                     'app_admin'         => true,
                 ],

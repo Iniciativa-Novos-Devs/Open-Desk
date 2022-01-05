@@ -8,11 +8,32 @@ use App\Models\Chamado;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
 use App\Mail\NovoChamadoMail;
+use App\Models\Anexo;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 class ChamadoController extends Controller
 {
+    public static function routes()
+    {
+        Route::get('/chamados', [ChamadoController::class, 'index'])->name('chamados_index');
+
+        Route::get('/chamados/add', [ChamadoController::class, 'add'])
+        ->middleware('permission:chamados-create|chamados-all') //$user->hasAnyPermission(['edit articles', 'publish articles', 'unpublish articles']);
+        ->name('chamados_add');
+
+        Route::post('/chamados/store', [ChamadoController::class, 'store'])->name('chamados_store');
+        Route::get('/chamados/{chamado_id}/{chamado_slug?}', [ChamadoController::class, 'show'])->name('chamados_show');
+
+        Route::get('/chamados/delete_atachment/{chamado_id}/{atachment_id}', [ChamadoController::class, 'deleteAtachment'])
+            ->name('chamados_delete_atachment');
+    }
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index(Request $request)
     {
         return view('chamados.index');
@@ -77,9 +98,6 @@ class ChamadoController extends Controller
 
         $user       = auth()->user();
 
-        if(!$user)
-            return redirect()->route('chamados_index')->with('success', 'Acesso não autorizado');
-
         $usuario = Usuario::where('email', $user->email)->first();
 
         if(!$usuario)//TODO validar se o usuário tem a permissão de criar chamados
@@ -126,7 +144,7 @@ class ChamadoController extends Controller
         if($request->input('create_another') == 'yes')
             return redirect()->back()->with('success', 'Chamado criado com sucesso');
 
-        return redirect()->route('chamados_index')->with('success', 'Chamado criado com sucesso');
+        return redirect()->route('chamados_show', $chamado->id)->with('success', 'Chamado criado com sucesso');
     }
 
     public static function enviaEmailNovoChamado(Chamado $chamado)
@@ -136,17 +154,38 @@ class ChamadoController extends Controller
         if($email)
             Mail::to($email)->send(new NovoChamadoMail($chamado));
     }
-
-    public static function routes()
+    /**
+     * function deleteAtachment
+     *
+     * @param $chamado_id, $atachment_id
+     * @return
+     */
+    public function deleteAtachment($chamado_id, $atachment_id)
     {
-        Route::get('/chamados', [ChamadoController::class, 'index'])->name('chamados_index');
+        $chamado    = Chamado::where('id', $chamado_id)->first();
 
-        Route::get('/chamados/add', [ChamadoController::class, 'add'])
-        ->middleware('permission:chamados-create|chamados-all') //$user->hasAnyPermission(['edit articles', 'publish articles', 'unpublish articles']);
-        ->name('chamados_add');
+        if(!$chamado)
+            return redirect()->route('chamados_show', $chamado_id)->with('error', 'Chamado não encontrado');
 
-        Route::post('/chamados/store', [ChamadoController::class, 'store'])->name('chamados_store');
-        Route::get('/chamados/{chamado_id}/{chamado_slug?}', [ChamadoController::class, 'show'])->name('chamados_show');
+        $atachment  = $chamado->anexos->firstWhere('id', $atachment_id);
+
+        if(!$atachment || !($atachment['id'] ?? null))
+            return redirect()->route('chamados_show', $chamado_id)->with('error', 'Anexo inválido');
+
+        $anexo      = Anexo::where('id', $atachment['id'])->first();
+
+        if(!$anexo)
+            return redirect()->route('chamados_show', $chamado_id)->with('error', 'Anexo não encontrado');
+
+        if(file_exists(public_path($anexo->path)))
+            unlink(public_path($anexo->path));
+
+        $chamado->anexos = $chamado->anexos->where('id', '!=',$atachment_id);
+        $chamado->save();
+
+        $anexo->delete();
+
+        return redirect()->route('chamados_show', $chamado_id)->with('success', 'Anexo deletado com sucesso');
     }
 
 }

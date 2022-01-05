@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\StatusEnum;
+use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -28,7 +29,7 @@ class Chamado extends Model
 
     protected $casts = [
         'status' => 'integer',
-        'anexos' => 'array',
+        'anexos' => AsCollection::class,
     ];
 
     protected $fillable = [

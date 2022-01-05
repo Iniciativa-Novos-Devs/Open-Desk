@@ -37,16 +37,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($chamado->anexos as $anexo)
+                        @foreach ($chamado->anexos as $index => $anexo)
                             <tr>
-                                <th scope="row">1</th>
+                                <th scope="row">{{ $index +1 }}</th>
                                 <td>{{ $anexo['name'] ?? null }}</td>
                                 <td>
                                     {{ ($anexo['extension'] ?? null) . ' | ' . ($mime_type = $anexo['mime_type'] ?? null) }}
                                 </td>
                                 <td>{{ humanFileSize($anexo['size'] ?? null) }}</td>
                                 <td>
-                                    <a href="#apagar" class="btn btn-sm btn-danger">Apagar</a>
+                                    <a
+                                        href="@route('chamados_delete_atachment', [$chamado->id, ($anexo['id'] ?? null)])"
+                                        onclick="if (! confirm('Deseja mesmo deletar o anexo {{ $anexo['name'] ?? null }}?')) { return false; }"
+                                        class="btn btn-sm btn-danger">
+                                        Apagar
+                                    </a>
                                     <a href="{{ asset($anexo['path']) }}" target="_blank" class="btn btn-sm btn-info">Ver</a>
                                     <a href="{{ asset($anexo['path']) }}" target="_blank" download="" class="btn btn-sm btn-info">Baixar</a>
                                 </td>

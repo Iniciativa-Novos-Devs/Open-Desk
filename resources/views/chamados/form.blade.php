@@ -71,7 +71,7 @@
                             <div class="my-3 col-12 form-group">
                                 <label for="title">Título do Problema</label>
                                 <input type="text" class="form-control" name="title" value="{{ old('title') }}" id="title" minlength="5"
-                                    maxlength="100" placeholder="Título do Problema">
+                                    maxlength="100" placeholder="Título do Problema" required>
                             </div>
 
                             <div class="my-3 col-12">

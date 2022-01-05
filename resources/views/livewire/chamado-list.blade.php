@@ -90,13 +90,19 @@
                                         $color_by_status = $chamado->status == \App\Enums\StatusEnum::PENDENTE      ? 'text-success': $color_by_status;
                                     @endphp
                                     <tr class="py-0 {{ $color_by_status }} ">
-                                        <td class="py-0">{{ $chamado->id }}</td>
                                         <td class="py-0">
-                                            <a href="#">{{ $chamado->usuario->name }}</a>
+                                            <a href="@route('chamados_show', $chamado->id)">
+                                            {{ $chamado->id }}
+                                            </a>
+                                        </td>
+                                        <td class="py-0">
+                                            {{ $chamado->usuario->name }}
                                         </td>
                                         <td class="py-0"
                                             title="{{ \Str::limit(strip_tags(html_entity_decode($chamado->title)), 180, '...') }}">
-                                            {{ \Str::limit(strip_tags(html_entity_decode($chamado->title)), 20, '...') }}
+                                            <a href="@route('chamados_show', $chamado->id)">
+                                                {{ \Str::limit(strip_tags(html_entity_decode($chamado->title)), 20, '...') }}
+                                            </a>
                                         </td>
                                         <td class="py-0">{{ $chamado->atendente->name ?? null }}</td>
                                         <td class="py-0">{{ $chamado->created_at->format('d/m/Y H:i:s') }}</td>

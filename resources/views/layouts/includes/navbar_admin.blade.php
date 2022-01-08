@@ -9,28 +9,46 @@
         <div class="collapse navbar-collapse" id="navbarText">
             <ul class="mb-2 navbar-nav me-auto mb-lg-0">
 
+                @auth
                 <li class="nav-item">
-                    <a class="nav-link" aria-current="page" href="/">Principal</a>
+                    <a class="nav-link" href="@route('dashboard')">Dashboard</a>
                 </li>
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                    <a class="nav-link dropdown-toggle" href="#" id="chamadoNavbarDropdownMenuLink" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         Chamados
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <li><a class="dropdown-item" href="{{ route('chamados_add') }}">Abrir Chamado</a></li>
-                        <li><a class="dropdown-item" href="{{ route('chamados_index') }}">Meus chamados</a></li>
-                        <li><a class="dropdown-item" href="{{ route('atendimentos_index') }}#detalhes_do_chamado">Atender chamados</a></li>
-                        <li><a class="dropdown-item" href="{{ route('homologacao_index') }}">Homologação de chamados</a></li>
-                    </ul>
+                    <ul class="dropdown-menu" aria-labelledby="chamadoNavbarDropdownMenuLink">
+                        @can('chamados-create')
+                            <li><a class="dropdown-item" href="{{ route('chamados_add') }}">Abrir Chamado</a></li>
+                        @endcan
 
+                        @can('chamados-read')
+                            <li><a class="dropdown-item" href="{{ route('chamados_index') }}">Meus chamados</a></li>
+                            <li><a class="dropdown-item" href="{{ route('homologacao_index') }}">Homologação de chamados</a></li>
+                        @endcan
+
+                        @can('chamados-atender')
+                            <li><a class="dropdown-item" href="{{ route('atendimentos_index') }}#detalhes_do_chamado">Atender chamados</a></li>
+                        @endcan
+                    </ul>
+                </li>
+                @else
+                <li class="nav-item">
+                    <a class="nav-link" href="@route('chamados_add')">
+                        Abrir Chamado
+                    </a>
+                </li>
+                @endauth
+
+                @role('admin')
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                    <a class="nav-link dropdown-toggle" href="#" id="adminNavbarDropdownMenuLink" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         Manutenção
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <ul class="dropdown-menu" aria-labelledby="adminNavbarDropdownMenuLink">
                         <li><a class="dropdown-item" href="#">Unidades</a></li>
                         @canany(['usuarios-all', 'usuarios-create', 'usuarios-read', 'usuarios-update', 'usuarios-delete'])
                             <li><a class="dropdown-item" href="@route('usuarios.index')">@lang('Users')</a></li>
@@ -44,6 +62,7 @@
                         <li><a class="dropdown-item" href="{{ route('atendentes.index') }}">Atendentes</a></li>
                     </ul>
                 </li>
+                @endrole
             </ul>
             <div class="order-3 navbar-collapse collapse w-100 dual-collapse2">
                 <ul class="navbar-nav ms-auto">

@@ -77,3 +77,5 @@ button { outline: none; }
 
 /* CKEditor */
 .ck.ck-editor__main .ck-editor__editable{ min-height: 25vh; }
+
+li.nav-item a.nav-link{white-space: nowrap;}

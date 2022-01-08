@@ -68,7 +68,7 @@ class ChamadoList extends Component
         if(!$this->selected_status)
             return $chamados;
 
-        if($this->selected_status && StatusEnum::getState($this->selected_status))
+        if($this->selected_status && StatusEnum::getValue($this->selected_status))
             $chamados->where('status', $this->selected_status);
         else
             $chamados->whereNotIn('status', [

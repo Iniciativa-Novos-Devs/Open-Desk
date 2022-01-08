@@ -24,7 +24,7 @@ class StatusEnum
         8 => 'Homologado',
     ];
 
-    public static function getState(int $state_enum)
+    public static function getValue(int $state_enum)
     {
         if(self::isValidState($state_enum))
             return self::$humans[$state_enum];

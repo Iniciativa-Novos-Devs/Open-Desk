@@ -110,10 +110,10 @@
 
                                             @if ($chamado->status == \App\Enums\StatusEnum::EM_HOMOLOGACAO && $apenas_chamados_do_usuario)
                                                 <a href="@route('homologacao_show', $chamado->id)" class="btn btn-sm btn-outline-info">
-                                                    {{ \App\Enums\StatusEnum::getState((int) $chamado->status) }}
+                                                    {{ \App\Enums\StatusEnum::getValue((int) $chamado->status) }}
                                                 </a>
                                             @else
-                                            {{ \App\Enums\StatusEnum::getState((int) $chamado->status) }}
+                                            {{ \App\Enums\StatusEnum::getValue((int) $chamado->status) }}
                                             @endif
 
                                             @if ($chamado->status == \App\Enums\StatusEnum::ENCERRADO)

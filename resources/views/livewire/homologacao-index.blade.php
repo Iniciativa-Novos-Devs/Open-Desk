@@ -65,7 +65,7 @@
                     <tr>
                         <td scope="row">{{ $chamado->id }}</td>
                         <td>{{ $chamado->title }}</td>
-                        <td>{{ $status_enum->getState($chamado->status) }}</td>
+                        <td>{{ $status_enum->getValue($chamado->status) }}</td>
                         <td>{{ $chamado->atendente->name ?? null }}</td>
                         <td>{{ $chamado->finished_at ?? null }}</td>
                         <td>{{ $chamado->created_at }}</td>

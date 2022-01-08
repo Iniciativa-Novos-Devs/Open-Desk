@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\OrigemDoProblemaEnum;
 use App\Enums\StatusEnum;
 use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,6 +17,7 @@ class Chamado extends Model
     protected $table = 'hd_chamados';
 
     protected $appends = [
+        'origem',
         'status_name',
     ];
 
@@ -53,6 +55,7 @@ class Chamado extends Model
         'homologacao_avaliacao',       //Avaliação do homologador de 1 a 5
         'homologacao_observacao_fim',  //Mensagem opcional do homologador
         'homologacao_observacao_back', //Mensagem obrigatória do homologador CASO O CHAMADO NÃO ESTEJA CONCLUÍDO
+        'origem_do_problema',          //Origem do problema
     ];
 
     public function getStatusNameAttribute()
@@ -60,7 +63,15 @@ class Chamado extends Model
         if(!$this->status ?? null)
             return null;
 
-        return StatusEnum::getState($this->status);
+        return StatusEnum::getValue($this->status);
+    }
+
+    public function getOrigemAttribute()
+    {
+        if(!$this->origem_do_problema ?? null)
+            return null;
+
+        return OrigemDoProblemaEnum::getValue($this->origem_do_problema);
     }
 
     public function tipo_problema()

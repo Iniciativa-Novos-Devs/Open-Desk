@@ -148,7 +148,8 @@
                                                     @else
                                                     disabled
                                                     @endif
-                                                    type="button">
+                                                    type="button"
+                                                    onclick="Loader.open()">
                                                     Atender
                                                 </button>
 

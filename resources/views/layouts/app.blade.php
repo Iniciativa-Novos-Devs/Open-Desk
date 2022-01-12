@@ -22,6 +22,14 @@
     {{-- Aqui está carregando o material design bootstrap --}}
     <link rel="stylesheet" href="{{ asset('css/mdb-build/app.css') }}">
 
+    {{--
+        https://github.com/TiagoFrancaFernandesOPEN/animated-svg-loading-spinner
+        Loader.open()
+        Loader.close()
+    --}}
+    <link rel="stylesheet" href="{{ asset('vendor/loading-spinner/css/loader.min.css') }}">
+    <script src="{{ asset('vendor/loading-spinner/js/loader.min.js') }}"></script>
+
     <script src="{{ asset('assets/js/auto_load_script.js') }}"></script>
     <script async src="{{ asset('js/app.js') }}"></script>
     <script async src="{{ asset('assets/js/all.js') }}"></script>
@@ -93,6 +101,17 @@
                     if(window.toastMessage)
                         toastMessage(e.message, e.toast_type, new_options)
                 });
+
+                Livewire.on('openSpinner', e => {
+                    if(window.Loader)
+                        Loader.open();
+                });
+
+                Livewire.on('closeSpinner', e => {
+                    if(window.Loader)
+                        Loader.close();
+                });
+
             }
         });
     </script>

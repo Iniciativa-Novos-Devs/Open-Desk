@@ -15,13 +15,14 @@ use App\Models\Usuario;
 use Livewire\Component;
 use App\Enums\StatusEnum;
 use App\Http\Controllers\UserPreferencesController;
+use App\Http\Livewire\Traits\LoadSpinner;
 use \App\Libs\Helpers\DateHelpers;
 use App\Models\Area;
 use Livewire\WithPagination;
 
 class AtendimentosChamadoList extends Component
 {
-    use WithPagination;
+    use WithPagination, LoadSpinner;
 
     protected $select_items;
 
@@ -230,7 +231,10 @@ class AtendimentosChamadoList extends Component
     public function startEmAtendimento(bool $update_cache = null)
     {
         if(!$this->atendente->id ?? null)
+        {
+            $this->closeSpinner();
             return;//TODO validar se o usuário é um atendente
+        }
 
         $this->cache_keys['em_atendimento'] = 'em_atendimento_atendente_id_'.$this->atendente->id;
 
@@ -253,6 +257,8 @@ class AtendimentosChamadoList extends Component
                 ->where('atendente_id', $this->atendente->id)
                 ->first();
         });
+
+        $this->closeSpinner();
     }
 
     public function clearCache($cache_key = null)
@@ -363,18 +369,21 @@ class AtendimentosChamadoList extends Component
         {
             //TODO validar se o usuário é um atendente
             $this->toastIt('Usuário atual não é um atendente! [ln~'.__LINE__.']', 'error', ['preventDuplicates' => true]);
+            $this->closeSpinner();
             return;
         }
 
         if($this->hasEmAtendimento())
         {
             $this->toastIt('Já existe um chamado em atendimento! [ln~'.__LINE__.']', 'error', ['preventDuplicates' => true]);
+            $this->closeSpinner();
             return;
         }
 
         if(!is_numeric($chamado_id))
         {
             $this->toastIt('Falha ao selecionar identificador do chamado! [ln~'.__LINE__.']', 'error', ['preventDuplicates' => true]);
+            $this->closeSpinner();
             return;
         }
 
@@ -384,6 +393,7 @@ class AtendimentosChamadoList extends Component
         if(!$chamado)
         {
             $this->toastIt('Falha ao abrir o chamado! [ln~'.__LINE__.']', 'error', ['preventDuplicates' => true]);
+            $this->closeSpinner();
             return;
         }
 
@@ -395,6 +405,7 @@ class AtendimentosChamadoList extends Component
         if(!$update)
         {
             $this->toastIt('Falha ao atualizar o chamado! [ln~'.__LINE__.']', 'error', ['preventDuplicates' => true]);
+            $this->closeSpinner();
             return;
         }
 
@@ -402,6 +413,8 @@ class AtendimentosChamadoList extends Component
             ->whereNotIn('status', $this->cantOpenIfStatusIn())->first();
 
         $this->startEmAtendimento(true);
+
+        $this->closeSpinner();
     }
 
     public function cantOpenIfStatusIn(array $and_this = [])

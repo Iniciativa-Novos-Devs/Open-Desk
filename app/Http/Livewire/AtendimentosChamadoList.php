@@ -481,13 +481,20 @@ class AtendimentosChamadoList extends Component
     public function tranferirChamado()
     {
         if(!$this->em_atendimento ?? null)
+        {
+            $this->closeSpinner();
             return;
+        }
 
         if(!$this->exigeLogMessage(5))
+        {
+            $this->closeSpinner();
             return;
+        }
 
         $chamado_id = $this->em_atendimento->id;
         $this->emit('tranferirChamadoEvent', compact('chamado_id'));
+        $this->closeSpinner();
     }
 
     protected function exigeLogMessage(int $min_chars = 5)
@@ -586,11 +593,15 @@ class AtendimentosChamadoList extends Component
         {
             $this->toastIt("Dados insuficientes", 'error', ['preventDuplicates' => true]);
             $this->emit('reOpenModalTransferenciaPorEvent');
+            $this->closeSpinner();
             return;
         }
 
         if(!$this->exigeLogMessage(5))
+        {
+            $this->closeSpinner();
             return;
+        }
 
         if($this->transferencia_para == 'area')
             $updated = $this->em_atendimento->update([
@@ -620,9 +631,11 @@ class AtendimentosChamadoList extends Component
             $this->limpaValoresDasPropriedades();
             $this->startEmAtendimento(true);
 
+            $this->closeSpinner();
             return;
         }
 
+        $this->closeSpinner();
         $this->toastIt("Falha ao transferir chamado", 'error', ['preventDuplicates' => true]);
     }
 
@@ -646,6 +659,8 @@ class AtendimentosChamadoList extends Component
 
         if($limpa_valores)
             $this->limpaValoresDasPropriedades();
+
+        $this->closeSpinner();
     }
 
     protected function getOptionsData(string $transferencia_para, bool $clear_cache = false)

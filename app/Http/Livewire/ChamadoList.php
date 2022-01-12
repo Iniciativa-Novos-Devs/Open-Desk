@@ -206,7 +206,9 @@ class ChamadoList extends Component
     public function emmitFlowTransferirChamado($chamado_id)
     {
         if(!$chamado_id || !is_numeric($chamado_id))
+        {
             return;
+        }
 
         if(!!$this->show_action_buttons)
             $this->emitUp('eventFlowTransferirChamado', $chamado_id);

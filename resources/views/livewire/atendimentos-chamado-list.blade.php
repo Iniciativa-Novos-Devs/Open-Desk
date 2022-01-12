@@ -108,147 +108,172 @@
 
     @livewire('chamado-list', ['items_by_page' => 5, 'show_action_buttons' => true])
 
-    <div class="mt-0 col-12 row d-flex justify-content-between" id="detalhes_do_chamado">
-        <div class="border col-6 row" style="min-height: 50vh;">
+    <div class="col-12 px-4" id="detalhes_do_chamado">
+        <div class="row">
+            <div class="border col-6 row" style="min-height: 50vh;">
 
-            @if ($this->em_atendimento ?? null)
-                <div class="col-12">
-                    <ul class="py-0 list-group list-group-flush">
-                        <li class="py-0 list-group-item d-flex justify-content-start">
-                            <strong>Chamado: </strong><span
-                                class="mx-1 text-left text-muted">{{ $this->em_atendimento->id ?? null }}</span>
-                            <span class="mx-3"></span>
-                            @if ($this->em_atendimento->unidade->nome ?? null)
-                                <strong>Unidade: </strong>
-                                <span class="mx-1 text-left text-muted">
-                                    {{ $this->em_atendimento->unidade->nome ?? null }}
-                                </span>
-                            @endif
-                        </li>
-                        <li class="py-0 list-group-item">
+                @if ($this->em_atendimento ?? null)
+                    <div class="col-12">
+                        <ul class="py-0 list-group list-group-flush">
+                            <li class="py-0 list-group-item d-flex justify-content-start">
+                                <strong>Chamado: </strong><span
+                                    class="mx-1 text-left text-muted">{{ $this->em_atendimento->id ?? null }}</span>
+                                <span class="mx-3"></span>
+                                @if ($this->em_atendimento->unidade->nome ?? null)
+                                    <strong>Unidade: </strong>
+                                    <span class="mx-1 text-left text-muted">
+                                        {{ $this->em_atendimento->unidade->nome ?? null }}
+                                    </span>
+                                @endif
+                            </li>
+                            <li class="py-0 list-group-item">
 
-                            <div class="w-100">
-                                <h6 class="mt-3 text-bold">Detalhes do chamado:</h6>
-                                <div class="accordion" id="accordion_detalhe_chamado">
+                                <div class="row">
+                                    <h6 class="mt-3 text-bold">Detalhes do chamado:</h6>
+                                    <div class="accordion" id="accordion_detalhe_chamado">
 
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header" id="detalhe_chamado_headingThree">
+                                        <div class="accordion-item">
                                             <h2 class="accordion-header" id="detalhe_chamado_headingThree">
-                                                <button class="accordion-button collapsed" type="button"
-                                                    data-bs-toggle="collapse" data-bs-target="#collapse_detalhe_chamado"
-                                                    aria-expanded="false" aria-controls="collapse_detalhe_chamado">
-                                                    {{ $this->em_atendimento->title ?? null }}
-                                                    | {{ $this->em_atendimento->usuario->name ?? null }}
-                                                    | <span class="text-muted">
-                                                        @if ($this->em_atendimento->created_at ?? null)
-                                                            {!! '&nbsp;' . $this->em_atendimento->created_at->format('d/m/Y H:i:s') !!}
-                                                        @endif
-                                                    </span>
-                                                </button>
-                                            </h2>
-                                            <div id="collapse_detalhe_chamado" class="accordion-collapse collapse"
-                                                aria-labelledby="detalhe_chamado_headingThree"
-                                                data-bs-parent="#accordion_detalhe_chamado" style="">
-                                                <div class="accordion-body">
-                                                    {!! '&nbsp;' . html_entity_decode($this->em_atendimento->observacao ?? null) !!}
+                                                <h2 class="accordion-header" id="detalhe_chamado_headingThree">
+                                                    <button class="accordion-button collapsed" type="button"
+                                                        data-bs-toggle="collapse" data-bs-target="#collapse_detalhe_chamado"
+                                                        aria-expanded="false" aria-controls="collapse_detalhe_chamado">
+                                                        {{ $this->em_atendimento->title ?? null }}
+                                                        | {{ $this->em_atendimento->usuario->name ?? null }}
+                                                        | <span class="text-muted">
+                                                            @if ($this->em_atendimento->created_at ?? null)
+                                                                {!! '&nbsp;' . $this->em_atendimento->created_at->format('d/m/Y H:i:s') !!}
+                                                            @endif
+                                                        </span>
+                                                    </button>
+                                                </h2>
+                                                <div id="collapse_detalhe_chamado" class="accordion-collapse collapse"
+                                                    aria-labelledby="detalhe_chamado_headingThree"
+                                                    data-bs-parent="#accordion_detalhe_chamado" style="">
+                                                    <div class="accordion-body">
+                                                        {!! '&nbsp;' . html_entity_decode($this->em_atendimento->observacao ?? null) !!}
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <button class="mt-2 btn btn-sm btn-info">Anexos</button>
+                                            </div>
+
+                                            <div class="col-8">
+                                                <div class="input-group input-group-sm mt-2">
+                                                    <label class="input-group-text select-none" for="origem_da_ocorrencia">Origem da ocorrência</label>
+                                                    <select class="form-select form-select-sm" id="origem_da_ocorrencia" required>
+                                                        <option selected disabled>Origem da ocorrência</option>
+                                                        @foreach (\App\Enums\OrigemDoProblemaEnum::$humans as $enum => $value)
+                                                            <option value="{{ $enum }}">{{ $value }}</option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
                                             </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <button class="mt-2 btn btn-sm btn-info">Anexos</button>
-                            <hr>
-                        </li>
-                    </ul>
-                </div>
+                                <hr>
+                            </li>
+                        </ul>
+                    </div>
 
-                <div class="pb-3 col-12">
-                    <div class="form-group w-100">
-                        <label for="nota_atendimento">Registro do atendimento</label>
-                        <textarea id="nota_atendimento"
-                        class="mb-3 form-control {{ (!$this->log_message || !strlen($this->log_message) > 5) ? 'border border-danger' : '' }}"
-                        cols="10" rows="3"
-                            {{ $this->em_atendimento ?? null ? '' : 'disabled' }}
-                            placeholder="Aqui vai sua observação..."
-                            style="min-height: 6rem; max-height: 14rem; background-color: #211e1e21;"
-                            wire:model.lazy='log_message'></textarea>
+                    <div class="pb-3 col-12">
+                        <div class="form-group w-100">
+                            <label for="nota_atendimento">Registro do atendimento</label>
+                            <textarea id="nota_atendimento"
+                            class="mb-3 form-control {{ (!$this->log_message || !strlen($this->log_message) > 5) ? 'border border-danger' : '' }}"
+                            cols="10" rows="3"
+                                {{ $this->em_atendimento ?? null ? '' : 'disabled' }}
+                                placeholder="Aqui vai sua observação..."
+                                style="min-height: 6rem; max-height: 14rem; background-color: #211e1e21;"
+                                wire:model.lazy='log_message'></textarea>
+                        </div>
+                    </div>
+                @else
+                    <div class="pb-3 col-12">
+                        <h6 class="my-3 text-center">Sem chamado em atendimento</h6>
+                    </div>
+                @endif
+            </div>
+
+            <div style="height: 14rem;" class="col-2">
+                <div class="row d-flex justify-content-center">
+                    <div class="col-12 d-flex justify-content-center">
+                        <div class="btn-group-vertical p-2" role="group" aria-label="Vertical button group">
+                            <button class="my-1 rounded btn btn-secondary" wire:click="pauseCurrent()"
+                                {{ !($this->em_atendimento ?? null) ? 'disabled' : '' }} type="button">
+                                Pausar
+                            </button>
+                            <button type="button" class="my-1 rounded btn btn-info">Compartilhar</button>
+                            <button class="my-1 rounded btn btn-warning" {{ !($this->em_atendimento ?? null) ? 'disabled' : '' }}
+                                wire:click="tranferirChamado()" type="button">
+                                Transferir
+                            </button>
+                            <button class="my-1 rounded btn btn-danger" {{-- wire:click="closeCurrent()" --}}
+                                wire:click="confirm('Deseja encerrar o chamado?', 'closeCurrent', '')"
+                                {{ !($this->em_atendimento ?? null) ? 'disabled' : '' }} type="button">Encerrar</button>
+                        </div>
                     </div>
                 </div>
-            @else
-                <div class="pb-3 col-12">
-                    <h6 class="my-3 text-center">Sem chamado em atendimento</h6>
-                </div>
-            @endif
-        </div>
-
-        <div class="border col-2 d-flex justify-content-center" style="height: 14rem;">
-            <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
-                <button class="my-1 rounded btn btn-secondary" wire:click="pauseCurrent()"
-                    {{ !($this->em_atendimento ?? null) ? 'disabled' : '' }} type="button">
-                    Pausar
-                </button>
-                <button type="button" class="my-1 rounded btn btn-info">Compartilhar</button>
-                <button class="my-1 rounded btn btn-warning" {{ !($this->em_atendimento ?? null) ? 'disabled' : '' }}
-                    wire:click="tranferirChamado()" type="button">
-                    Transferir
-                </button>
-                <button class="my-1 rounded btn btn-danger" {{-- wire:click="closeCurrent()" --}}
-                    wire:click="confirm('Deseja encerrar o chamado?', 'closeCurrent', '')"
-                    {{ !($this->em_atendimento ?? null) ? 'disabled' : '' }} type="button">Encerrar</button>
             </div>
-        </div>
 
-        <div class="border col-4 table-responsive">
-            <h6>Chamados Pausados</h6>
-            <table class="table">
-                <thead>
-                    <tr class="py-0">
-                        <th class="py-0 small" scope="col"># | Título</th>
-                        <th class="py-0 small" scope="col">Detalhes</th>
-                        <th class="py-0 small" scope="col">Pausado em</th>
-                        <th class="py-0 small" scope="col">-</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($chamados_pausados as $chamado_pausado)
-                        @php
-                            $title = strip_tags(html_entity_decode($chamado_pausado->observacao ?? ''));
-                        @endphp
+            <div class="border col-4 table-responsive">
+                <h6>Chamados Pausados</h6>
+                <table class="table">
+                    <thead>
                         <tr class="py-0">
-                            <td data-toggle="tooltip" data-html="true"
-                                title="{{ \Str::limit(strip_tags(html_entity_decode($chamado_pausado->title)), 200, '...') }}"
-                                class="py-0">
-                                {{ $chamado_pausado->id }} |
-                                {{ \Str::limit(strip_tags(html_entity_decode($chamado_pausado->title)), 15, '...') }}
-                            </td>
-                            <td class="py-0 small">
-                                <button data-toggle="tooltip" data-html="true" title="
-                                    {!! $chamado_pausado->unidade ? 'Unidade: ' . $chamado_pausado->unidade->nome : '' !!}
-                                    {{ $chamado_pausado->paused_at ? 'Pausado em: ' . $chamado_pausado->paused_at->format('d/m/Y H:i:s') : '' }}
-                                    " class="py-0 rounded-circle btn btn-sm btn-outline-info">!</button>
-                            </td>
-                            <td data-toggle="tooltip" data-html="true"
-                                title="{{ $chamado_pausado->paused_at ? $chamado_pausado->paused_at->format('d/m/Y H:i:s') : '' }}"
-                                class="py-0">
-                                {{ $chamado_pausado->paused_at ? $chamado_pausado->paused_at->format('d/m H:i') : '' }}
-                            </td>
-                            <td class="py-0">
-                                <button class="p-0 px-1 btn btn-sm btn-success no-focus"
-                                    wire:click="atenderChamado({{ $chamado_pausado->id }})" type="button">
-                                    Reabrir
-                                </button>
-                                <button
-                                    class="p-0 px-1 btn btn-sm btn-warning no-focus"
-                                    wire:click="flowTransferirChamado({{ $chamado_pausado->id }})"
-                                    {{-- wire:click="$emitTo('atendimentos-chamado-list', 'emmitFlowTransferirChamado', {{ $chamado_pausado->id }})" --}}
-                                    type="button">
-                                    Transferir
-                                </button>
-                            </td>
+                            <th class="py-0 small" scope="col"># | Título</th>
+                            <th class="py-0 small" scope="col">Detalhes</th>
+                            <th class="py-0 small" scope="col">Pausado em</th>
+                            <th class="py-0 small" scope="col">-</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach ($chamados_pausados as $chamado_pausado)
+                            @php
+                                $title = strip_tags(html_entity_decode($chamado_pausado->observacao ?? ''));
+                            @endphp
+                            <tr class="py-0">
+                                <td data-toggle="tooltip" data-html="true"
+                                    title="{{ \Str::limit(strip_tags(html_entity_decode($chamado_pausado->title)), 200, '...') }}"
+                                    class="py-0">
+                                    {{ $chamado_pausado->id }} |
+                                    {{ \Str::limit(strip_tags(html_entity_decode($chamado_pausado->title)), 15, '...') }}
+                                </td>
+                                <td class="py-0 small">
+                                    <button data-toggle="tooltip" data-html="true" title="
+                                        {!! $chamado_pausado->unidade ? 'Unidade: ' . $chamado_pausado->unidade->nome : '' !!}
+                                        {{ $chamado_pausado->paused_at ? 'Pausado em: ' . $chamado_pausado->paused_at->format('d/m/Y H:i:s') : '' }}
+                                        " class="py-0 rounded-circle btn btn-sm btn-outline-info">!</button>
+                                </td>
+                                <td data-toggle="tooltip" data-html="true"
+                                    title="{{ $chamado_pausado->paused_at ? $chamado_pausado->paused_at->format('d/m/Y H:i:s') : '' }}"
+                                    class="py-0">
+                                    {{ $chamado_pausado->paused_at ? $chamado_pausado->paused_at->format('d/m H:i') : '' }}
+                                </td>
+                                <td class="py-0">
+                                    <button class="p-0 px-1 btn btn-sm btn-success no-focus"
+                                        wire:click="atenderChamado({{ $chamado_pausado->id }})" type="button">
+                                        Reabrir
+                                    </button>
+                                    <button
+                                        class="p-0 px-1 btn btn-sm btn-warning no-focus"
+                                        wire:click="flowTransferirChamado({{ $chamado_pausado->id }})"
+                                        {{-- wire:click="$emitTo('atendimentos-chamado-list', 'emmitFlowTransferirChamado', {{ $chamado_pausado->id }})" --}}
+                                        type="button">
+                                        Transferir
+                                    </button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 

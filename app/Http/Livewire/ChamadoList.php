@@ -11,6 +11,7 @@ use App\Http\Controllers\UserPreferencesController;
 use App\CacheManagers\AreaCache;
 use App\CacheManagers\AtendenteCache;
 use App\CacheManagers\UsuarioCache;
+use App\Http\Livewire\Traits\LoadSpinner;
 use \Illuminate\Session\SessionManager;
 use Auth;
 use Str;
@@ -22,7 +23,7 @@ use Livewire\WithPagination;
 
 class ChamadoList extends Component
 {
-    use WithPagination;
+    use WithPagination, LoadSpinner;
 
     protected $select_items;
 
@@ -189,8 +190,13 @@ class ChamadoList extends Component
 
     public function emmitAtenderChamado($chamado_id)
     {
+        $this->openSpinner();
+
         if(!$chamado_id || !is_numeric($chamado_id))
+        {
+            $this->closeSpinner();
             return;
+        }
 
         // $this->emitTo('atendimentos-chamado-list', 'eventAtenderChamado', ['chamado' => $chamado_id]);
         if(!!$this->show_action_buttons)

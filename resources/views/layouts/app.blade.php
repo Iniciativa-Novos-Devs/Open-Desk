@@ -67,8 +67,18 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
 
+    <footer class="footer fixed-bottom mt-auto py-3 bg-light">
+        <div class="container">
+            <p class="text-muted">
+                <sub>{{ config('app.name') }}</sub>
+                @if (config('version-by-git.show_versions_in_footer'))
+                    <sub>-</sub>
+                    <sub> {{ \App\Libs\Helpers\GitHashVersion::get() }} </sub>
+                @endif
+            </p>
+        </div>
+    </footer>
     <script>
-
         function toastMessage(message, toast_type = 'success', options = {})
         {
             if(!window.toastr)

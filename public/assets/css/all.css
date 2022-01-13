@@ -79,3 +79,13 @@ button { outline: none; }
 .ck.ck-editor__main .ck-editor__editable{ min-height: 25vh; }
 
 li.nav-item a.nav-link{white-space: nowrap;}
+
+/* Fixed footer */
+.footer.fixed-bottom {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    color: white;
+    text-align: center;
+}

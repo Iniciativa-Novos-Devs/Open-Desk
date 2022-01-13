@@ -6,7 +6,7 @@
             </a>
         </div>
         <div class="col-4 d-flex align-self-center">
-            <h4 class="lead">Sistema de HelpDesk - UGAF</h4>
+            <h4 class="lead">{{ config('app.name') }}</h4>
         </div>
     </div>
 

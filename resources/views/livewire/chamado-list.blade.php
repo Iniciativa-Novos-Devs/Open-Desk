@@ -139,7 +139,7 @@
                                             <td class="py-0">
                                                 @php
                                                     $pode_ser_atendido = $this->chamadoPodeSerAtendido($chamado->status) &&
-                                                    (!$chamado->atendente_id || $chamado->atendente_id == $this->atendente->id);
+                                                    (!$chamado->atendente_id || $chamado->atendente_id == $this->usuario->id);
                                                 @endphp
 
                                                 <button class="p-0 px-1 btn btn-sm btn-success no-focus"

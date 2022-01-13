@@ -67,9 +67,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
 
-    <footer class="footer fixed-bottom mt-auto py-3 bg-light">
-        <div class="container">
-            <p class="text-muted">
+    <footer class="footer fixed-bottom  p-0 m-0 mt-auto bg-white">
+        <div class="container-box p-0 m-0">
+            <p class="text-muted p-0 m-0">
                 <sub>{{ config('app.name') }}</sub>
                 @if (config('version-by-git.show_versions_in_footer'))
                     <sub>-</sub>

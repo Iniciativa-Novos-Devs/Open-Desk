@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\ChamadoEmHomologacaoEvent;
+use App\Http\Controllers\Admin\HomologacaoController;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
@@ -26,6 +27,6 @@ class NotificaUsuarioChamadoEmHomologacao
      */
     public function handle(ChamadoEmHomologacaoEvent $event)
     {
-        \App\Http\Controllers\HomologacaoController::sendHomologationRequestEmailToUser($event->chamado);
+        HomologacaoController::sendHomologationRequestEmailToUser($event->chamado);
     }
 }

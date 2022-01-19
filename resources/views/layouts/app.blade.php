@@ -67,6 +67,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
 
+    <div class="w-100 mt-5"></div>
+
     <footer class="footer fixed-bottom  p-0 m-0 mt-auto bg-white">
         <div class="container-box p-0 m-0">
             <p class="text-muted p-0 m-0">

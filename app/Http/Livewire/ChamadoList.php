@@ -6,7 +6,7 @@ use App\Models\Chamado;
 use App\Models\Usuario;
 use Livewire\Component;
 use App\Enums\StatusEnum;
-use App\Http\Controllers\UserPreferencesController;
+use App\Http\Controllers\Admin\UserPreferencesController;
 
 use App\CacheManagers\AreaCache;
 use App\CacheManagers\AtendenteCache;

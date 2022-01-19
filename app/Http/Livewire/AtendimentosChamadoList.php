@@ -14,7 +14,7 @@ use App\Models\Chamado;
 use App\Models\Usuario;
 use Livewire\Component;
 use App\Enums\StatusEnum;
-use App\Http\Controllers\UserPreferencesController;
+use App\Http\Controllers\Admin\UserPreferencesController;
 use App\Http\Livewire\Traits\LoadSpinner;
 use \App\Libs\Helpers\DateHelpers;
 use App\Models\Area;
@@ -253,6 +253,15 @@ class AtendimentosChamadoList extends Component
                     'atendente' => function($query) {
                         $query->select('id','name',);
                     },
+                    'logs' => function ($query) {
+                        $query->limit(10)
+                            ->orderBy('created_at', 'desc')
+                            ->with([
+                                'usuario' => function ($query) {
+                                    $query->select('id','name',);
+                                },
+                            ]);
+                    },
                 ])
                 ->where('atendente_id', $this->atendente->id)
                 ->first();
@@ -440,15 +449,6 @@ class AtendimentosChamadoList extends Component
                 },
                 'usuario' => function($query) {
                     $query->select('id','name',);
-                },
-                'logs' => function ($query) {
-                    $query->limit(5)
-                        ->orderBy('created_at', 'desc')
-                        ->with([
-                            'usuario' => function ($query) {
-                                $query->select('id','name',);
-                            },
-                        ]);
                 },
             ])
             ->where('id', $chamado_id);

@@ -198,7 +198,7 @@
 
                         <h6>Histórico:</h6>
                         <div class="w-100">
-                            <div class="accordion" id="accordionExample">
+                            <div class="accordion" id="accordionChamadoLogs">
                                 @foreach ($this->em_atendimento->logs as $log)
                                     <div class="accordion-item">
                                         <h2 class="accordion-header" id="headingThree">
@@ -215,7 +215,7 @@
                                         </h2>
                                         <div id="collapse_{{ $log->id }}"
                                             class="accordion-collapse collapse"
-                                            aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                            aria-labelledby="headingThree" data-bs-parent="#accordionChamadoLogs">
                                             <div class="accordion-body">
                                                 {{ nl2br($log->content ?? null) }}
                                             </div>
@@ -224,6 +224,12 @@
                                 @endforeach
                             </div>
                         </div>
+
+                        @if ($this->em_atendimento && $this->em_atendimento->logs)
+                            <div class="w-100 mb-3 p-3 d-flex justify-content-center">
+                                <a href="@route('chamados_show', $this->em_atendimento->id)" class="btn btn-sm btn-outline-secondary">Mais...</a>
+                            </div>
+                        @endif
                     </div>
                 @else
                     <div class="pb-3 col-12">

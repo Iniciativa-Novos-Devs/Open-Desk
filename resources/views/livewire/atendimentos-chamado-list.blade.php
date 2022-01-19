@@ -249,7 +249,7 @@
                                     <button data-toggle="tooltip" data-html="true" title="
                                         {!! $chamado_pausado->unidade ? 'Unidade: ' . $chamado_pausado->unidade->nome : '' !!}
                                         {{ $chamado_pausado->paused_at ? 'Pausado em: ' . $chamado_pausado->paused_at->format('d/m/Y H:i:s') : '' }}
-                                        " class="py-0 rounded-circle btn btn-sm btn-outline-info">!</button>
+                                        " class="rounded-circle btn btn-sm btn-outline-info py-0 px-2">!</button>
                                 </td>
                                 <td data-toggle="tooltip" data-html="true"
                                     title="{{ $chamado_pausado->paused_at ? $chamado_pausado->paused_at->format('d/m/Y H:i:s') : '' }}"

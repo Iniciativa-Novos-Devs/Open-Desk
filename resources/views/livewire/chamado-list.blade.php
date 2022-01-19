@@ -118,17 +118,17 @@
 
                                             @if ($chamado->status == \App\Enums\StatusEnum::ENCERRADO)
                                                 @if ($chamado->homologado_em)
-                                                    <button type="button" class="py-0 btn btn-sm btn-success rounded-circle"
+                                                    <button type="button" class="btn btn-sm btn-success rounded-circle py-0 px-2"
                                                     data-toggle="tooltip" data-html="true" title="Homologado"
                                                     aria-disabled="true">!</button>
                                                 @else
-                                                    <button type="button" class="py-0 btn btn-sm btn-danger rounded-circle"
+                                                    <button type="button" class="btn btn-sm btn-danger rounded-circle py-0 px-2"
                                                     data-toggle="tooltip" data-html="true" title="Não homologado"
                                                     aria-disabled="true">!</button>
                                                 @endif
                                             @else
                                                 @if ($chamado->homologacao_observacao_back)
-                                                    <button type="button" class="py-0 btn btn-sm btn-danger rounded-circle"
+                                                    <button type="button" class="btn btn-sm btn-danger rounded-circle py-0 px-2"
                                                     data-toggle="tooltip" data-html="true" title="Chamado reaberto"
                                                     aria-disabled="true">!</button>
                                                 @endif

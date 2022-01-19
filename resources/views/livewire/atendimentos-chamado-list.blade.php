@@ -193,6 +193,37 @@
                                 style="min-height: 6rem; max-height: 14rem; background-color: #211e1e21;"
                                 wire:model.lazy='log_message'></textarea>
                         </div>
+
+                        <hr>
+
+                        <h6>Histórico:</h6>
+                        <div class="w-100">
+                            <div class="accordion" id="accordionExample">
+                                @foreach ($this->em_atendimento->logs as $log)
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header" id="headingThree">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#collapse_{{ $log->id }}"
+                                                aria-expanded="{{ $log->id == 1 ? 'true' : 'false' }}"
+                                                aria-controls="collapse_{{ $log->id }}">
+                                                {{ \App\Enums\ChamadoLogTypeEnum::getValue($log->type) }} |
+                                                {{ $log->usuario ? $log->usuario ->name : null }} |
+                                                <span class="text-muted">
+                                                    {{ $log->created_at ?? null }}
+                                                </span>
+                                            </button>
+                                        </h2>
+                                        <div id="collapse_{{ $log->id }}"
+                                            class="accordion-collapse collapse"
+                                            aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                            <div class="accordion-body">
+                                                {{ nl2br($log->content ?? null) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
                     </div>
                 @else
                     <div class="pb-3 col-12">
@@ -276,8 +307,6 @@
             </div>
         </div>
     </div>
-
-
 
     <script>
         function makeSelectItem(transferencia_para, options_data)

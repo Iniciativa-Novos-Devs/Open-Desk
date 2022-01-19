@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-class StatusEnum
+class StatusEnum extends AbstractEnum
 {
     public const ABERTO         = 1;
     public const PENDENTE       = 2;
@@ -23,17 +23,4 @@ class StatusEnum
         7 => 'Em homologação',
         8 => 'Homologado',
     ];
-
-    public static function getValue(int $state_enum)
-    {
-        if(self::isValidState($state_enum))
-            return self::$humans[$state_enum];
-
-        return null;
-    }
-
-    public static function isValidState(int $state_enum)
-    {
-        return in_array($state_enum, array_keys(self::$humans));
-    }
 }

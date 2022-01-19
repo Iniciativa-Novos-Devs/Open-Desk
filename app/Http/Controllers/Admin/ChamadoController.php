@@ -41,48 +41,25 @@ class ChamadoController extends Controller
 
     public function show($chamado_id)
     {
-        $chamado    = Chamado::with('usuario', 'tipo_problema', 'problema')->where('id', $chamado_id)->first();
+        $chamado    = Chamado::with([
+            'usuario', 'tipo_problema', 'problema',
+            'logs' => function ($query) {
+                $query->limit(25)
+                    ->orderBy('created_at', 'desc')
+                    ->with([
+                        'usuario' => function ($query) {
+                            $query->select('id','name',);
+                        },
+                    ]);
+            },
+        ])->where('id', $chamado_id)->first();
         //TODO criar relação "histórico"
 
         if(!$chamado)
             return redirect()->route('chamados_index')->with('error', 'Chamado não encontrado');
 
-        $historico  = [
-            [
-                'titulo' => 'Algo aqui 1',
-                'usuario' => 'Fulano 1',
-                'data'      => '2021-04-20 10:31:00',
-                'conteudo'  => 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aliquam amet impedit pariatur culpa possimus quidem fuga incidunt, cumque praesentium, dolorum totam repellendus quos in minima, magnam laudantium mollitia. Consequuntur, enim.',
-            ],
-            [
-                'titulo' => 'Algo aqui 2',
-                'usuario' => 'Fulano 2',
-                'data'      => '2021-04-20 10:31:00',
-                'conteudo'  => 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aliquam amet impedit pariatur culpa possimus quidem fuga incidunt, cumque praesentium, dolorum totam repellendus quos in minima, magnam laudantium mollitia. Consequuntur, enim.',
-            ],
-            [
-                'titulo' => 'Algo aqui 3',
-                'usuario' => 'Fulano 3',
-                'data'      => '2021-04-20 10:31:00',
-                'conteudo'  => 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aliquam amet impedit pariatur culpa possimus quidem fuga incidunt, cumque praesentium, dolorum totam repellendus quos in minima, magnam laudantium mollitia. Consequuntur, enim.',
-            ],
-            [
-                'titulo' => 'Algo aqui 4',
-                'usuario' => 'Fulano 4',
-                'data'      => '2021-04-20 10:31:00',
-                'conteudo'  => 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aliquam amet impedit pariatur culpa possimus quidem fuga incidunt, cumque praesentium, dolorum totam repellendus quos in minima, magnam laudantium mollitia. Consequuntur, enim.',
-            ],
-            [
-                'titulo' => 'Algo aqui 5',
-                'usuario' => 'Fulano 5',
-                'data'      => '2021-04-20 10:31:00',
-                'conteudo'  => 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aliquam amet impedit pariatur culpa possimus quidem fuga incidunt, cumque praesentium, dolorum totam repellendus quos in minima, magnam laudantium mollitia. Consequuntur, enim.',
-            ],
-        ];
-
         return view('chamados.show', [
             'chamado'   => $chamado,
-            'historico' => $historico,
         ]);
     }
 
@@ -96,7 +73,7 @@ class ChamadoController extends Controller
         //TODO fazer validação de usuários aqui
         //permitir que um chamado seja criado por um atendente enviando um udentificador desse usuário
 
-        $user       = auth()->user();
+        $user    = auth()->user();
 
         $usuario = Usuario::where('email', $user->email)->first();
 

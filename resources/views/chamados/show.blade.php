@@ -65,38 +65,31 @@
 
     <hr>
 
-    <h6>Histórico:</h6>
+    <h6>Histórico (últimos logs):</h6>
     <div class="w-100">
         <div class="accordion" id="accordionExample">
-            @php
-                $index = 1;
-            @endphp
-            @foreach ($historico as $h)
+            @foreach ($chamado->logs as $log)
                 <div class="accordion-item">
                     <h2 class="accordion-header" id="headingThree">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#collapse_{{ $index }}"
-                            aria-expanded="{{ $index == 1 ? 'true' : 'false' }}"
-                            aria-controls="collapse_{{ $index }}">
-                            {{ $h['titulo'] }} |
-                            {{ $h['usuario'] }} |
-                            {{ $index }} |
+                            data-bs-target="#collapse_{{ $log->id }}"
+                            aria-expanded="{{ $log->id == 1 ? 'true' : 'false' }}"
+                            aria-controls="collapse_{{ $log->id }}">
+                            {{ \App\Enums\ChamadoLogTypeEnum::getValue($log->type) }} |
+                            {{ $log->usuario ? $log->usuario ->name : null }} |
                             <span class="text-muted">
-                                {{ $h['data'] }}
+                                {{ $log->created_at ?? null }}
                             </span>
                         </button>
                     </h2>
-                    <div id="collapse_{{ $index }}"
-                        class="accordion-collapse collapse {{ $index == 1 ? 'show' : '' }}"
+                    <div id="collapse_{{ $log->id }}"
+                        class="accordion-collapse collapse {{ $loop->index == 0 ? 'show' : '' }}"
                         aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
-                            {{ nl2br($h['conteudo']) }}
+                            {{ nl2br($log->content ?? null) }}
                         </div>
                     </div>
                 </div>
-                @php
-                    $index++;
-                @endphp
             @endforeach
         </div>
     </div>

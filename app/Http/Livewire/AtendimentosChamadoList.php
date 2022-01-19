@@ -441,6 +441,15 @@ class AtendimentosChamadoList extends Component
                 'usuario' => function($query) {
                     $query->select('id','name',);
                 },
+                'logs' => function ($query) {
+                    $query->limit(5)
+                        ->orderBy('created_at', 'desc')
+                        ->with([
+                            'usuario' => function ($query) {
+                                $query->select('id','name',);
+                            },
+                        ]);
+                },
             ])
             ->where('id', $chamado_id);
     }

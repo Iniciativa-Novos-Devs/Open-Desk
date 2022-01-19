@@ -109,4 +109,12 @@ class Chamado extends Model
         return $this->belongsTo(Unidade::class, 'unidade_id', 'id');
     }
 
+    /**
+     * Get all of the logs for the Chamado
+     */
+    public function logs()
+    {
+        return $this->hasMany(ChamadoLog::class);
+    }
+
 }

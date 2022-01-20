@@ -104,6 +104,37 @@
                 </span>
             </div>
         </div>
+
+        <hr>
+
+        <h6>Histórico (últimos logs):</h6>
+        <div class="w-100">
+            <div class="accordion" id="accordionExample">
+                @foreach ($chamado->logs as $log)
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse_{{ $log->id }}"
+                                aria-expanded="{{ $log->id == 1 ? 'true' : 'false' }}"
+                                aria-controls="collapse_{{ $log->id }}">
+                                {{ \App\Enums\ChamadoLogTypeEnum::getValue($log->type) }} |
+                                {{ $log->usuario ? $log->usuario ->name : null }} |
+                                <span class="text-muted">
+                                    {{ $log->created_at ?? null }}
+                                </span>
+                            </button>
+                        </h2>
+                        <div id="collapse_{{ $log->id }}"
+                            class="accordion-collapse collapse"
+                            aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                {!! html_entity_decode($log->content ?? null) !!}
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
     </div>
 @endsection
 

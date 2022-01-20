@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\ChamadoLogTypeEnum;
 use App\Http\Controllers\Controller;
 use App\Enums\StatusEnum;
 use App\Models\Chamado;
@@ -49,48 +50,24 @@ class HomologacaoController extends Controller
                         'atendente' => function($query) {
                             $query->select('id','name',);
                         },
+                        'logs' => function ($query) {
+                            $query->limit(25)
+                                ->orderBy('created_at', 'desc')
+                                ->with([
+                                    'usuario' => function ($query) {
+                                        $query->select('id','name',);
+                                    },
+                                ]);
+                        },
                     ])
                     ->first();
 
         if(!$chamado)
             return redirect()->route('homologacao_index')->with('error', 'Chamado não encontrado ou inválido para homologação');
 
-        $historico  = [
-            [
-                'titulo' => 'Algo aqui 1',
-                'usuario' => 'Fulano 1',
-                'data'      => '2021-04-20 10:31:00',
-                'conteudo'  => 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aliquam amet impedit pariatur culpa possimus quidem fuga incidunt, cumque praesentium, dolorum totam repellendus quos in minima, magnam laudantium mollitia. Consequuntur, enim.',
-            ],
-            [
-                'titulo' => 'Algo aqui 2',
-                'usuario' => 'Fulano 2',
-                'data'      => '2021-04-20 10:31:00',
-                'conteudo'  => 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aliquam amet impedit pariatur culpa possimus quidem fuga incidunt, cumque praesentium, dolorum totam repellendus quos in minima, magnam laudantium mollitia. Consequuntur, enim.',
-            ],
-            [
-                'titulo' => 'Algo aqui 3',
-                'usuario' => 'Fulano 3',
-                'data'      => '2021-04-20 10:31:00',
-                'conteudo'  => 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aliquam amet impedit pariatur culpa possimus quidem fuga incidunt, cumque praesentium, dolorum totam repellendus quos in minima, magnam laudantium mollitia. Consequuntur, enim.',
-            ],
-            [
-                'titulo' => 'Algo aqui 4',
-                'usuario' => 'Fulano 4',
-                'data'      => '2021-04-20 10:31:00',
-                'conteudo'  => 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aliquam amet impedit pariatur culpa possimus quidem fuga incidunt, cumque praesentium, dolorum totam repellendus quos in minima, magnam laudantium mollitia. Consequuntur, enim.',
-            ],
-            [
-                'titulo' => 'Algo aqui 5',
-                'usuario' => 'Fulano 5',
-                'data'      => '2021-04-20 10:31:00',
-                'conteudo'  => 'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aliquam amet impedit pariatur culpa possimus quidem fuga incidunt, cumque praesentium, dolorum totam repellendus quos in minima, magnam laudantium mollitia. Consequuntur, enim.',
-            ],
-        ];
         return view('homologacao.show', [
             'chamado'   => $chamado,
             'user'      => $user,
-            'historico' => $historico,
         ]);
     }
 
@@ -113,6 +90,15 @@ class HomologacaoController extends Controller
                     ->with([
                         'atendente' => function($query) {
                             $query->select('id','name',);
+                        },
+                        'logs' => function ($query) {
+                            $query->limit(25)
+                                ->orderBy('created_at', 'desc')
+                                ->with([
+                                    'usuario' => function ($query) {
+                                        $query->select('id','name',);
+                                    },
+                                ]);
                         },
                     ])
                     ->first();
@@ -172,6 +158,8 @@ class HomologacaoController extends Controller
         if(!$chamado)
             return redirect()->route('homologacao_show')->with('error', 'Chamado não encontrado ou inválido para homologação');
 
+        $usuario_homologador = "{$user->id} - {$user->name}";
+
         if($concluir === 'yes')
         {
             $chamado->update([
@@ -183,6 +171,11 @@ class HomologacaoController extends Controller
                 'status'                      => StatusEnum::HOMOLOGADO,
             ]);
 
+            $chamado->logs()->create([
+                'content' => htmlentities(($request->input('homologacao_nota') ?? "Homologado."). "\n<em>Usuário: {$usuario_homologador}</em>"),
+                'type' => ChamadoLogTypeEnum::HOMOLOGADO,
+            ]);
+
             return redirect()->route('homologacao_index')->with('success', "Chamado #{$chamado->id} homologado com sucesso");
         }else{
             $chamado->update([
@@ -192,6 +185,11 @@ class HomologacaoController extends Controller
                 'homologacao_observacao_fim'  => null,
                 'homologacao_observacao_back' => htmlentities($request->input('homologacao_nota')),
                 'status'                      => StatusEnum::ABERTO,
+            ]);
+
+            $chamado->logs()->create([
+                'content' => htmlentities(($request->input('homologacao_nota') ?? "Reaberto na homologação."). "\n<em>Usuário: {$usuario_homologador}</em>"),
+                'type' => ChamadoLogTypeEnum::RETORNO_DA_HOMOLOGAÇÃO,
             ]);
 
             return redirect()->route('homologacao_index')->with('success', "Chamado #{$chamado->id} reaberto");

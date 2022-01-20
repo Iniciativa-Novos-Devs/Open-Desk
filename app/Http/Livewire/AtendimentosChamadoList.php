@@ -19,6 +19,7 @@ use App\Http\Livewire\Traits\LoadSpinner;
 use \App\Libs\Helpers\DateHelpers;
 use App\Models\Area;
 use Livewire\WithPagination;
+use App\Enums\ChamadoLogTypeEnum;
 
 class AtendimentosChamadoList extends Component
 {
@@ -305,15 +306,35 @@ class AtendimentosChamadoList extends Component
 
     protected function setCurrentAsPaused()
     {
-        if(!$this->em_atendimento)
+        if(!$this->log_message)
+        {
+            $this->toastIt('Favor colocar um registro do atendimento antes de pausar. [ln~'.__LINE__.']', 'error', ['preventDuplicates' => true]);
             return;
+        }
+
+        if(!$this->minLogChar(10))
+        {
+            return;
+        }
+
+        if(!$this->em_atendimento)
+        {
+            return;
+        }
 
         if(!$this->em_atendimento instanceof Chamado)
+        {
             return;
+        }
 
         $updated = $this->em_atendimento->update([
             'status'    => StatusEnum::PAUSADO,
             'paused_at' => now(),
+        ]);
+
+        $this->em_atendimento->logs()->create([
+            'content' => $this->log_message ?? 'Pausado',
+            'type' => ChamadoLogTypeEnum::PAUSADO,
         ]);
 
         if($updated)
@@ -333,9 +354,8 @@ class AtendimentosChamadoList extends Component
             return;
         }
 
-        if(strlen($this->log_message) < 10)
+        if(!$this->minLogChar(10))
         {
-            $this->toastIt('O registro do atendimento precisa ter no mínimo 10 caracteres. [ln~'.__LINE__.']', 'error', ['preventDuplicates' => true]);
             return;
         }
 
@@ -365,6 +385,11 @@ class AtendimentosChamadoList extends Component
 
         if($updated)
         {
+            $this->em_atendimento->logs()->create([
+                'content' => $this->log_message ?? 'Enviado para homologação',
+                'type' => ChamadoLogTypeEnum::ENVIADO_PARA_HOMOLOGAÇÃO,
+            ]);
+
             $this->toastIt('Chamado #'. $this->em_atendimento->id .' encerrado com sucesso!', 'success', ['preventDuplicates' => false]);
             return $updated;
         }
@@ -396,7 +421,7 @@ class AtendimentosChamadoList extends Component
             return;
         }
 
-        $chamado = $this->getChamadoById((int) $chamado_id)
+        $chamado = static::getChamadoById((int) $chamado_id)
             ->whereNotIn('status', $this->cantOpenIfStatusIn())->first();
 
         if(!$chamado)
@@ -418,8 +443,10 @@ class AtendimentosChamadoList extends Component
             return;
         }
 
-        $this->em_atendimento = $this->getChamadoById((int) $chamado_id)
-            ->whereNotIn('status', $this->cantOpenIfStatusIn())->first();
+        $chamado->logs()->create([
+            'content' => 'Iniciado atendimento. Atendente: '. $this->atendente->name ?? null,
+            'type' => ChamadoLogTypeEnum::ATENDIMENTO_INICIADO,
+        ]);
 
         $this->startEmAtendimento(true);
 
@@ -441,17 +468,26 @@ class AtendimentosChamadoList extends Component
         return !in_array($chamado_status, $this->cantOpenIfStatusIn());
     }
 
-    protected function getChamadoById(int $chamado_id)
+    protected static function getChamadoById(int $chamado_id)
     {
-        return Chamado::with([
+        return Chamado::where('id', $chamado_id)
+            ->with([
                 'unidade' => function($query) {
                     $query->select('id','nome',);
                 },
                 'usuario' => function($query) {
                     $query->select('id','name',);
                 },
-            ])
-            ->where('id', $chamado_id);
+                'logs' => function ($query) {
+                    $query->limit(10)
+                        ->orderBy('created_at', 'desc')
+                        ->with([
+                            'usuario' => function ($query) {
+                                $query->select('id','name',);
+                            },
+                        ]);
+                },
+            ]);
     }
 
     public function hasEmAtendimento()
@@ -644,6 +680,11 @@ class AtendimentosChamadoList extends Component
             return;
         }
 
+        $this->em_atendimento->logs()->create([
+            'content' => $this->log_message ?? 'Transferido',
+            'type' => ChamadoLogTypeEnum::TRANSFERIDO,
+        ]);
+
         $this->closeSpinner();
         $this->toastIt("Falha ao transferir chamado", 'error', ['preventDuplicates' => true]);
     }
@@ -730,5 +771,22 @@ class AtendimentosChamadoList extends Component
             $this->log_message = "Transferência direta de chamado";
             $this->tranferirChamado();
         }
+    }
+
+    /**
+     * function minLogChar
+     *
+     * @param int $min_chars
+     * @return
+     */
+    public function minLogChar(int $min_chars = 10)
+    {
+        if(strlen($this->log_message) < $min_chars)
+        {
+            $this->toastIt('O registro do atendimento precisa ter no mínimo 10 caracteres. [ln~'.__LINE__.']', 'error', ['preventDuplicates' => true]);
+            return false;
+        }
+
+        return true;
     }
 }

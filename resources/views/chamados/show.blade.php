@@ -86,7 +86,7 @@
                         class="accordion-collapse collapse {{ $loop->index == 0 ? 'show' : '' }}"
                         aria-labelledby="headingThree" data-bs-parent="#accordionExample">
                         <div class="accordion-body">
-                            {{ nl2br($log->content ?? null) }}
+                            {!! html_entity_decode($log->content ?? null) !!}
                         </div>
                     </div>
                 </div>

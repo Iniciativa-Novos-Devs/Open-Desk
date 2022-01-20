@@ -186,7 +186,7 @@
                         <div class="form-group w-100">
                             <label for="nota_atendimento">Registro do atendimento</label>
                             <textarea id="nota_atendimento"
-                            class="mb-3 form-control {{ (!$this->log_message || !strlen($this->log_message) > 5) ? 'border border-danger' : '' }}"
+                            class="mb-3 form-control {{ (!$this->log_message || strlen($this->log_message) < 10) ? 'border border-danger' : '' }}"
                             cols="10" rows="3"
                                 {{ $this->em_atendimento ?? null ? '' : 'disabled' }}
                                 placeholder="Aqui vai sua observação..."
@@ -206,9 +206,13 @@
                                                 data-bs-target="#collapse_{{ $log->id }}"
                                                 aria-expanded="{{ $log->id == 1 ? 'true' : 'false' }}"
                                                 aria-controls="collapse_{{ $log->id }}">
-                                                {{ \App\Enums\ChamadoLogTypeEnum::getValue($log->type) }} |
-                                                {{ $log->usuario ? $log->usuario ->name : null }} |
-                                                <span class="text-muted">
+                                                <span class="text-muted px-1">
+                                                    {{ \App\Enums\ChamadoLogTypeEnum::getValue($log->type) }}
+                                                </span>
+                                                <span class="text-muted px-1">
+                                                    {{ $log->usuario ? $log->usuario ->name : null }}
+                                                </span>
+                                                <span class="text-muted px-1">
                                                     {{ $log->created_at ?? null }}
                                                 </span>
                                             </button>
@@ -217,7 +221,7 @@
                                             class="accordion-collapse collapse"
                                             aria-labelledby="headingThree" data-bs-parent="#accordionChamadoLogs">
                                             <div class="accordion-body">
-                                                {{ nl2br($log->content ?? null) }}
+                                                {!! html_entity_decode($log->content ?? null) !!}
                                             </div>
                                         </div>
                                     </div>

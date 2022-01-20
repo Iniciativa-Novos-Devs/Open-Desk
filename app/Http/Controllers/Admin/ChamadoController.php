@@ -53,7 +53,6 @@ class ChamadoController extends Controller
                     ]);
             },
         ])->where('id', $chamado_id)->first();
-        //TODO criar relação "histórico"
 
         if(!$chamado)
             return redirect()->route('chamados_index')->with('error', 'Chamado não encontrado');

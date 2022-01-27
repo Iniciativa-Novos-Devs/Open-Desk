@@ -48,9 +48,11 @@ class UsuarioCache
             $query = Usuario::with('roles');
 
             if($role)
+            {
                 $query->whereHas('roles', function ($query) use ($role) {
-                    $query->hasRole($role);
+                    $query->where('name', $role);
                 });
+            }
 
             if($attributes)
                 $query->select($attributes);

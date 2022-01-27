@@ -29,13 +29,13 @@ class AtendenteCache
 
     public static function all(array $attributes = [], int $limit = null)
     {
-        $cache_key = Str::slug(Arr::query(['role' => 'Atendente', 'limit' => ($limit ? $limit : 'no-limit'), 'attributes' => $attributes]));
+        $cache_key = Str::slug(Arr::query(['role' => 'atendente', 'limit' => ($limit ? $limit : 'no-limit'), 'attributes' => $attributes]));
 
         if(self::$clear_cache)
             Cache::forget($cache_key);
 
         return Cache::remember($cache_key, (60 * 60/*secs*/), function () use ($attributes, $limit) {
-            return UsuarioCache::all('Atendente', $attributes, $limit);
+            return UsuarioCache::all('atendente', $attributes, $limit);
         });
     }
 

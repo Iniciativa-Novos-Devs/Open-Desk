@@ -4,7 +4,6 @@ namespace App\Http\Livewire;
 
 use App\CacheManagers\AreaCache;
 use App\CacheManagers\AtendenteCache;
-use App\CacheManagers\UsuarioCache;
 use \Illuminate\Session\SessionManager;
 use Auth;
 use Str;
@@ -737,6 +736,7 @@ class AtendimentosChamadoList extends Component
             });
 
         if($transferencia_para == 'atendente')
+        {
             return Cache::remember($cache_key, (30 * 60/*secs*/), function () use ($transferencia_para) {
                 $atendentes = AtendenteCache::all(['id', 'name']);
 
@@ -746,6 +746,7 @@ class AtendimentosChamadoList extends Component
 
                 return $data ?? [];
             });
+        }
 
         return [];
     }

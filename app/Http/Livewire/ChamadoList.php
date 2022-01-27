@@ -9,8 +9,6 @@ use App\Enums\StatusEnum;
 use App\Http\Controllers\Admin\UserPreferencesController;
 
 use App\CacheManagers\AreaCache;
-use App\CacheManagers\AtendenteCache;
-use App\CacheManagers\UsuarioCache;
 use App\Http\Livewire\Traits\LoadSpinner;
 use \Illuminate\Session\SessionManager;
 use Auth;

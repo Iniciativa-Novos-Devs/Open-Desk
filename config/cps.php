@@ -32,4 +32,6 @@ return [
     | Se permite login de administrador da aplicaão sem passar pela segunda validação
     /********************************/
     "allow_admin_without_2f"    => env('CPS_ALLOW_ADMIN_WITHOUT_2F', true),
+
+    'max_atachment_inputs' => (int) env('CPS_MAX_ATACHMENT_INPUTS', 1),
 ];

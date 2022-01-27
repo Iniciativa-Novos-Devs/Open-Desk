@@ -75,22 +75,137 @@
                             </div>
 
                             <div class="my-3 col-12">
-                                <textarea name="observacao" id="observacao" cols="30" rows="10" minlength="10"
-                                    class="form-control template-ds">{{ old('observacao') ?? null }}</textarea>
+                                <div class="rounded border p-4">
+                                    <div class="row mb-2">
+                                        <h5>@lang('Note')</h5>
+                                    </div>
+
+                                    <textarea name="observacao" id="observacao" minlength="10"
+                                        class="form-control template-ds">{{ old('observacao') ?? null }}</textarea>
+                                </div>
                             </div>
 
                             <div class="my-3 col-12">
-                                <div class="row">
-                                    <div class="col-10">
-                                        <input type="file" class="form-control" name="anexos[]" id="anexo_1">
+                                <div class="rounded border p-4">
+
+                                    <script>
+                                        function atachmentAddNewInput()
+                                        {
+                                            var atachment_container = document.querySelector('[atachment-container]');
+
+                                            if(!atachment_container)
+                                            {
+                                                console.log('atachment_container not found');
+                                                return;
+                                            }
+
+                                            var max_atachment_inputs = {{ config('cps.max_atachment_inputs', 1) }};
+                                            var total_childs         = atachment_container.childElementCount;
+                                            console.log('total_childs: ' + total_childs, 'max_atachment_inputs: ' + max_atachment_inputs);
+
+                                            var atachment_error_message_el = document.querySelector('[data-msg-type="error"]');
+
+                                            if(total_childs >= max_atachment_inputs)
+                                            {
+                                                if(atachment_error_message_el)
+                                                {
+                                                    atachment_error_message_el.innerHTML =
+                                                    `@lang('You can not add more than :max_atachment_inputs files', [
+                                                        'max_atachment_inputs' => __(config('cps.max_atachment_inputs'))
+                                                    ])`;
+                                                    atachment_error_message_el.classList.remove('d-none');
+                                                }
+
+                                                console.log('max_atachment_inputs reached');
+                                                return;
+                                            }
+
+                                            if(atachment_error_message_el)
+                                            {
+                                                atachment_error_message_el.innerHTML = '';
+                                                atachment_error_message_el.classList.add('d-none');
+                                            }
+
+                                            var random_id = window.uuidv4 ? uuidv4() :
+                                                Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
+                                            var input_line = `
+                                                <div class="col-10">
+                                                    <input type="file" class="form-control" name="anexos[]" id="anexo_2">
+                                                </div>
+                                                <div class="col-2">
+                                                    <button
+                                                        class="btn btn-primary p-0 px-4"
+                                                        title="@lang('Add new :item', ['item' => __('atachment')])"
+                                                        type="button" onclick="atachmentAddNewInput()">
+                                                        <i style=" color: cornflowerblue;font-size: 1.3rem;" class="bi-file-plus-fill"></i>
+                                                    </button>
+
+                                                    <button
+                                                        class="btn btn-outline-danger p-0 px-4"
+                                                        title="@lang('Add new :item', ['item' => __('atachment')])"
+                                                        type="button" onclick="atachmentRemoveInput('${random_id}')">
+                                                        <i style=" color: cornflowerred;font-size: 1.3rem;" class="bi bi-file-minus-fill"></i>
+                                                    </button>
+                                                </div>
+                                            `
+
+                                            var input_line_container = document.createElement('div');
+                                            input_line_container.classList.add('row');
+                                            input_line_container.classList.add('mb-2');
+                                            input_line_container.setAttribute('data-uuid', random_id);
+                                            input_line_container.innerHTML = input_line;
+
+                                            atachment_container.appendChild(input_line_container);
+                                        }
+
+                                        function atachmentRemoveInput(uuid)
+                                        {
+                                            var element_to_remove = document.querySelector(`[data-uuid="${uuid}"]`);
+                                            if(element_to_remove)
+                                            {
+                                                element_to_remove.remove();
+                                            }
+
+                                            var atachment_error_message_el = document.querySelector('[data-msg-type="error"]');
+
+                                            if(atachment_error_message_el)
+                                            {
+                                                atachment_error_message_el.innerHTML = '';
+                                                atachment_error_message_el.classList.add('d-none');
+                                            }
+                                        }
+                                    </script>
+
+                                    <div class="row mb-2">
+                                        <div class="col-6">
+                                            <h5>@lang('Atachments')</h5>
+                                        </div>
+
+                                        <div class="col-6 text-center">
+                                            <span class="text-danger d-none" data-msg-type="error">
+
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div class="col-2">Adicionar</div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-10">
-                                        <input type="file" class="form-control" name="anexos[]" id="anexo_2">
+
+                                    <div atachment-container="">
+                                        <div class="row mb-2">
+                                            <div class="col-10">
+                                                <input type="file" class="form-control" name="anexos[]" id="anexo_1">
+                                            </div>
+                                            <div class="col-2">
+                                                <button
+                                                    class="btn btn-primary p-0 px-4"
+                                                    title="@lang('Add new :item', ['item' => __('atachment')])"
+                                                    type="button" onclick="atachmentAddNewInput()">
+                                                    <i style=" color: cornflowerblue;font-size: 1.3rem;" class="bi-file-plus-fill"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+
                                     </div>
-                                    <div class="col-2">Adicionar</div>
                                 </div>
                             </div>
 

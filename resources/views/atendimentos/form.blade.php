@@ -36,13 +36,17 @@
                                     <div class="col-10">
                                         <input type="file" class="form-control" name="anexos[]" id="anexo_1">
                                     </div>
-                                    <div class="col-2">Adicionar</div>
+                                    <div class="col-2">
+                                        <button type="button" class="btn btn-outline-info">Adicionar</button>
+                                    </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-10">
                                         <input type="file" class="form-control" name="anexos[]" id="anexo_2">
                                     </div>
-                                    <div class="col-2">Adicionar</div>
+                                    <div class="col-2">
+                                        <button type="button" class="btn btn-outline-info">Adicionar</button>
+                                    </div>
                                 </div>
                             </div>
 

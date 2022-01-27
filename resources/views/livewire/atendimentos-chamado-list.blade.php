@@ -61,7 +61,6 @@
                                             x-on:change="select_open = false"
                                             x-cloak x-show="select_open"
                                             {{ $transferencia_para_id && $transferencia_para ? "style=display:none;" : '' }}
-                                            onclick="hideSelectTransfer()"
                                             name="transferencia_para_id" id="option_transferencia_para_id" wire:model="transferencia_para_id"
                                             wire:change="alterado()" class="form-control form-select">
                                             @if ($opcoesParaTranferencia['label'] ?? null)

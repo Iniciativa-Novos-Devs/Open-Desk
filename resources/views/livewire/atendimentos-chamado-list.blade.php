@@ -159,7 +159,69 @@
                                     <div class="col-12">
                                         <div class="row">
                                             <div class="col-4">
-                                                <button class="mt-2 btn btn-sm btn-info">Anexos</button>
+                                                <button class="mt-2 btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#modalAnexosDoChamado">
+                                                    Anexos
+                                                </button>
+
+                                                <!-- Modal -->
+                                                <div class="modal fade"
+                                                    id="modalAnexosDoChamado"
+                                                    data-bs-backdrop="static"
+                                                    data-bs-keyboard="false" tabindex="-1"
+                                                    aria-labelledby="modalAnexosDoChamadoLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                        <h5 class="modal-title" id="modalAnexosDoChamadoLabel">
+                                                            @lang('Atachments')
+                                                        </h5>
+                                                        <button type="button"
+                                                            class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="@lang('Close')">
+                                                        </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="p-2 my-3 border rounded border-dark w-100">
+                                                                <h6>Anexos {{ $this->em_atendimento->anexos ? '(' . count($this->em_atendimento->anexos) . ')' : '' }}</h6>
+                                                                @if ($this->em_atendimento->anexos)
+                                                                    <table class="table table-striped">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th scope="col">#</th>
+                                                                                <th scope="col">Anexo</th>
+                                                                                <th scope="col">Tipo / mime</th>
+                                                                                <th scope="col">Tamanho</th>
+                                                                                <th scope="col">Ações</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            @foreach ($this->em_atendimento->anexos as $index => $anexo)
+                                                                                <tr>
+                                                                                    <th scope="row">{{ $index +1 }}</th>
+                                                                                    <td>{{ $anexo['name'] ?? null }}</td>
+                                                                                    <td>
+                                                                                        {{ ($anexo['extension'] ?? null) . ' | ' . ($mime_type = $anexo['mime_type'] ?? null) }}
+                                                                                    </td>
+                                                                                    <td>{{ humanFileSize($anexo['size'] ?? null) }}</td>
+                                                                                    <td>
+                                                                                        <a href="{{ asset($anexo['path']) }}" target="_blank" class="btn btn-sm btn-info">Ver</a>
+                                                                                        <a href="{{ asset($anexo['path']) }}" target="_blank" download="" class="btn btn-sm btn-info">Baixar</a>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            @endforeach
+                                                                        </tbody>
+                                                                    </table>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                            @lang('Close')
+                                                        </button>
+                                                        </div>
+                                                    </div>
+                                                    </div>
+                                                </div>
                                             </div>
 
                                             <div class="col-8">

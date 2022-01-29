@@ -15,6 +15,7 @@ class RolesAndPermissionsSeeder extends Seeder
         'u' => 'update',
         'd' => 'delete',
         'a' => 'all',
+        'm' => 'massive',
     ];
 
     public function run()
@@ -25,7 +26,7 @@ class RolesAndPermissionsSeeder extends Seeder
 
         // create permissions
         $permissions = [
-            'usuarios'      => ['c', 'r', 'u', 'd', 'a', ],
+            'usuarios'      => ['c', 'r', 'u', 'd', 'a', 'm'],
             'chamados'      => ['c', 'r', 'u', 'd', 'a', 'atender', ],
             'roles'         => ['c', 'r', 'u', 'd', 'a', 'assign', ],
             'permissions'   => ['c', 'r', 'u', 'd', 'a', 'assign', ],
@@ -42,10 +43,10 @@ class RolesAndPermissionsSeeder extends Seeder
 
         $roles = [
             'admin' => [
-                'usuarios'      => ['c', 'r', 'u',],
+                'usuarios'      => ['a', 'c', 'r', 'u', 'd', 'm'],
                 'chamados'      => ['a', 'atender'],
-                // 'roles'         => ['a'],
-                // 'permissions'   => ['a', 'assign'],
+                'roles'         => ['a'],
+                'permissions'   => ['a', 'assign'],
             ],
             'atendente' => [
                 'chamados'      => ['c', 'r', 'u', 'atender'],

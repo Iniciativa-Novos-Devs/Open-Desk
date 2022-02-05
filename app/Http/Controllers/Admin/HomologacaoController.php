@@ -249,10 +249,17 @@ class HomologacaoController extends Controller
 
     public static function sendHomologationRequestEmailToUser(Chamado $chamado)
     {
+        if(!config('chamados.email.delivery_emails', true))
+        {
+            return;
+        }
+
         $user = $chamado->usuario;
 
         if (!$user)
+        {
             return false;
+        }
 
         $title          = \Str::limit(strip_tags(html_entity_decode($chamado->title)), 20, '...');
         $chamado_url    = self::genHomologacaoPorEmail($chamado->id);

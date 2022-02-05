@@ -125,10 +125,17 @@ class ChamadoController extends Controller
 
     public static function enviaEmailNovoChamado(Chamado $chamado)
     {
+        if(!config('chamados.email.delivery_emails', true))
+        {
+            return;
+        }
+
         $email = $chamado->usuario->email ?? null;
 
         if($email)
+        {
             Mail::to($email)->send(new NovoChamadoMail($chamado));
+        }
     }
     /**
      * function deleteAtachment

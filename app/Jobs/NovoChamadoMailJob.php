@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Http\Controllers\Admin\ChamadoController as AdminChamadoController;
 use App\Http\Controllers\ChamadoController;
 use App\Models\Chamado;
 use Illuminate\Bus\Queueable;
@@ -33,7 +34,6 @@ class NovoChamadoMailJob implements ShouldQueue
      */
     public function handle()
     {
-        if(config('chamados.email.delivery_emails', true))
-            ChamadoController::enviaEmailNovoChamado($this->chamado);
+        AdminChamadoController::enviaEmailNovoChamado($this->chamado);
     }
 }

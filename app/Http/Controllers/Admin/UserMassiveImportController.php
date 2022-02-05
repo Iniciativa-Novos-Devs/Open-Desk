@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\MassiveImport;
 use Illuminate\Http\Request;
 use Route;
+use Str;
 
 class UserMassiveImportController extends Controller
 {
@@ -38,15 +40,87 @@ class UserMassiveImportController extends Controller
      */
     public function uploadFileAndDispatch(Request $request)
     {
-        var_dump('/**
-         * TODO:
-         * - validar o arquivo
-         * - validar o tamanho do arquivo
-         * - validar o formato do arquivo
-         * - Armazenar o arquivo no storage e criar referencia no banco
-         * - Disparar o processo de importação
-         * - Criar job e script que importa os dados
-         */');
-        dd([$request->all(),__FILE__.':'.__LINE__]);
+        $request->validate([
+            'massive_file' => 'required|mimes:xlsx,csv',
+        ]);
+
+        $importSheet = $request->file('massive_file');
+
+        $extension = $importSheet->getClientOriginalExtension();
+
+        if (!$extension || !in_array($extension, ['csv', 'xlsx']))
+        {
+            return redirect()->back()->with(
+                'error', __('Error on import file')
+            );
+        }
+
+        $fileName = Str::slug(
+            Str::random(32).'_user_massive_file.'.$extension
+        );
+
+        $importSheetPath = $importSheet->storeAs(
+            'massive_import_files',
+            $fileName
+        );
+
+        static::createImportAndStartJob(
+            $importSheetPath,
+            \App\Runners\ImportaUsuariosViaExcel::class,
+            'processFile'
+        );
+    }
+
+    /**
+     * function createImportAndStartJob
+     *
+     * @param Type type
+     * @return
+     */
+    public static function createImportAndStartJob(
+        string $importSheetPath,
+        string $importerClass,
+        string $startClassMethod
+    )
+    {
+        $massive_import = static::storeOnDb(
+            $importSheetPath,
+            $importerClass,
+            $startClassMethod
+        );
+
+        if(!$massive_import)
+        {
+            return false;
+        }
+
+        //Chamar job
+    }
+
+    /**
+     * function storeOnDb
+     *
+     * @param string $importSheetPath
+     * @return
+     */
+    protected static function storeOnDb(
+        string $importSheetPath,
+        string $importerClass,
+        string $startClassMethod
+    )
+    {
+        if(!$importSheetPath || !file_exists($importSheetPath))
+        {
+            return false;
+        }
+
+        return MassiveImport::create([
+            'file_path'          => $importSheetPath,
+            'importer_class'     => $importerClass,
+            'start_class_method' => $startClassMethod,
+            'started_at'         => null,
+            'finished_at'        => null,
+            'report_file'        => null,
+        ]);
     }
 }

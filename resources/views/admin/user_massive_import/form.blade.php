@@ -13,7 +13,10 @@
     </div>
 
     <div class="col-12">
-        <form action="@route('users.massive-import.upload')" method="post" class="row d-flex align-items-center flex-column">
+        <form
+            action="@route('users.massive-import.upload')" method="post"
+            class="row d-flex align-items-center flex-column"
+            enctype="multipart/form-data">
             @csrf
 
             <div class="form-group col-6 mb-3">

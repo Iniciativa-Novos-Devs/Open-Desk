@@ -83,7 +83,16 @@ class ImportaUsuariosViaExcel
                 }
             });
 
-            static::generateSheet($createdUsers, storage_path('logs/usuarios_cadastrados.xlsx'));
+            $reportFile = static::generateSheet($createdUsers, storage_path(
+                'logs/usuarios_cadastrados.xlsx'
+            ));
+
+            unlink($pathToFile);
+
+            return [
+                'success'       => true,
+                'report_file'   => $reportFile,
+            ];
     }
 
     /**

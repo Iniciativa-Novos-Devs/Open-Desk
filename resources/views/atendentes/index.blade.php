@@ -29,26 +29,6 @@
                                                         Áreas
                                                     </a>
                                                 </div>
-                                                <div class="mx-1">
-                                                    <a class="btn btn-sm btn-outline-secondary" href="#">
-                                                        xxxxx
-                                                    </a>
-                                                </div>
-                                                <div class="mx-1">
-                                                    <a class="btn btn-sm btn-outline-secondary" href="#">
-                                                        xxxxx
-                                                    </a>
-                                                </div>
-                                                <div class="mx-1">
-                                                    <a class="btn btn-sm btn-outline-secondary" href="#">
-                                                        xxxxx
-                                                    </a>
-                                                </div>
-                                                <div class="mx-1">
-                                                    <a class="btn btn-sm btn-outline-secondary" href="#">
-                                                        xxxxx
-                                                    </a>
-                                                </div>
                                             </div>
                                         </div>
                                     </td>

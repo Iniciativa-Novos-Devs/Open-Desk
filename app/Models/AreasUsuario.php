@@ -15,4 +15,21 @@ class AreasUsuario extends Model
         'usuario_id',
         'area_id',
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::creating(function($model) {
+            $existent_data = $model
+                ->where('usuario_id', $model->usuario_id)
+                ->where('area_id', $model->area_id)
+                ->first();
+
+            if($existent_data)
+            {
+                return false;
+            }
+        });
+    }
 }

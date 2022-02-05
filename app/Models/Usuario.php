@@ -29,6 +29,7 @@ class Usuario extends Authenticatable
         'ue',
         'versao',
         'app_admin',
+        'unidade_id',
     ];
 
     /**
@@ -63,6 +64,20 @@ class Usuario extends Authenticatable
 
     public function areas()
     {
-        return $this->belongsToMany(Area::class, 'hd_areas_usuarios', 'usuario_id', 'area_id')->withPivot('area_id');
+        return $this->belongsToMany(
+            Area::class,
+            'hd_areas_usuarios',
+            'usuario_id',
+            'area_id'
+        )->withPivot('area_id');
+    }
+
+    /**
+     * Get the unidade that owns the Usuario
+     *
+     */
+    public function unidade()
+    {
+        return $this->belongsTo(Unidade::class);
     }
 }

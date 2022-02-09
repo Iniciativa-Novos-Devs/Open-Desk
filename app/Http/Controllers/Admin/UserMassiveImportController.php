@@ -147,6 +147,13 @@ class UserMassiveImportController extends Controller
             return false;
         }
 
+        $lastImportedReport = storage_path('logs/usuarios_cadastrados.xlsx');
+
+        if (file_exists($lastImportedReport))
+        {
+            unlink($lastImportedReport);
+        }
+
         return MassiveImport::create([
             'file_path'          => $importSheetPath,
             'importer_class'     => $importerClass,

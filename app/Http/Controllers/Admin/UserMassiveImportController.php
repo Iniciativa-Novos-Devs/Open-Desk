@@ -73,7 +73,7 @@ class UserMassiveImportController extends Controller
         {
             return redirect()->route('usuarios.index')->with(
                 'success',
-                __('File uploaded successfully. Wait the finish of import proccess')
+                __('File uploaded successfully. Wait the finish of import proccess.')
             );
         }
 

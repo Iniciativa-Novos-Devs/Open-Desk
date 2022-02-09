@@ -8,7 +8,7 @@
     "Upload the sheet file": "Suba a planilha de importação",
     ":item added successfully": ":item adicionado com sucesso",
     "You can not add more than :max_atachment_inputs files": "Você não pode adicionar mais que :max_atachment_inputs arquivos",
-    "File uploaded successfully. Wait the finish of import proccess": "Arquivo enviado com sucesso. Aguarde o processo de importação",
+    "File uploaded successfully. Wait the finish of import proccess.": "Arquivo enviado com sucesso. Aguarde o processo de importação.",
     "Error on import file": "Erro na importação do arquivo",
     "atachment": "anexo",
     "Atachment": "Anexo",

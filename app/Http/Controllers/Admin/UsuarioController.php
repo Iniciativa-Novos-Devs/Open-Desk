@@ -21,6 +21,7 @@ class UsuarioController extends Controller
             Route::get('/delete/{usuario_id}',  [self::class, 'destroy'])->name('usuarios.delete');
             Route::post('/update/{usuario_id}', [self::class, 'update'])->name('usuarios.update');
             Route::post('/store',               [self::class, 'store'])->name('usuarios.store');
+            UserMassiveImportController::routes();
         });
     }
 

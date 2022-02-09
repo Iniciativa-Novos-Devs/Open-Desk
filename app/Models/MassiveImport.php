@@ -24,4 +24,18 @@ class MassiveImport extends Model
         'report_file',
         'success',
     ];
+
+    public static function boot()
+    {
+        parent::boot();
+
+        // before delete() method call this
+        static::deleting(function ($item)
+        {
+            if($item->file_path && file_exists(storage_path("app/{$item->file_path}")))
+            {
+                unlink(storage_path("app/{$item->file_path}"));
+            }
+        });
+    }
 }

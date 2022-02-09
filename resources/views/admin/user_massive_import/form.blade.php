@@ -14,7 +14,7 @@
 
     <div class="col-12">
         <form
-            action="@route('users.massive-import.upload')" method="post"
+            action="@route('usuarios.massive-import.upload')" method="post"
             class="row d-flex align-items-center flex-column"
             enctype="multipart/form-data">
             @csrf

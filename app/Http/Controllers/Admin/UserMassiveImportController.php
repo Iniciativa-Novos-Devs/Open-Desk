@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\UserMassiveImportJob;
 use App\Models\MassiveImport;
 use Illuminate\Http\Request;
 use Route;
@@ -12,8 +13,8 @@ class UserMassiveImportController extends Controller
 {
     public static function routes()
     {
-        Route::get('massive-import',    [self::class, 'form'])->name('users.massive-import.form');
-        Route::post('massive-import',   [self::class, 'uploadFileAndDispatch'])->name('users.massive-import.upload');
+        Route::get('massive-import',    [self::class, 'form'])->name('usuarios.massive-import.form');
+        Route::post('massive-import',   [self::class, 'uploadFileAndDispatch'])->name('usuarios.massive-import.upload');
     }
 
     public function __construct()
@@ -55,19 +56,29 @@ class UserMassiveImportController extends Controller
             );
         }
 
-        $fileName = Str::slug(
-            Str::random(32).'_user_massive_file.'.$extension
-        );
+        $fileName = Str::random(32)."_user_massive_file.{$extension}";
 
         $importSheetPath = $importSheet->storeAs(
             'massive_import_files',
             $fileName
         );
 
-        static::createImportAndStartJob(
+        $success = static::createImportAndStartJob(
             $importSheetPath,
             \App\Runners\ImportaUsuariosViaExcel::class,
             'processFile'
+        );
+
+        if ($success)
+        {
+            return redirect()->route('usuarios.index')->with(
+                'success',
+                __('File uploaded successfully. After processing, you will receive an email with the results.')
+            );
+        }
+
+        return redirect()->route('usuarios.massive-import.form')->with(
+            'error', __('Error on import file')
         );
     }
 
@@ -89,12 +100,14 @@ class UserMassiveImportController extends Controller
             $startClassMethod
         );
 
-        if(!$massive_import)
+        if(!$massive_import || !$massive_import instanceof MassiveImport)
         {
             return false;
         }
 
-        //Chamar job
+        UserMassiveImportJob::dispatch($massive_import);
+
+        return true;
     }
 
     /**
@@ -109,7 +122,7 @@ class UserMassiveImportController extends Controller
         string $startClassMethod
     )
     {
-        if(!$importSheetPath || !file_exists($importSheetPath))
+        if(!$importSheetPath || !file_exists(storage_path("app/{$importSheetPath}")))
         {
             return false;
         }

@@ -17,9 +17,14 @@ class MassiveImporterRun
             return;
         }
 
-        $importerFilePath   = $massiveImport->file_path          ?? '';
+        $importerFilePath       = $massiveImport->file_path ?? '';
+        $importerFileFullPath   = storage_path("app/{$importerFilePath}");
 
-        if (!$importerFilePath || !file_exists($importerFilePath))
+        if (
+            !$importerFileFullPath ||
+            !is_string($importerFileFullPath) ||
+            !file_exists($importerFileFullPath)
+        )
         {
             $massiveImport->update([
                 'success'     => false,
@@ -34,7 +39,7 @@ class MassiveImporterRun
         $importerClass      = $massiveImport->importer_class     ?? '';
         $startClassMethod   = $massiveImport->start_class_method ?? '';
 
-        $return = (new $importerClass())->$startClassMethod($importerFilePath);
+        $return = (new $importerClass())->$startClassMethod($importerFileFullPath);
 
         $success    = !! ($return['success'] ?? null);
         $reportFile = $return['report_file'] ?? null;

@@ -14,12 +14,32 @@ class UserMassiveImportController extends Controller
     public static function routes()
     {
         Route::get('massive-import',    [self::class, 'form'])->name('usuarios.massive-import.form');
-        Route::post('massive-import',   [self::class, 'uploadFileAndDispatch'])->name('usuarios.massive-import.upload');
+        Route::post('massive-import',   [self::class, 'uploadFileAndDispatch'])
+            ->name('usuarios.massive-import.upload');
+
+        Route::get('massive-import/report',   [self::class, 'importedReportDownload'])
+            ->name('usuarios.massive-import.imported_report_download');
     }
 
     public function __construct()
     {
         $this->middleware(['role:super-admin|admin', 'permission:usuarios-all|usuarios-create|usuarios-read|usuarios-update|usuarios-massive']);
+    }
+
+    /**
+     * function importedReportDownload
+     *
+     * @param Request $request
+     * @return
+     */
+    public function importedReportDownload(Request $request)
+    {
+        $lastImportedReport = storage_path('logs/usuarios_cadastrados.xlsx');
+
+        if (file_exists($lastImportedReport))
+        {
+            return response()->download($lastImportedReport);
+        }
     }
 
     /**

@@ -10,6 +10,7 @@
     "You can not add more than :max_atachment_inputs files": "Você não pode adicionar mais que :max_atachment_inputs arquivos",
     "File uploaded successfully. Wait the finish of import proccess.": "Arquivo enviado com sucesso. Aguarde o processo de importação.",
     "Error on import file": "Erro na importação do arquivo",
+    "Download the last imported :items": "Baixar os últimos :items importados",
     "atachment": "anexo",
     "Atachment": "Anexo",
     "atachments": "anexos",

@@ -21,7 +21,7 @@ class ChamadoSeeder extends Seeder
     {
         $usuarios       = Usuario::select('id')->limit(5)->get()->pluck('id');
 
-        if (!$usuarios)
+        if (!$usuarios->toArray())
         {
             echo 'Sem usuários cadastrados';
             return null;

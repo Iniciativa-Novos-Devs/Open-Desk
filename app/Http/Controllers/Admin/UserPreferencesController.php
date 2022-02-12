@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Route;
+use Auth;
 
 class UserPreferencesController extends Controller
 {
@@ -17,6 +18,8 @@ class UserPreferencesController extends Controller
     {
         Route::post('desconectar-outros-dispositivos', [self::class, 'logoutOtherDevices'])->name('user.logout_other_devices');
         Route::get('user/preferences', [self::class, 'preferences'])->name('user.preferences');
+        Route::post('user/preferences/change_password', [self::class, 'changePassowrd'])
+            ->name('user.preferences.change_password');
     }
 
     public function preferences(Request $request)
@@ -52,8 +55,43 @@ class UserPreferencesController extends Controller
             'password' => 'required|string|min:5',
         ]);
 
-        \Auth::logoutOtherDevices($request->input('password'));
+        Auth::logoutOtherDevices($request->input('password'));
 
         return back()->with('success', __('Other devices disconnected successfully'));
+    }
+
+    /**
+     * function changePassowrd
+     *
+     * @param Request $request
+     * @return
+     */
+    public function changePassowrd(Request $request)
+    {
+        $request->validate([
+            'current_password'    => 'required|string|min:6',
+            'new_password'        => 'required|string|min:6',
+            'repeat_new_password' => 'required|string|min:6',
+        ]);
+
+        if($request->input('new_password') !== $request->input('repeat_new_password'))
+        {
+            return back()->with('error', __('New password and repeat new password must be the same'));
+        }
+
+        if(!Auth::attempt([
+            'email' => Auth::user()->email,
+            'password' => $request->input('current_password')
+        ]))
+        {
+            return back()->with('error', __('Current password is incorrect'));
+        }
+
+        Auth::user()->update([
+            'password' => bcrypt($request->input('new_password'))
+        ]);
+
+        return redirect(route('user.preferences'))
+            ->with('success', __('Password changed successfully'));
     }
 }

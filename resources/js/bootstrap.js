@@ -11,6 +11,8 @@ try {
     window.tippy    = require('tippy.js');
     window.Alpine   = require('alpinejs').default;
     window.axios    = require('axios');
+    window.Chart = require('chart.js/auto').default;
+
 } catch (e) {}
 
 try{

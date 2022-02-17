@@ -8,11 +8,16 @@ use Route;
 
 class PainelController extends Controller
 {
+    public function index(Request $request)
+    {
+        return redirect()->route('dashboard');
+    }
+
     public static function routes()
     {
         Route::group(['prefix' => 'painel', 'middleware' => ['auth', 'redirect_to_base_host']], function () {
             //-----------------------------------------------------------------------------------
-            Route::get('/', [self::class, 'index'])->name('painel');
+            DashboardController::routes();
 
             //-----------------------------------------------------------------------------------
             AtividadesController::routes();
@@ -36,10 +41,5 @@ class PainelController extends Controller
             UsuarioController::routes();
             //-----------------------------------------------------------------------------------
         });
-    }
-
-    public function index(Request $request)
-    {
-        return view('dashboard.index');
     }
 }

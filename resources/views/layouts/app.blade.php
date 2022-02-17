@@ -28,6 +28,7 @@
     --}}
     <link rel="stylesheet" href="{{ asset('vendor/loading-spinner/css/loader.min.css') }}">
     <script src="{{ asset('vendor/loading-spinner/js/loader.min.js') }}"></script>
+    <script async src="{{ asset('js/app.js') }}"></script>
 
     <script>
         if(typeof window.__show_logs == 'undefined')
@@ -57,7 +58,6 @@
     @endif
 
     <script src="{{ asset('assets/js/auto_load_script.js') }}"></script>
-    <script async src="{{ asset('js/app.js') }}"></script>
     <script async src="{{ asset('assets/js/all.js') }}"></script>
 
     @yield('head_content')

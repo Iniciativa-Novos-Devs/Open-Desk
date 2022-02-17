@@ -20,8 +20,9 @@
         "tailwindcss": "^2.0.2"
     },
     "dependencies": {
-        "toastr": "^2.1.4",
         "alpinejs": "^3.5.2",
-        "tippy.js": "^6.3.7"
+        "chart.js": "^3.7.1",
+        "tippy.js": "^6.3.7",
+        "toastr": "^2.1.4"
     }
 }

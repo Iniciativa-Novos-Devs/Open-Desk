@@ -13,8 +13,7 @@ Route::group(['middleware' => ['redirect_to_base_host']], function () {
     require __DIR__.'/auth.php';
 });
 
-Route::get('/', [PainelController::class, 'index']);
-Route::get('/dashboard', [PainelController::class, 'index'])->name('dashboard');
+Route::get('/', [PainelController::class, 'index'])->name('painel');
 
 ##-----------------------------------------------------------------------------------
 /**

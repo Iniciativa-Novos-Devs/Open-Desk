@@ -4,126 +4,107 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Libs\Helpers\ColorGenerator;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Collection;
 use Route;
+use DB;
+use Str;
+use Auth;
 
 class DashboardController extends Controller
 {
     public static function routes()
     {
         Route::get('/dashboard', [self::class, 'index'])->name('dashboard');
+
+        Route::get('/demoCharts', [DemoChartsController::class, 'demoCharts'])->name('demoCharts');
     }
 
     public function index(Request $request)
     {
-        $charts['line'] = [
-            'title' => 'Line Chart',
-            'class' => 'col-md-6 col-sm-12',
-            'chart' => $this->fakeChart('line')
-        ];
+        $dataGeral = $this->getProblemas();
+        $dataUser  = $this->getProblemas(Auth::user()->id);
 
-        $charts['bar'] = [
-            'title' => 'Bar Chart',
-            'class' => 'col-md-6 col-sm-12',
-            'chart' => app()->chartjs
-                ->name('barChartTest')
-                ->type('bar')
-                ->size(['width' => 400, 'height' => 200])
-                ->labels(['Label x', 'Label y'])
-                ->datasets([
-                    [
-                        "label" => "My First dataset",
-                        'backgroundColor' => ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)'],
-                        'data' => [69, 59]
-                    ],
-                    [
-                        "label" => "My First dataset",
-                        'backgroundColor' => ['rgba(255, 99, 132, 0.3)', 'rgba(54, 162, 235, 0.3)'],
-                        'data' => [65, 12]
-                    ]
-                ])
-                ->options([])
-        ];
-        $charts['radar'] = [
-            'title' => 'Radar Chart',
-            'class' => 'col-md-4 col-sm-12',
-            'chart' => $this->fakeChart('radar')
-        ];
+        if($dataGeral->count())
+        {
+            $charts[] = [
+                'title' => 'Problemas - Geral',
+                'class' => 'col-md-4 col-sm-12',
+                'chart' => app()->chartjs
+                    ->name('problemas_geral')
+                    ->type('pie')
+                    ->size(['width' => 400, 'height' => 200])
+                    ->labels($dataGeral->pluck('descricao')->all())
+                    ->datasets([
+                        [
+                            'backgroundColor'       => $colors = ColorGenerator::generateArrayOfColors($dataGeral->count()),
+                            'hoverBackgroundColor'  => $colors,
+                            'data' => $dataGeral->pluck('count')->all()
+                        ]
+                    ])
+                    ->options([])
+            ];
+        }
 
-        $charts['pie'] = [
-            'title' => 'Pie Chart',
-            'class' => 'col-md-4 col-sm-12',
-            'chart' => app()->chartjs
-                ->name('pieChartTest')
-                ->type('pie')
-                ->size(['width' => 400, 'height' => 200])
-                ->labels(['Label x', 'Label y'])
-                ->datasets([
-                    [
-                        'backgroundColor' => ['#FF6384', '#36A2EB'],
-                        'hoverBackgroundColor' => ['#FF6384', '#36A2EB'],
-                        'data' => [69, 59]
-                    ]
-                ])
-                ->options([])
-        ];
-
-        $charts['doughnut'] = [
-            'title' => 'Doughnut Chart',
-            'class' => 'col-md-4 col-sm-12',
-            'chart' => app()->chartjs
-                ->name('doughnutChart')
-                ->type('doughnut')
-                ->size(['width' => 400, 'height' => 200])
-                ->labels(['Label x', 'Label y'])
-                ->datasets([
-                    [
-                        'backgroundColor' => ['#FF6384', '#36A2EB'],
-                        'hoverBackgroundColor' => ['#FF6384', '#36A2EB'],
-                        'data' => [69, 59]
-                    ]
-                ])
-                ->options([])
-        ];
+        if($dataUser->count())
+        {
+            $charts[] = [
+                'title' => 'Problemas - Usuário',
+                'class' => 'col-md-4 col-sm-12',
+                'chart' => app()->chartjs
+                    ->name('problemas_user')
+                    ->type('pie')
+                    ->size(['width' => 400, 'height' => 200])
+                    ->labels($dataUser->pluck('descricao')->all())
+                    ->datasets([
+                        [
+                            'backgroundColor'       => $colors = ColorGenerator::generateArrayOfColors($dataUser->count()),
+                            'hoverBackgroundColor'  => $colors,
+                            'data' => $dataUser->pluck('count')->all()
+                        ]
+                    ])
+                    ->options([])
+            ];
+        }
 
         return view('dashboard.index', [
-            'charts' => $charts,
+            'charts' => $charts ?? [],
         ]);
     }
 
     /**
-     * function fakeChart
+     * function getProblemas
      *
+     * @param int|null $usuarioId = null
      * @return
      */
-    public function fakeChart(string $type = 'line')
+    public function getProblemas(int|null $usuarioId = null) :Collection
     {
-        return app()->chartjs
-            ->name(\Str::random(15))
-            ->type($type)
-            ->size(['width' => 400, 'height' => 200])
-            ->labels(['January', 'February', 'March', 'April', 'May', 'June', 'July'])
-            ->datasets([
-                [
-                    "label" => "My First dataset",
-                    'backgroundColor' => "rgba(38, 185, 154, 0.31)",
-                    'borderColor' => "rgba(38, 185, 154, 0.7)",
-                    "pointBorderColor" => "rgba(38, 185, 154, 0.7)",
-                    "pointBackgroundColor" => "rgba(38, 185, 154, 0.7)",
-                    "pointHoverBackgroundColor" => "#fff",
-                    "pointHoverBorderColor" => "rgba(220,220,220,1)",
-                    'data' => [65, 59, 80, 81, 56, 55, 40],
-                ],
-                [
-                    "label" => "My Second dataset",
-                    'backgroundColor' => "rgba(38, 185, 154, 0.31)",
-                    'borderColor' => "rgba(38, 185, 154, 0.7)",
-                    "pointBorderColor" => "rgba(38, 185, 154, 0.7)",
-                    "pointBackgroundColor" => "rgba(38, 185, 154, 0.7)",
-                    "pointHoverBackgroundColor" => "#fff",
-                    "pointHoverBorderColor" => "rgba(220,220,220,1)",
-                    'data' => [12, 33, 44, 44, 55, 23, 40],
-                ]
-            ])
-            ->options([]);
+        $cacheKey = Str::slug('getProblemas_' . $usuarioId);
+
+        $data =  Cache::remember($cacheKey, 60 /*secs*/, function ()  use ($usuarioId) {
+            $query = DB::table('hd_chamados as c')
+            ->join('hd_problemas as hp', 'c.problema_id', '=', 'hp.id')
+            ->select('hp.descricao', 'c.problema_id', DB::raw('COUNT( c.problema_id )'))
+            ->groupBy('c.problema_id', 'hp.descricao')
+            ->havingRaw('COUNT( c.problema_id )> 1')
+            ->orderBy('c.problema_id');
+
+            if($usuarioId)
+            {
+                $query->where('c.usuario_id', $usuarioId);
+            }
+
+            return $query->get();
+        });
+
+        if (!$data->count())
+        {
+            Cache::forget($cacheKey);
+            return collect([]);
+        }
+
+        return $data;
     }
 }

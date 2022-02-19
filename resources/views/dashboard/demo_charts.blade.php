@@ -1,8 +1,7 @@
 @extends('layouts.page')
 
 @section('content')
-<h2>Dashboard</h2>
-<h5><a href="@route('demoCharts')">demoCharts</a></h5>
+<h2>Demo charts</h2>
 
 <div class="row row-cols-1 row-cols-md-2 g-4">
     @foreach ($charts as $chart)

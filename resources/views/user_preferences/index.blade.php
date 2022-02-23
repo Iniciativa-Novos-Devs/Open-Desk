@@ -53,7 +53,7 @@
                             <label for="input_current_password">@lang('Current password')</label>
                             <input class="form-control" id="input_current_password"
                                 placeholder="@lang('Current password')"
-                                :type="show_password ? 'password' : 'text'"
+                                :type="show_password ? 'text' : 'password'"
                                 name="current_password" placeholder="@lang('Current password')" value="" required
                                 autocomplete="current-password">
 
@@ -70,7 +70,7 @@
                             <label for="input_new_password">@lang('New password')</label>
                             <input class="form-control" id="input_new_password" name="new_password"
                                 placeholder="@lang('New password')"
-                                :type="show_password ? 'password' : 'text'"
+                                :type="show_password ? 'text' : 'password'"
                                 placeholder="@lang('New password')" value="" required autocomplete="new-password">
 
                             @error('new_password')
@@ -85,7 +85,7 @@
                             <label for="input_repeat_new_password">@lang('Repeat new password')</label>
                             <input class="form-control" id="input_repeat_new_password"
                                 placeholder="@lang('Repeat new password')"
-                                :type="show_password ? 'password' : 'text'"
+                                :type="show_password ? 'text' : 'password'"
                                 name="repeat_new_password" placeholder="@lang('Repeat new password')" value="" required
                                 autocomplete="repeat_new-password">
 

@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Http\Controllers\Admin\HomologacaoController;
 use Illuminate\Console\Command;
 
 class RequestHomologationForAllCommand extends Command
@@ -38,6 +39,6 @@ class RequestHomologationForAllCommand extends Command
     public function handle()
     {
         info('Iniciando o envio de e-mails para os donos de chamados que ainda não homologaram.');
-        \App\Http\Controllers\HomologacaoController::requestHomologationForAll();
+        HomologacaoController::requestHomologationForAll();
     }
 }

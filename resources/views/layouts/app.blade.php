@@ -28,11 +28,11 @@
     --}}
     <link rel="stylesheet" href="{{ asset('vendor/loading-spinner/css/loader.min.css') }}">
     <script src="{{ asset('vendor/loading-spinner/js/loader.min.js') }}"></script>
-    <script async src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
 
     <script>
         if(typeof window.__show_logs == 'undefined')
-            window.__show_logs = {{ env('APP_DEBUG', false) }};
+            window.__show_logs = {{ env('app.debug', false) ? 'true' : 'false' }};
 
         function toggleShowLogs()
         {

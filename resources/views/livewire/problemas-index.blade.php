@@ -80,7 +80,6 @@
                         </td>
                         <td>{{ $problema->created_at }}</td>
                         <td>
-                            <a href="{{ route('problemas_edit', $problema->id) }}" class="btn btn-sm btn-outline-info">Editar</a>
                             <a href="{{ route('problemas_delete', $problema->id) }}"
                                 class="btn btn-sm btn-outline-danger"
                                 onclick="if (! confirm('Deseja mesmo deletar o problema?')) { return false; }">Deletar</a>

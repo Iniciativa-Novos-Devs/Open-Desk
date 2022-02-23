@@ -12,11 +12,10 @@ class ProblemaController extends Controller
 {
     public static function routes()
     {
-        Route::get('/problemas/{atividade_id?}', [ProblemaController::class, 'index'])->name('problemas_index');
-        Route::get('/problemas/add/atividade/{atividade_id}', [ProblemaController::class, 'add'])->name('problemas_add');
-        Route::get('/problemas/edit/{atividade_id}', [ProblemaController::class, 'edit'])->name('problemas_edit');
-        Route::get('/problemas/delete/{atividade_id}', [ProblemaController::class, 'delete'])->name('problemas_delete');
-        Route::post('/problemas/store', [ProblemaController::class, 'store'])->name('problemas_store');
+        Route::get('/problemas/{atividade_id?}',                [self::class, 'index'])->name('problemas_index');
+        Route::get('/problemas/add/atividade/{atividade_id}',   [self::class, 'add'])->name('problemas_add');
+        Route::get('/problemas/delete/{atividade_id}',          [self::class, 'delete'])->name('problemas_delete');
+        Route::post('/problemas/store',                         [self::class, 'store'])->name('problemas_store');
     }
 
     public function index($atividade_id = null)

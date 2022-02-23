@@ -18,6 +18,4 @@
     </div>
     @endforeach
 </div>
-
-</script>
 @endsection

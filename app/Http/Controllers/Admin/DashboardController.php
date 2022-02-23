@@ -88,7 +88,7 @@ class DashboardController extends Controller
             ->join('hd_problemas as hp', 'c.problema_id', '=', 'hp.id')
             ->select('hp.descricao', 'c.problema_id', DB::raw('COUNT( c.problema_id ) as count'))
             ->groupBy('c.problema_id', 'hp.descricao')
-            ->havingRaw('COUNT( c.problema_id )> 1')
+            ->havingRaw('COUNT( c.problema_id ) > 0')
             ->orderBy('c.problema_id');
 
             if($usuarioId)

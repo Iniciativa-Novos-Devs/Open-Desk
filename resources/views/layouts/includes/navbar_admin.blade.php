@@ -49,7 +49,7 @@
                         Manutenção
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="adminNavbarDropdownMenuLink">
-                        <li><a class="dropdown-item" href="#">Unidades</a></li>
+                        <li><a class="dropdown-item" href="{{ route('unidades.index') }}">Unidades</a></li>
                         @canany(['usuarios-all', 'usuarios-create', 'usuarios-read', 'usuarios-update', 'usuarios-delete'])
                             <li><a class="dropdown-item" href="@route('usuarios.index')">@lang('Users')</a></li>
                         @endcanany

@@ -40,10 +40,16 @@
                     <td>{{ $unidade->diretor }}</td>
                     <td>{{ $unidade->dir_adm }}</td>
                     <td>
-                        <a class="btn btn-sm btn-outline-info"
-                        href="{{ route('unidades.show', $unidade->id ) }}">
-                        Mais
-                        </a>
+                        <div class="button-group">
+                            <a class="btn btn-sm btn-outline-info"
+                            href="{{ route('unidades.show', $unidade->id ) }}">
+                            Mais
+                            </a>
+                            <a class="btn btn-sm btn-primary"
+                            href="{{ route('unidades.edit', $unidade->id ) }}">
+                            Editar
+                            </a>
+                        </div>
                     </td>
                 </tr>
             @endforeach

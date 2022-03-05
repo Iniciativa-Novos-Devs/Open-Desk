@@ -84,7 +84,15 @@ class UnidadeController extends Controller
      */
     public function edit($id)
     {
-        //
+        $unidade = Unidade::where('id', $id)->first();
+
+        if (!$unidade) {
+            return redirect()->route('unidades.index')->with('error', 'Unidade não encontrada');
+        }
+
+        return view('unidades.form', [
+            'unidade' => $unidade,
+        ]);
     }
 
     /**
@@ -96,7 +104,29 @@ class UnidadeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $unidade = Unidade::where('id', $id)->first();
+
+        if (!$unidade) {
+            return redirect()->route('unidades.index')->with('error', 'Unidade não encontrada');
+        }
+
+        $request->validate([
+            "nome" => "required|string|min:10|max:150",
+            "cidade" => "nullable|string|min:3|max:100",
+        ]);
+
+        $updaded = $unidade->update([
+            "nome" => $request->input('nome'),
+            "cidade" => $request->input('cidade'),
+            "diretor" => $request->input('diretor'),
+            "dir_adm" => $request->input('dir_adm'),
+        ]);
+
+        if (!$updaded) {
+            return back()->with('error', 'Falha ao atualizar unidade')->withInput();
+        }
+
+        return redirect()->route('unidades.index')->with("success", "Unidade atualizada com sucesso");
     }
 
     /**

@@ -73,7 +73,15 @@ class UnidadeController extends Controller
      */
     public function show($id)
     {
-        //
+        $unidade = Unidade::where('id', $id)->first();
+
+        if (!$unidade) {
+            return redirect()->route('unidades.index')->with('error', 'Unidade não encontrada');
+        }
+
+        return view('unidades.show', [
+            'unidade' => $unidade,
+        ]);
     }
 
     /**

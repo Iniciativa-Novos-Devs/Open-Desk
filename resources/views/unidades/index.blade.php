@@ -24,6 +24,7 @@
             </tr>
 
             <tr>
+                <th scope="col" class="cursor-pointer">#</th>
                 <th scope="col" class="cursor-pointer">UE</th>
                 <th scope="col" class="cursor-pointer">Nome</th>
                 <th scope="col" class="cursor-pointer">Cidade</th>
@@ -34,6 +35,7 @@
         <tbody>
             @foreach ($unidades as $unidade)
                 <tr>
+                    <td>{{ $unidade->id }}</td>
                     <td>{{ $unidade->ue }}</td>
                     <td>{{ $unidade->nome }}</td>
                     <td>{{ $unidade->cidade }}</td>
@@ -49,6 +51,11 @@
                             href="{{ route('unidades.edit', $unidade->id ) }}">
                             Editar
                             </a>
+                            <a class="btn btn-sm btn-danger"
+                            href="{{ route('unidades.delete', $unidade->id ) }}">
+                            Deletar
+                            </a>
+
                         </div>
                     </td>
                 </tr>

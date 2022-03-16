@@ -12,6 +12,7 @@ class UnidadeController extends Controller
     public static function routes()
     {
         Route::resource('unidades', self::class);
+        Route::get('unidades/delete/{unidade_id}', [self::class, 'destroy'])->name('unidades.delete');
     }
 
     /**
@@ -145,6 +146,14 @@ class UnidadeController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $unidade = Unidade::where('id', $id)->first();
+
+        if (!$unidade) {
+            return redirect()->route('unidades.index')->with('error', 'Unidade não encontrada');
+        }
+
+        $unidade->delete();
+
+        return redirect()->route('unidades.index')->with("success", "Unidade delatada com sucesso");
     }
 }

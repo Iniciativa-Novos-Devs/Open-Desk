@@ -19,3 +19,5 @@ _dev_dir
 
 /*ocker*
 /env_COMPOSER_CACHE_DIR/
+.vsls.json
+_ide_helper.php

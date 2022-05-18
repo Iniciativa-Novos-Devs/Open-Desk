@@ -25,7 +25,7 @@
         <div class="pt-3 mt-3 text-center col-3">
             <form method="POST" action="{{ route('valida_usuario_cps') }}">
                 @csrf
-                <img class="mb-4 display-6" class="Responsive" src=" {{ asset('/imagens/logo.jpg') }}" alt="logo" width="72">
+                <img class="mb-4 display-6" class="Responsive" src=" {{ asset('/imagens/logo.webp') }}" alt="logo" width="72">
                 <h1 class="mb-3 h3 fw-normal">{{ __('Validação no CPS') }}</h1>
 
                 <div class="form-floating">

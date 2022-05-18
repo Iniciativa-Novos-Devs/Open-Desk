@@ -184,7 +184,7 @@
                                                 </span>
                                             </div>
                                             <div class="mt-0 text-right col-2">
-                                                <select class="p-1 m-1 custom-select custom-select-sm"
+                                                <select class="p-1 m-1 custom-select custom-select-sm form-select cursor-pointer"
                                                     wire:model="items_by_page">
                                                     @foreach ([5, 10, 20, 30, 50, 100] as $qtd)
                                                         <option value="{{ $qtd }}">{{ $qtd }}

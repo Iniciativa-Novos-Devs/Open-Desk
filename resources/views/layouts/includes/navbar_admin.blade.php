@@ -1,6 +1,13 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
     <div class="container-fluid">
         <a class="navbar-brand" href="{{ route('painel') }}">HelpDesk</a>
+
+        @auth
+            @can('chamados-create')
+                <a class="btn btn-md btn-warning mx-5" href="{{ route('chamados_add') }}">Abrir Chamado</a>
+            @endcan
+        @endauth
+
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
             aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

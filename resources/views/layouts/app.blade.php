@@ -19,7 +19,8 @@
     <link rel="stylesheet" href="{{ asset('assets/css/all.css') }}">
 
     {{-- Aqui está carregando o material design bootstrap --}}
-    <link rel="stylesheet" href="{{ asset('css/mdb-build/app.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('css/mdb-build/app.css') }}"> --}}
+    <link rel="stylesheet" href="{{ asset('themes/bootswatch.com/flatly/bootstrap.min.css') }}">
 
     {{--
         https://github.com/TiagoFrancaFernandesOPEN/animated-svg-loading-spinner

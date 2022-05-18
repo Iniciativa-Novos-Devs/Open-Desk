@@ -89,3 +89,6 @@ li.nav-item a.nav-link{white-space: nowrap;}
     color: white;
     text-align: center;
 }
+
+/* Afasta a logo to topo */
+.top-logo { margin-top: 4.5rem !important; }

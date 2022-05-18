@@ -58,7 +58,7 @@
 
     <div class="container-box">
         <div class="p-0 m-0 row">
-            <div class="mt-0 col-8 _bg-danger">
+            <div class="mt-0 col-md-8 col-sm-12">
                 <div class="row">
                     <form class="col-12" method="POST" action="{{ route('chamados_store') }}"
                         enctype="multipart/form-data">
@@ -203,23 +203,24 @@
                                                 </button>
                                             </div>
                                         </div>
-
-
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="col-12 row">
-                                <div class="col-4">
-                                </div>
+                            <div class="col-12">
+                                <div class="row">
+                                    <div class="col-12 d-md-none mt-5"></div>
 
-                                <div class="col-4">
-                                    <button type="submit" name="create_another" id="create_another" value="yes"
-                                        class="form-control btn bnt-md btn-outline-success">Cadastrar e permanecer</button>
-                                </div>
+                                    <div class="col-md-6 col-sm-12 d-grid gap-2">
+                                        <button type="submit" name="create_another" id="create_another" value="yes"
+                                            class="form-control btn bnt-md btn-outline-success">Cadastrar e permanecer</button>
+                                    </div>
 
-                                <div class="col-4">
-                                    <button type="submit" class="form-control btn bnt-md btn-success">Cadastrar</button>
+                                    <div class="col-12 d-md-none mt-5"></div>
+
+                                    <div class="col-md-6 col-sm-12 d-grid gap-2">
+                                        <button type="submit" class="form-control btn bnt-md btn-success">Cadastrar</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -239,7 +240,7 @@
                 </div>
             </div>
 
-            <div class="mt-3 col-4 _bg-warning">
+            <div class="mt-3 col-md-4 col-sm-12">
                 <div class="p-0 m-0 mt-3 row">
                     <div class="px-0 mb-1 border col-12 faq-container">
                         <select class="px-0 mx-0 form-select" size="3" aria-label="size 3 select example">

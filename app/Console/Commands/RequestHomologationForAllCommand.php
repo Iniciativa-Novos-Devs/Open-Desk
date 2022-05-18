@@ -40,5 +40,6 @@ class RequestHomologationForAllCommand extends Command
     {
         info('Iniciando o envio de e-mails para os donos de chamados que ainda não homologaram.');
         HomologacaoController::requestHomologationForAll();
+        info('Concluindo o envio de e-mails para os donos de chamados que ainda não homologaram.');
     }
 }

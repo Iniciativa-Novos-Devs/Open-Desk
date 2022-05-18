@@ -29,9 +29,10 @@ class Kernel extends ConsoleKernel
         //https://laravel.com/docs/8.x/scheduling#running-the-scheduler
         // https://laravel.com/docs/8.x/scheduling#schedule-frequency-options
 
-        $schedule->command('chamados:homologation-request-all')->twiceDaily(8, 18);//Envia e-nmails às 8h e 18h
+        //Envia e-mails às 8h e 18h
+        $schedule->command('chamados:homologation-request-all')->twiceDaily(8, 18);
 
-        https://stackoverflow.com/a/52610570
+        // https://stackoverflow.com/a/52610570
         $schedule->command('queue:work-custom-long')->everyMinute()->withoutOverlapping();
     }
 

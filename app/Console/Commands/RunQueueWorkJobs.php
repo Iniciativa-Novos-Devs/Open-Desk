@@ -39,7 +39,7 @@ class RunQueueWorkJobs extends Command
     {
         return $this->call('queue:work', [
             '--stop-when-empty' => null,
-            '--timeout' => 120,
+            '--timeout' => 55,
         ]);
     }
 }

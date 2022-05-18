@@ -37,6 +37,7 @@ class RunQueueWorkJobs extends Command
      */
     public function handle()
     {
+        $this->comment("Running: {$this->signature}");
         return $this->call('queue:work', [
             '--stop-when-empty' => null,
             '--timeout' => 55,

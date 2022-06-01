@@ -22,3 +22,4 @@ _dev_dir
 .vsls.json
 .vscode
 _ide_helper*
+nohup*

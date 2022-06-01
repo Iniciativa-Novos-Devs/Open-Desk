@@ -2,11 +2,9 @@
 
 namespace App\Jobs;
 
-use App\Http\Controllers\Admin\ChamadoController as AdminChamadoController;
-use App\Http\Controllers\ChamadoController;
+use App\Http\Controllers\Admin\ChamadoController;
 use App\Models\Chamado;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -14,9 +12,13 @@ use Illuminate\Queue\SerializesModels;
 
 class NovoChamadoMailJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     public $chamado;
+
     /**
      * Create a new job instance.
      *
@@ -34,6 +36,6 @@ class NovoChamadoMailJob implements ShouldQueue
      */
     public function handle()
     {
-        AdminChamadoController::enviaEmailNovoChamado($this->chamado);
+        ChamadoController::enviaEmailNovoChamado($this->chamado);
     }
 }

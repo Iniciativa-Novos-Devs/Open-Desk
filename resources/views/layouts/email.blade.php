@@ -4,7 +4,7 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Simple Transactional Email</title>
+    <title>Title - E-mail de {{ config('app.name') }}</title>
     <style>
         /* -------------------------------------
           GLOBAL RESETS
@@ -353,12 +353,13 @@
                 border-color: #34495e !important;
             }
         }
-
     </style>
 </head>
 
 <body class="">
-    <span class="preheader">This is preheader text. Some clients will show this text as a preview.</span>
+    <span class="preheader">
+        E-mail de {{ config('app.name') }}
+    </span>
     <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
         <tr>
             <td>&nbsp;</td>
@@ -390,15 +391,15 @@
                         <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                             <tr>
                                 <td class="content-block">
-                                    <span class="apple-link">Company Inc, 3 Abbey Road, San Francisco CA 94102</span>
-                                    <br> Don't like these emails? <a
-                                        href="http://i.imgur.com/CScmqnj.gif">Unsubscribe</a>.
+                                    <span class="apple-link">
+                                        Você está recebendo esse e-mail da aplicação <a href="{{ url('/') }}">
+                                            {{ config('app.name') }}
+                                        </a>.
+                                    </span>
                                 </td>
                             </tr>
                             <tr>
-                                <td class="content-block powered-by">
-                                    Powered by <a href="http://htmlemail.io">HTMLemail</a>.
-                                </td>
+                                <td class="content-block powered-by"></td>
                             </tr>
                         </table>
                     </div>

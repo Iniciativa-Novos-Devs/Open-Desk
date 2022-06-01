@@ -4,13 +4,13 @@ namespace App\Mail;
 
 use App\Models\Chamado;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
 class NovoChamadoMail extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+    use SerializesModels;
 
     public $chamado;
 
@@ -33,14 +33,15 @@ class NovoChamadoMail extends Mailable
     {
         $usuario = $this->chamado->usuario ?? null;
 
-        if(!$usuario)
+        if (!$usuario) {
             return;
+        }
 
-        $name   = $usuario->name;
+        $name = $usuario->name;
 
         return $this->view('emails.novo_chamado', [
-            'name'      => $name,
-            'chamado'   => $this->chamado,
+            'name' => $name,
+            'chamado' => $this->chamado,
         ]);
     }
 }

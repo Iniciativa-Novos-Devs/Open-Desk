@@ -1,15 +1,17 @@
 <?php
+
 namespace App\CacheManagers;
 
 use App\Models\Usuario;
-use Illuminate\Support\Facades\Cache;
-use Str;
 use Arr;
 use Auth;
+use Illuminate\Support\Facades\Cache;
+use Str;
 
 class UsuarioCache
 {
-    protected static $clear_cache       = false;
+    protected static $clear_cache = false;
+
     protected static $default_relations = [
         'areas',
         'roles',
@@ -21,18 +23,20 @@ class UsuarioCache
 
         $cache_key = Str::slug(Arr::query(['usuario_id' => $usuario_id, 'relationships' => $relationships]));
 
-        if(self::$clear_cache)
+        if (self::$clear_cache) {
             Cache::forget($cache_key);
+        }
 
-        return Cache::remember($cache_key, 1800 /*secs*/, function ()  use ($usuario_id, $relationships) {
+        return Cache::remember($cache_key, 1800 /*secs*/, function () use ($usuario_id, $relationships) {
             return Usuario::with($relationships)->where('id', $usuario_id)->first();
         });
     }
 
     public static function byLoggedUser(array $relationships = null)
     {
-        if(Auth::user()->id ?? null)
+        if (Auth::user()->id ?? null) {
             return self::byId(Auth::user()->id, $relationships);
+        }
 
         return null;
     }
@@ -41,24 +45,26 @@ class UsuarioCache
     {
         $cache_key = Str::slug(Arr::query(['role' => ($role ?? 'all'), 'limit' => ($limit ? $limit : 'no-limit'), 'attributes' => $attributes]));
 
-        if(self::$clear_cache)
+        if (self::$clear_cache) {
             Cache::forget($cache_key);
+        }
 
         return Cache::remember($cache_key, (60 * 60/*secs*/), function () use ($role, $attributes, $limit) {
             $query = Usuario::with('roles');
 
-            if($role)
-            {
+            if ($role) {
                 $query->whereHas('roles', function ($query) use ($role) {
                     $query->where('name', $role);
                 });
             }
 
-            if($attributes)
+            if ($attributes) {
                 $query->select($attributes);
+            }
 
-            if($limit)
+            if ($limit) {
                 $query->limit($limit);
+            }
 
             return $query->get();
         });
@@ -66,7 +72,6 @@ class UsuarioCache
 
     public function clearCache(bool $clear_cache = null)
     {
-        self::$clear_cache = !! $clear_cache;
+        self::$clear_cache = (bool) $clear_cache;
     }
-
 }

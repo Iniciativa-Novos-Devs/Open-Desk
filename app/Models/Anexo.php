@@ -9,16 +9,16 @@ class Anexo extends Model
 {
     use HasFactory;
 
-    protected $table        = 'hd_anexos';
+    protected $table = 'hd_anexos';
 
-    protected $casts        = [
-        'restrito_a_grupos'   => 'array',
+    protected $casts = [
+        'restrito_a_grupos' => 'array',
         'restrito_a_usuarios' => 'array',
-        'temporario'          => 'boolean',
-        'destruir_apos'       => 'datetime',
+        'temporario' => 'boolean',
+        'destruir_apos' => 'datetime',
     ];
 
-    protected $fillable     = [
+    protected $fillable = [
         'path',
         'extension',
         'mime_type',

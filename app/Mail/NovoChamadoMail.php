@@ -33,7 +33,7 @@ class NovoChamadoMail extends Mailable
     {
         $usuario = $this->chamado->usuario ?? null;
 
-        if (!$usuario) {
+        if (! $usuario) {
             return;
         }
 

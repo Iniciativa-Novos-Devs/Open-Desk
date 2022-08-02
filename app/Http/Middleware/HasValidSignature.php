@@ -16,8 +16,7 @@ class HasValidSignature
      */
     public function handle(Request $request, Closure $next)
     {
-        if (! $request->hasValidSignature())
-        {
+        if (! $request->hasValidSignature()) {
             abort(401);
         }
 

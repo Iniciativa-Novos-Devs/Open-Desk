@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Libs\Helpers\ColorGenerator;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Collection;
-use Route;
-use DB;
-use Str;
 use Auth;
+use DB;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
+use Route;
+use Str;
 
 class DashboardController extends Controller
 {
@@ -24,10 +24,9 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $dataGeral = $this->getProblemas();
-        $dataUser  = $this->getProblemas(Auth::user()->id);
+        $dataUser = $this->getProblemas(Auth::user()->id);
 
-        if($dataGeral->count())
-        {
+        if ($dataGeral->count()) {
             $charts[] = [
                 'title' => 'Problemas - Geral',
                 'class' => 'col-md-4 col-sm-12',
@@ -38,17 +37,16 @@ class DashboardController extends Controller
                     ->labels($dataGeral->pluck('descricao')->all())
                     ->datasets([
                         [
-                            'backgroundColor'       => $colors = ColorGenerator::generateArrayOfColors($dataGeral->count()),
-                            'hoverBackgroundColor'  => $colors,
-                            'data' => $dataGeral->pluck('count')->all()
-                        ]
+                            'backgroundColor' => $colors = ColorGenerator::generateArrayOfColors($dataGeral->count()),
+                            'hoverBackgroundColor' => $colors,
+                            'data' => $dataGeral->pluck('count')->all(),
+                        ],
                     ])
-                    ->options([])
+                    ->options([]),
             ];
         }
 
-        if($dataUser->count())
-        {
+        if ($dataUser->count()) {
             $charts[] = [
                 'title' => 'Problemas - Usuário',
                 'class' => 'col-md-4 col-sm-12',
@@ -59,12 +57,12 @@ class DashboardController extends Controller
                     ->labels($dataUser->pluck('descricao')->all())
                     ->datasets([
                         [
-                            'backgroundColor'       => $colors = ColorGenerator::generateArrayOfColors($dataUser->count()),
-                            'hoverBackgroundColor'  => $colors,
-                            'data' => $dataUser->pluck('count')->all()
-                        ]
+                            'backgroundColor' => $colors = ColorGenerator::generateArrayOfColors($dataUser->count()),
+                            'hoverBackgroundColor' => $colors,
+                            'data' => $dataUser->pluck('count')->all(),
+                        ],
                     ])
-                    ->options([])
+                    ->options([]),
             ];
         }
 
@@ -76,14 +74,14 @@ class DashboardController extends Controller
     /**
      * function getProblemas
      *
-     * @param int|null $usuarioId = null
+     * @param  int|null  $usuarioId = null
      * @return
      */
-    public function getProblemas(int|null $usuarioId = null) :Collection
+    public function getProblemas(int|null $usuarioId = null): Collection
     {
-        $cacheKey = Str::slug('getProblemas_' . $usuarioId);
+        $cacheKey = Str::slug('getProblemas_'.$usuarioId);
 
-        $data =  Cache::remember($cacheKey, 60 /*secs*/, function ()  use ($usuarioId) {
+        $data = Cache::remember($cacheKey, 60 /*secs*/, function () use ($usuarioId) {
             $query = DB::table('hd_chamados as c')
             ->join('hd_problemas as hp', 'c.problema_id', '=', 'hp.id')
             ->select('hp.descricao', 'c.problema_id', DB::raw('COUNT( c.problema_id ) as count'))
@@ -91,17 +89,16 @@ class DashboardController extends Controller
             ->havingRaw('COUNT( c.problema_id ) > 0')
             ->orderBy('c.problema_id');
 
-            if($usuarioId)
-            {
+            if ($usuarioId) {
                 $query->where('c.usuario_id', $usuarioId);
             }
 
             return $query->get();
         });
 
-        if (!$data->count())
-        {
+        if (! $data->count()) {
             Cache::forget($cacheKey);
+
             return collect([]);
         }
 

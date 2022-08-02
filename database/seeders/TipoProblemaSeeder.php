@@ -14,10 +14,9 @@ class TipoProblemaSeeder extends Seeder
      */
     public function run()
     {
-        foreach (range(1, 10) as $i)
-        {
+        foreach (range(1, 10) as $i) {
             TipoProblema::create([
-                'nome'   =>  \Str::random(8),
+                'nome' => \Str::random(8),
                 'versao' => 1,
             ]);
         }

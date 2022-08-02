@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -48,8 +47,8 @@ class Usuario extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'telefone_1_wa'     => 'boolean',
-        'app_admin'         => 'boolean',
+        'telefone_1_wa' => 'boolean',
+        'app_admin' => 'boolean',
     ];
 
     /**
@@ -74,7 +73,6 @@ class Usuario extends Authenticatable
 
     /**
      * Get the unidade that owns the Usuario
-     *
      */
     public function unidade()
     {

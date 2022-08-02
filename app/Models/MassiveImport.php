@@ -9,13 +9,13 @@ class MassiveImport extends Model
 {
     use HasFactory;
 
-    protected $table     = 'hd_massive_imports';
+    protected $table = 'hd_massive_imports';
 
-    protected $casts        = [
+    protected $casts = [
         'success' => 'boolean',
     ];
 
-    protected $fillable     = [
+    protected $fillable = [
         'file_path',
         'importer_class',
         'start_class_method',
@@ -30,10 +30,8 @@ class MassiveImport extends Model
         parent::boot();
 
         // before delete() method call this
-        static::deleting(function ($item)
-        {
-            if($item->file_path && file_exists(storage_path("app/{$item->file_path}")))
-            {
+        static::deleting(function ($item) {
+            if ($item->file_path && file_exists(storage_path("app/{$item->file_path}"))) {
                 unlink(storage_path("app/{$item->file_path}"));
             }
         });

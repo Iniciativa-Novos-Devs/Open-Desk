@@ -1,13 +1,15 @@
 <?php
+
 namespace App\CacheManagers;
 
+use Arr;
 use Illuminate\Support\Facades\Cache;
 use Str;
-use Arr;
 
 class AtendenteCache
 {
-    protected static $clear_cache       = false;
+    protected static $clear_cache = false;
+
     protected static $default_relations = [
         'atividades',
         'atendentes',
@@ -31,8 +33,9 @@ class AtendenteCache
     {
         $cache_key = Str::slug(Arr::query(['role' => 'atendente', 'limit' => ($limit ? $limit : 'no-limit'), 'attributes' => $attributes]));
 
-        if(self::$clear_cache)
+        if (self::$clear_cache) {
             Cache::forget($cache_key);
+        }
 
         return Cache::remember($cache_key, (60 * 60/*secs*/), function () use ($attributes, $limit) {
             return UsuarioCache::all('atendente', $attributes, $limit);
@@ -41,7 +44,6 @@ class AtendenteCache
 
     public function clearCache(bool $clear_cache = null)
     {
-        self::$clear_cache = !! $clear_cache;
+        self::$clear_cache = (bool) $clear_cache;
     }
-
 }

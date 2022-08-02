@@ -9,11 +9,10 @@ class TipoProblema extends Model
 {
     use HasFactory;
 
-    protected $table    = 'hd_tipo_problemas';
+    protected $table = 'hd_tipo_problemas';
 
     protected $fillable = [
         'nome',
         'versao',
     ];
-
 }

@@ -46,24 +46,24 @@ class UnidadeController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            "ue" => "required|string|min:3|max:3|unique:hd_unidades,ue",
-            "nome" => "required|string|min:10|max:150",
-            "cidade" => "nullable|string|min:3|max:100",
+            'ue' => 'required|string|min:3|max:3|unique:hd_unidades,ue',
+            'nome' => 'required|string|min:10|max:150',
+            'cidade' => 'nullable|string|min:3|max:100',
         ]);
 
         $unidade = Unidade::create([
-            "ue" => $request->input('ue'),
-            "nome" => $request->input('nome'),
-            "cidade" => $request->input('cidade'),
-            "diretor" => $request->input('diretor'),
-            "dir_adm" => $request->input('dir_adm'),
+            'ue' => $request->input('ue'),
+            'nome' => $request->input('nome'),
+            'cidade' => $request->input('cidade'),
+            'diretor' => $request->input('diretor'),
+            'dir_adm' => $request->input('dir_adm'),
         ]);
 
-        if (!$unidade) {
+        if (! $unidade) {
             return back()->with('error', 'Falha no cadastro da unidade');
         }
 
-        return redirect()->route('unidades.index')->with("success", "Unidade cadastrada com sucesso");
+        return redirect()->route('unidades.index')->with('success', 'Unidade cadastrada com sucesso');
     }
 
     /**
@@ -76,7 +76,7 @@ class UnidadeController extends Controller
     {
         $unidade = Unidade::where('id', $id)->first();
 
-        if (!$unidade) {
+        if (! $unidade) {
             return redirect()->route('unidades.index')->with('error', 'Unidade não encontrada');
         }
 
@@ -95,7 +95,7 @@ class UnidadeController extends Controller
     {
         $unidade = Unidade::where('id', $id)->first();
 
-        if (!$unidade) {
+        if (! $unidade) {
             return redirect()->route('unidades.index')->with('error', 'Unidade não encontrada');
         }
 
@@ -115,27 +115,27 @@ class UnidadeController extends Controller
     {
         $unidade = Unidade::where('id', $id)->first();
 
-        if (!$unidade) {
+        if (! $unidade) {
             return redirect()->route('unidades.index')->with('error', 'Unidade não encontrada');
         }
 
         $request->validate([
-            "nome" => "required|string|min:10|max:150",
-            "cidade" => "nullable|string|min:3|max:100",
+            'nome' => 'required|string|min:10|max:150',
+            'cidade' => 'nullable|string|min:3|max:100',
         ]);
 
         $updaded = $unidade->update([
-            "nome" => $request->input('nome'),
-            "cidade" => $request->input('cidade'),
-            "diretor" => $request->input('diretor'),
-            "dir_adm" => $request->input('dir_adm'),
+            'nome' => $request->input('nome'),
+            'cidade' => $request->input('cidade'),
+            'diretor' => $request->input('diretor'),
+            'dir_adm' => $request->input('dir_adm'),
         ]);
 
-        if (!$updaded) {
+        if (! $updaded) {
             return back()->with('error', 'Falha ao atualizar unidade')->withInput();
         }
 
-        return redirect()->route('unidades.index')->with("success", "Unidade atualizada com sucesso");
+        return redirect()->route('unidades.index')->with('success', 'Unidade atualizada com sucesso');
     }
 
     /**
@@ -148,12 +148,12 @@ class UnidadeController extends Controller
     {
         $unidade = Unidade::where('id', $id)->first();
 
-        if (!$unidade) {
+        if (! $unidade) {
             return redirect()->route('unidades.index')->with('error', 'Unidade não encontrada');
         }
 
         $unidade->delete();
 
-        return redirect()->route('unidades.index')->with("success", "Unidade delatada com sucesso");
+        return redirect()->route('unidades.index')->with('success', 'Unidade delatada com sucesso');
     }
 }

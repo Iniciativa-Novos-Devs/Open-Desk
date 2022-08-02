@@ -10,5 +10,5 @@ return [
         |
         */
         'delivery_emails' => env('TICKET_DELIVERY_EMAIL', true),
-    ]
+    ],
 ];

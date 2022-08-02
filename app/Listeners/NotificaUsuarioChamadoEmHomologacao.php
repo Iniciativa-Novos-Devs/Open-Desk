@@ -4,8 +4,6 @@ namespace App\Listeners;
 
 use App\Events\ChamadoEmHomologacaoEvent;
 use App\Http\Controllers\Admin\HomologacaoController;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class NotificaUsuarioChamadoEmHomologacao
 {

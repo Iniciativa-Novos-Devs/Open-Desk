@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\CacheManagers\RoleCache;
+use App\Http\Controllers\Controller;
 use App\Models\Usuario;
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Role;
-use Auth;
 
 class UsuarioController extends Controller
 {
@@ -16,11 +16,11 @@ class UsuarioController extends Controller
     {
         Route::prefix('usuarios')->group(function () {
             Route::get('/', [self::class, 'index'])->name('usuarios.index');
-            Route::get('/show/{usuario_id}',    [self::class, 'show'])->name('usuarios.show');
-            Route::get('/edit/{usuario_id}',    [self::class, 'edit'])->name('usuarios.edit');
-            Route::get('/delete/{usuario_id}',  [self::class, 'destroy'])->name('usuarios.delete');
+            Route::get('/show/{usuario_id}', [self::class, 'show'])->name('usuarios.show');
+            Route::get('/edit/{usuario_id}', [self::class, 'edit'])->name('usuarios.edit');
+            Route::get('/delete/{usuario_id}', [self::class, 'destroy'])->name('usuarios.delete');
             Route::post('/update/{usuario_id}', [self::class, 'update'])->name('usuarios.update');
-            Route::post('/store',               [self::class, 'store'])->name('usuarios.store');
+            Route::post('/store', [self::class, 'store'])->name('usuarios.store');
             UserMassiveImportController::routes();
         });
     }
@@ -55,12 +55,12 @@ class UsuarioController extends Controller
         ];
 
         return view('admin.usuarios.index', [
-            'usuarios'  => Usuario::paginate(10),
-            'columns'   => [
+            'usuarios' => Usuario::paginate(10),
+            'columns' => [
                 'id' => 'ID',
                 'name' => 'Nome',
             ],
-            'actions'   => $actions,
+            'actions' => $actions,
         ]);
     }
 
@@ -94,8 +94,7 @@ class UsuarioController extends Controller
     public function show($usuario_id)
     {
         $usuario = Usuario::find($usuario_id);
-        if (!$usuario)
-        {
+        if (! $usuario) {
             return redirect()->route('usuarios.index')->with('error', __('User not found'));
         }
 
@@ -112,25 +111,23 @@ class UsuarioController extends Controller
      */
     public function edit($usuario_id)
     {
-        if ($usuario_id == \Auth::user()->id)
-        {
+        if ($usuario_id == \Auth::user()->id) {
             return redirect()->route('usuarios.index')->with('error', __('You can not edit your own user'));
         }
 
-        $usuario        = Usuario::with('roles')->where('id', $usuario_id)->first();
-        $usuario_roles  = $usuario->roles->pluck('name');
+        $usuario = Usuario::with('roles')->where('id', $usuario_id)->first();
+        $usuario_roles = $usuario->roles->pluck('name');
 
         $roles = RoleCache::all();
 
-        if (!$usuario)
-        {
+        if (! $usuario) {
             return redirect()->route('usuarios.index')->with('error', __('User not found'));
         }
 
         return view('admin.usuarios.form', [
-            'usuario'       => $usuario,
+            'usuario' => $usuario,
             'usuario_roles' => $usuario_roles,
-            'roles'         => $roles,
+            'roles' => $roles,
         ]);
     }
 
@@ -144,36 +141,33 @@ class UsuarioController extends Controller
     public function update(Request $request, $usuario_id)
     {
         $usuario = Usuario::where('id', $usuario_id)->first();
-        if (!$usuario)
-        {
+        if (! $usuario) {
             return redirect()->route('usuarios.index')->with('error', __('User not found'));
         }
 
         $user_roles = $request->input('user_roles');
 
-        if($user_roles && is_array($user_roles))
-        {
+        if ($user_roles && is_array($user_roles)) {
             $user_roles = collect($user_roles);
 
-            if($user_roles->contains('super-admin') && !Auth::user()->hasRole('super-admin'))
-            {
-                $user_roles = $user_roles->filter(function($role) {
+            if ($user_roles->contains('super-admin') && ! Auth::user()->hasRole('super-admin')) {
+                $user_roles = $user_roles->filter(function ($role) {
                     return $role != 'super-admin';
                 });
             }
 
             $roles = Role::whereIn('name', $user_roles->all())->select('name')->get()->pluck('name');
 
-            if($roles)
+            if ($roles) {
                 $usuario->syncRoles($roles);
+            }
         }
 
         $usuario->name = $request->name;
         $usuario->email = $request->email;
         $saved = $usuario->save();
 
-        if ($saved)
-        {
+        if ($saved) {
             return redirect()->route('usuarios.index')->with('success', __('User updated successfully'));
         }
 
@@ -189,16 +183,17 @@ class UsuarioController extends Controller
     public function destroy($usuario_id)
     {
         $usuario = Usuario::find($usuario_id);
-        if (!$usuario)
-        {
+        if (! $usuario) {
             return redirect()->route('usuarios.index')->with('error', __('User not found'));
         }
 
-        if($usuario->hasAnyRole(['admin', 'super-admin']))
+        if ($usuario->hasAnyRole(['admin', 'super-admin'])) {
             return redirect()->route('usuarios.index')->with('error', __('Admin user can not be deleted'));
+        }
 
-        if (\Auth::user()->id != $usuario->id)
+        if (\Auth::user()->id != $usuario->id) {
             return redirect()->route('usuarios.index')->with('error', __('The logged user can not be deleted'));
+        }
 
         $usuario->delete();
 

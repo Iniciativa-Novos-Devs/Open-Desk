@@ -21,8 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(AreaSeeder::class);
         $this->call(UsuarioSeeder::class);
 
-        if(env('APP_ENV') != 'production')//Seeders apenas de ambiente for diferente de production
-        {
+        if (env('APP_ENV') != 'production') {//Seeders apenas de ambiente for diferente de production
             $this->call(TipoProblemaSeeder::class);
             $this->call(AtividadeSeeder::class);
             $this->call(ProblemaSeeder::class);

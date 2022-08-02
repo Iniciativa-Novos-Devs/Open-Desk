@@ -4,28 +4,34 @@ namespace App\Http\Livewire;
 
 use App\Enums\StatusEnum;
 use App\Models\Chamado;
+use Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
-use Auth;
 
 class HomologacaoIndex extends Component
 {
     use WithPagination;
 
-    public $order_by      = 'finished_at';
-    public $order_dir     = 'DESC';
+    public $order_by = 'finished_at';
+
+    public $order_dir = 'DESC';
+
     public $items_by_page = 10;
-    public $usuario       = null;
-    public $filtro        = null;
-    public $filtro_input  = null;
+
+    public $usuario = null;
+
+    public $filtro = null;
+
+    public $filtro_input = null;
 
     public function mount()
     {
-        $this->usuario     = Auth::user();
-        if(!$this->usuario)
-            return redirect()->route('dashboard')->with('error', 'Usuario não autenticado');//FIX isso vai dar erro
+        $this->usuario = Auth::user();
+        if (! $this->usuario) {
+            return redirect()->route('dashboard')->with('error', 'Usuario não autenticado');
+        }//FIX isso vai dar erro
 
-        $this->filtro  = $filtro_input = request()->input('filtro') ?? 'pendentes';
+        $this->filtro = $filtro_input = request()->input('filtro') ?? 'pendentes';
     }
 
     public function render()
@@ -38,22 +44,24 @@ class HomologacaoIndex extends Component
 
     public function getChamados()
     {
-        $chamados   = Chamado::where('usuario_id', $this->usuario->id);
+        $chamados = Chamado::where('usuario_id', $this->usuario->id);
 
         $chamados->whereIn('status', [StatusEnum::EM_HOMOLOGACAO, StatusEnum::HOMOLOGADO]);
 
         $chamados->with([
-            'atendente' => function($query) {
-                $query->select('id','name',);
+            'atendente' => function ($query) {
+                $query->select('id', 'name', );
             },
         ])
         ->orderBy($this->order_by, $this->order_dir);
 
-        if($this->filtro == 'pendentes')
+        if ($this->filtro == 'pendentes') {
             $chamados = $chamados->whereNull('homologado_em');
+        }
 
-        if($this->filtro == 'homologados')
+        if ($this->filtro == 'homologados') {
             $chamados = $chamados->whereNotNull('homologado_em');
+        }
 
         return $chamados;
     }
@@ -61,12 +69,12 @@ class HomologacaoIndex extends Component
     public function changeOrderBy(string $order_by = null)
     {
         //Valida se um campo pelo qual deseja ordenar existe na model
-        $model              = new Chamado;
-        $dates              = array_merge(array_keys($model->getAttributes()), $model->getDates());
-        $accepted_order_by  = array_merge($model->getFillable(), $dates);
+        $model = new Chamado;
+        $dates = array_merge(array_keys($model->getAttributes()), $model->getDates());
+        $accepted_order_by = array_merge($model->getFillable(), $dates);
 
-        $this->order_by     = in_array($order_by, $accepted_order_by) ? $order_by : 'id';
-        $this->order_dir    = $this->order_dir == 'DESC' ? 'ASC' : 'DESC';
+        $this->order_by = in_array($order_by, $accepted_order_by) ? $order_by : 'id';
+        $this->order_dir = $this->order_dir == 'DESC' ? 'ASC' : 'DESC';
     }
 
     public function getFiltros()

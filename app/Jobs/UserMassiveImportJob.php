@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Models\MassiveImport;
 use App\Runners\MassiveImporterRun;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -34,8 +33,7 @@ class UserMassiveImportJob implements ShouldQueue
      */
     public function handle()
     {
-        if(!$this->massive_import || !$this->massive_import instanceof MassiveImport)
-        {
+        if (! $this->massive_import || ! $this->massive_import instanceof MassiveImport) {
             return;
         }
 

@@ -9,14 +9,16 @@ use Livewire\Component;
 class ChamadoProblemaAreaSelect extends Component
 {
     public $atividades_area;
+
     public $atividade_id = null;
+
     public $problema_id = null;
 
     public function mount()
     {
-        $this->atividade_id     = old('atividade_id') ?? null;
-        $this->problema_id      = old('problema_id')  ?? null;
-        $this->atividades_area  = Atividade::select('id', 'nome', 'area_id')->get();
+        $this->atividade_id = old('atividade_id') ?? null;
+        $this->problema_id = old('problema_id') ?? null;
+        $this->atividades_area = Atividade::select('id', 'nome', 'area_id')->get();
     }
 
     public function render()
@@ -28,9 +30,10 @@ class ChamadoProblemaAreaSelect extends Component
 
     private function getProblemas()
     {
-        if ($this->atividade_id && is_numeric($this->atividade_id))
+        if ($this->atividade_id && is_numeric($this->atividade_id)) {
             return Problema::where('atividade_area_id', $this->atividade_id)->select('id', 'descricao');
-        else
+        } else {
             return Problema::select('id', 'descricao');
+        }
     }
 }

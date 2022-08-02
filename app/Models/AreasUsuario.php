@@ -9,9 +9,9 @@ class AreasUsuario extends Model
 {
     use HasFactory;
 
-    protected $table        = 'hd_areas_usuarios';
+    protected $table = 'hd_areas_usuarios';
 
-    protected $fillable     = [
+    protected $fillable = [
         'usuario_id',
         'area_id',
     ];
@@ -20,14 +20,13 @@ class AreasUsuario extends Model
     {
         parent::boot();
 
-        self::creating(function($model) {
+        self::creating(function ($model) {
             $existent_data = $model
                 ->where('usuario_id', $model->usuario_id)
                 ->where('area_id', $model->area_id)
                 ->first();
 
-            if($existent_data)
-            {
+            if ($existent_data) {
                 return false;
             }
         });

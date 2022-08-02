@@ -10,20 +10,20 @@ class RedirectController extends Controller
 {
     public static function routes()
     {
-        ##-----------------------------------------------------------------------------------
-        ## Rotas de Auth desabilitadas
+        //#-----------------------------------------------------------------------------------
+        //# Rotas de Auth desabilitadas
         Route::match(['GET', 'POST'], '/register', [self::class, 'disabledRedirectToLogin'])->name('register');
-        Route::get('/forgot-password',             [self::class, 'disabledRedirectToLogin'])->name('password.request');
-        Route::post( '/forgot-password',           [self::class, 'disabledRedirectToLogin'])->name('password.email');
+        Route::get('/forgot-password', [self::class, 'disabledRedirectToLogin'])->name('password.request');
+        Route::post('/forgot-password', [self::class, 'disabledRedirectToLogin'])->name('password.email');
 
-        ##-----------------------------------------------------------------------------------
-        ## Outras rotas redirecionadas
+        //#-----------------------------------------------------------------------------------
+        //# Outras rotas redirecionadas
     }
 
     /**
      * function disabledRedirectToLogin
      *
-     * @param Request $request
+     * @param  Request  $request
      */
     public function disabledRedirectToLogin(Request $request)
     {

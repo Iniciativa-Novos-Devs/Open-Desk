@@ -16,14 +16,14 @@ class RedirectToBaseHostMiddleware
      */
     public function handle(Request $request, Closure $next)
     {
-        if(config('app.redirect_to_base_host', false))
-        {
-            $base_host  = config('app.base_host');
-            $app_url    = config('app.url');
-            $host       = $request->getHost();
+        if (config('app.redirect_to_base_host', false)) {
+            $base_host = config('app.base_host');
+            $app_url = config('app.url');
+            $host = $request->getHost();
 
-            if($base_host !== $host)
+            if ($base_host !== $host) {
                 return redirect($app_url);
+            }
         }
 
         return $next($request);

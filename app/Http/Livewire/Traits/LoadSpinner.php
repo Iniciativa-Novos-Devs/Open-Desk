@@ -2,8 +2,6 @@
 
 namespace App\Http\Livewire\Traits;
 
-use Livewire\Component;
-
 trait LoadSpinner
 {
     public function openSpinner()

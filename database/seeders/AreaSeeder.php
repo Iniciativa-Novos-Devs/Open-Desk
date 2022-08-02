@@ -16,17 +16,16 @@ class AreaSeeder extends Seeder
     {
         $areas = [
             [
-                'sigla'  => 'DPAT',
-                'nome'   => 'Patrimônio',
+                'sigla' => 'DPAT',
+                'nome' => 'Patrimônio',
             ],
             [
-                'sigla'  => 'NTC',
-                'nome'   => 'Núcleo de tomada de contas',
+                'sigla' => 'NTC',
+                'nome' => 'Núcleo de tomada de contas',
             ],
         ];
 
-        foreach ($areas as $area)
-        {
+        foreach ($areas as $area) {
             Area::updateOrCreate(
                 ['sigla' => $area['sigla']],
                 $area

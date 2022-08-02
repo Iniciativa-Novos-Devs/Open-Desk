@@ -60,16 +60,18 @@ class Chamado extends Model
 
     public function getStatusNameAttribute()
     {
-        if(!$this->status ?? null)
+        if (! $this->status ?? null) {
             return null;
+        }
 
         return StatusEnum::getValue($this->status);
     }
 
     public function getOrigemAttribute()
     {
-        if(!$this->origem_do_problema ?? null)
+        if (! $this->origem_do_problema ?? null) {
             return null;
+        }
 
         return OrigemDoProblemaEnum::getValue($this->origem_do_problema);
     }
@@ -116,5 +118,4 @@ class Chamado extends Model
     {
         return $this->hasMany(ChamadoLog::class);
     }
-
 }

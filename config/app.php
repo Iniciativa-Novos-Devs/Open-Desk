@@ -53,7 +53,7 @@ return [
     */
 
     'base_host' => env('BASE_HOST', 'localhost'),
-    'redirect_to_base_host' => !! env('REDIRECT_TO_BASE_HOST', false),
+    'redirect_to_base_host' => (bool) env('REDIRECT_TO_BASE_HOST', false),
 
     'url' => env('APP_URL', 'http://localhost'),
 

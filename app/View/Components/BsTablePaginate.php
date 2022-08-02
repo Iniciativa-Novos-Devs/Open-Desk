@@ -3,12 +3,13 @@
 namespace App\View\Components;
 
 use Arr;
-use Illuminate\View\Component;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\View\Component;
 
 class BsTablePaginate extends Component
 {
     public LengthAwarePaginator $paginated_data;
+
     public array $columns;
 
     /**
@@ -18,11 +19,10 @@ class BsTablePaginate extends Component
      */
     public function __construct(LengthAwarePaginator $data, array $columns, array $actions = [])
     {
-        $this->paginated_data   = $data;
-        $this->actions          = $actions;
+        $this->paginated_data = $data;
+        $this->actions = $actions;
 
-        if(!$columns || !Arr::isAssoc($columns))
-        {
+        if (! $columns || ! Arr::isAssoc($columns)) {
             throw new \Exception(__('Columns must be an associative array'));
         }
 
@@ -45,7 +45,7 @@ class BsTablePaginate extends Component
      * @param Type type
      * @return
      */
-    public function actions() :array
+    public function actions(): array
     {
         $actions = $this->actions ?? [
             [

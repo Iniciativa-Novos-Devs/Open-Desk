@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\Usuario;
-use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
@@ -16,7 +15,7 @@ class PasswordResetTest extends TestCase
     {
         $response = $this->get('/forgot-password');
 
-        $response->assertStatus(302);//Recurso desabilitado por segurança
+        $response->assertStatus(302); //Recurso desabilitado por segurança
         $response->assertRedirect(route('login'));
     }
 
@@ -28,7 +27,7 @@ class PasswordResetTest extends TestCase
 
         $response = $this->post('/forgot-password', ['email' => $user->email]);
 
-        $response->assertStatus(302);//Recurso desabilitado por segurança
+        $response->assertStatus(302); //Recurso desabilitado por segurança
         $response->assertRedirect(route('login'));
     }
 
@@ -40,7 +39,7 @@ class PasswordResetTest extends TestCase
 
         $response = $this->post('/forgot-password', ['email' => $user->email]);
 
-        $response->assertStatus(302);//Recurso desabilitado por segurança
+        $response->assertStatus(302); //Recurso desabilitado por segurança
         $response->assertRedirect(route('login'));
     }
 
@@ -52,7 +51,7 @@ class PasswordResetTest extends TestCase
 
         $response = $this->post('/forgot-password', ['email' => $user->email]);
 
-        $response->assertStatus(302);//Recurso desabilitado por segurança
+        $response->assertStatus(302); //Recurso desabilitado por segurança
         $response->assertRedirect(route('login'));
     }
 }

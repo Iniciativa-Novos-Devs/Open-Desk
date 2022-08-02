@@ -11,7 +11,7 @@ class ChamadoLog extends Model
 
     protected $table = 'hd_chamado_logs';
 
-    protected $fillable     = [
+    protected $fillable = [
         'content',
         'type',
         'chamado_id',

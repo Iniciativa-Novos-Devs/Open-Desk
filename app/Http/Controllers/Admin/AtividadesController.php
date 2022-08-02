@@ -15,38 +15,40 @@ class AtividadesController extends Controller
         return view('atividades.index');
     }
 
-
     public function edit($id)
     {
         $atividade = Atividade::where('id', $id)->first();
 
-        if(!$atividade)
+        if (! $atividade) {
             return redirect()->route('atividades_index')->with('error', 'Esta atividade não existe');
+        }
+
         return view('atividades.form', [
             'atividade' => $atividade,
-            'id'        => $id,
+            'id' => $id,
         ]);
     }
 
     public function add($area_id = null)
     {
         return view('atividades.form', [
-            'area_id'   => $area_id,
-            'areas'     => Area::select('id', 'sigla', 'nome')->get(),
+            'area_id' => $area_id,
+            'areas' => Area::select('id', 'sigla', 'nome')->get(),
         ]);
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nome'      => 'required|min:3|max:50|string',
-            'area_id'   => 'required|numeric|exists:hd_areas,id',
+            'nome' => 'required|min:3|max:50|string',
+            'area_id' => 'required|numeric|exists:hd_areas,id',
         ]);
 
         $atividade = Atividade::where('id', $id)->first();
 
-        if(!$atividade)
+        if (! $atividade) {
             return redirect()->route('atividades_index')->with('error', 'Esta atividade não existe');
+        }
 
         $atividade->update([
             'nome' => $request->input('nome'),
@@ -60,8 +62,9 @@ class AtividadesController extends Controller
     {
         $atividade = Atividade::where('id', $id)->first();
 
-        if(!$atividade)
+        if (! $atividade) {
             return redirect()->route('atividades_index')->with('error', 'Esta atividade não existe');
+        }
 
         $atividade->delete();
 
@@ -92,5 +95,4 @@ class AtividadesController extends Controller
         Route::post('/atividades/store', [AtividadesController::class, 'store'])->name('atividades_store');
         Route::get('/atividades/{id}/delete', [AtividadesController::class, 'delete'])->name('atividades_delete');
     }
-
 }

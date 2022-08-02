@@ -8,8 +8,9 @@ abstract class AbstractEnum
 
     public static function getValue(int $state_enum)
     {
-        if(static::isValidState($state_enum))
+        if (static::isValidState($state_enum)) {
             return static::$humans[$state_enum];
+        }
 
         return null;
     }

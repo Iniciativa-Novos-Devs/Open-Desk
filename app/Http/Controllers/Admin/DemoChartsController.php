@@ -3,18 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Libs\Helpers\ColorGenerator;
+use Illuminate\Http\Request;
 
 class DemoChartsController extends Controller
 {
-
     public function demoCharts(Request $request)
     {
         $charts['line'] = [
             'title' => 'Line Chart',
             'class' => 'col-md-6 col-sm-12',
-            'chart' => $this->fakeChart('line')
+            'chart' => $this->fakeChart('line'),
         ];
 
         $charts['bar'] = [
@@ -27,22 +26,22 @@ class DemoChartsController extends Controller
                 ->labels(['Label x', 'Label y'])
                 ->datasets([
                     [
-                        "label" => "My First dataset",
+                        'label' => 'My First dataset',
                         'backgroundColor' => $colors = ColorGenerator::generateArrayOfColors(2),
-                        'data' => [69, 59]
+                        'data' => [69, 59],
                     ],
                     [
-                        "label" => "My First dataset",
+                        'label' => 'My First dataset',
                         'backgroundColor' => $colors,
-                        'data' => [65, 12]
-                    ]
+                        'data' => [65, 12],
+                    ],
                 ])
-                ->options([])
+                ->options([]),
         ];
         $charts['radar'] = [
             'title' => 'Radar Chart',
             'class' => 'col-md-4 col-sm-12',
-            'chart' => $this->fakeChart('radar')
+            'chart' => $this->fakeChart('radar'),
         ];
 
         $charts['pie'] = [
@@ -57,10 +56,10 @@ class DemoChartsController extends Controller
                     [
                         'backgroundColor' => ['#FF6384', '#36A2EB'],
                         'hoverBackgroundColor' => ['#FF6384', '#36A2EB'],
-                        'data' => [69, 59]
-                    ]
+                        'data' => [69, 59],
+                    ],
                 ])
-                ->options([])
+                ->options([]),
         ];
 
         $charts['doughnut'] = [
@@ -75,10 +74,10 @@ class DemoChartsController extends Controller
                     [
                         'backgroundColor' => ['#FF6384', '#36A2EB'],
                         'hoverBackgroundColor' => ['#FF6384', '#36A2EB'],
-                        'data' => [69, 59]
-                    ]
+                        'data' => [69, 59],
+                    ],
                 ])
-                ->options([])
+                ->options([]),
         ];
 
         return view('dashboard.demo_charts', [
@@ -100,25 +99,25 @@ class DemoChartsController extends Controller
             ->labels(['January', 'February', 'March', 'April', 'May', 'June', 'July'])
             ->datasets([
                 [
-                    "label" => "My First dataset",
+                    'label' => 'My First dataset',
                     'backgroundColor' => $color1 = ColorGenerator::randomColor(),
                     'borderColor' => $color1,
-                    "pointBorderColor" => $color1,
-                    "pointBackgroundColor" => $color1,
-                    "pointHoverBackgroundColor" => "#fff",
-                    "pointHoverBorderColor" => "rgba(220,220,220,1)",
+                    'pointBorderColor' => $color1,
+                    'pointBackgroundColor' => $color1,
+                    'pointHoverBackgroundColor' => '#fff',
+                    'pointHoverBorderColor' => 'rgba(220,220,220,1)',
                     'data' => [65, 59, 80, 81, 56, 55, 40],
                 ],
                 [
-                    "label" => "My Second dataset",
+                    'label' => 'My Second dataset',
                     'backgroundColor' => $color2 = ColorGenerator::randomColor(),
                     'borderColor' => $color2,
-                    "pointBorderColor" => $color2,
-                    "pointBackgroundColor" => $color2,
-                    "pointHoverBackgroundColor" => "#fff",
-                    "pointHoverBorderColor" => "rgba(220,220,220,1)",
+                    'pointBorderColor' => $color2,
+                    'pointBackgroundColor' => $color2,
+                    'pointHoverBackgroundColor' => '#fff',
+                    'pointHoverBorderColor' => 'rgba(220,220,220,1)',
                     'data' => [12, 33, 44, 44, 55, 23, 40],
-                ]
+                ],
             ])
             ->options([]);
     }

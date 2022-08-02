@@ -20,7 +20,6 @@ class AreaController extends Controller
     {
         $areas = Area::select('id', 'nome', 'sigla')->paginate(20);
 
-
         return view('areas.index', [
             'areas' => $areas,
         ]);
@@ -28,15 +27,16 @@ class AreaController extends Controller
 
     public function show($area_id)
     {
-        $area       = Area::with('atendentes')->find($area_id);
+        $area = Area::with('atendentes')->find($area_id);
 
-        if(!$area)
+        if (! $area) {
             return redirect()->route('dashboard')->with('error', 'Área não encontrada');
+        }
 
         $atendentes = Usuario::whereNotIn('id', $area->atendentes->pluck('id'))->select('id', 'name', 'email')->get();
 
         return view('areas.show', [
-            'area'       => $area,
+            'area' => $area,
             'atendentes' => $atendentes,
         ]);
     }

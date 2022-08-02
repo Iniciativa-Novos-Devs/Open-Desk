@@ -34,8 +34,9 @@ class AuthenticatedSessionController extends Controller
 
         $cps_enabled = config('cps.enabled', true);
 
-        if($cps_enabled)
+        if ($cps_enabled) {
             return redirect()->route('valida_usuario_cps')->with(['success' => 'Validação primária validada com sucesso. Favor colocar seu e-mail e senha do CPS']);
+        }
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }

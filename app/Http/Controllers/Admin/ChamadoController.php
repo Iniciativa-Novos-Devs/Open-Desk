@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\NovoChamadoMailJob;
+use App\Mail\NovoChamadoMail;
+use App\Models\Anexo;
 use App\Models\Chamado;
 use App\Models\Usuario;
 use Illuminate\Http\Request;
-use App\Mail\NovoChamadoMail;
-use App\Models\Anexo;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
@@ -55,7 +55,7 @@ class ChamadoController extends Controller
             },
         ])->where('id', $chamado_id)->first();
 
-        if (!$chamado) {
+        if (! $chamado) {
             return redirect()->route('chamados_index')->with('error', 'Chamado não encontrado');
         }
 
@@ -78,7 +78,7 @@ class ChamadoController extends Controller
 
         $usuario = Usuario::where('email', $user->email)->first();
 
-        if (!$usuario) { //TODO validar se o usuário tem a permissão de criar chamados
+        if (! $usuario) { //TODO validar se o usuário tem a permissão de criar chamados
             return redirect()->route('chamados_index')->with('success', 'Usuario sem permissão para criar chamados');
         }
 
@@ -116,7 +116,7 @@ class ChamadoController extends Controller
 
         $chamado = Chamado::create($novo_chamado);
 
-        if (!$chamado) {
+        if (! $chamado) {
             return redirect()->route('chamados_index')->with('error', 'O chamado não pode ser criado');
         }
 
@@ -131,7 +131,7 @@ class ChamadoController extends Controller
 
     public static function enviaEmailNovoChamado(Chamado $chamado)
     {
-        if (!config('chamados.email.delivery_emails', true)) {
+        if (! config('chamados.email.delivery_emails', true)) {
             return;
         }
 
@@ -146,26 +146,25 @@ class ChamadoController extends Controller
      * function deleteAtachment.
      *
      * @param $chamado_id, $atachment_id
-     *
      * @return
      */
     public function deleteAtachment($chamado_id, $atachment_id)
     {
         $chamado = Chamado::where('id', $chamado_id)->first();
 
-        if (!$chamado) {
+        if (! $chamado) {
             return redirect()->route('chamados_show', $chamado_id)->with('error', 'Chamado não encontrado');
         }
 
         $atachment = $chamado->anexos->firstWhere('id', $atachment_id);
 
-        if (!$atachment || !($atachment['id'] ?? null)) {
+        if (! $atachment || ! ($atachment['id'] ?? null)) {
             return redirect()->route('chamados_show', $chamado_id)->with('error', 'Anexo inválido');
         }
 
         $anexo = Anexo::where('id', $atachment['id'])->first();
 
-        if (!$anexo) {
+        if (! $anexo) {
             return redirect()->route('chamados_show', $chamado_id)->with('error', 'Anexo não encontrado');
         }
 

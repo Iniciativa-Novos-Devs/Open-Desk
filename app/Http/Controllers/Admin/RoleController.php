@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
 use App\CacheManagers\RoleCache;
-use Illuminate\Support\Facades\Cache;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Role;
 use Permission;
-use Auth;
+use Role;
 
 class RoleController extends Controller
 {
@@ -17,11 +15,11 @@ class RoleController extends Controller
     {
         Route::prefix('papeis')->group(function () {
             Route::get('/', [self::class, 'index'])->name('roles.index');
-            Route::get('/show/{usuario_id}',    [self::class, 'show'])->name('roles.show');
-            Route::get('/edit/{usuario_id}',    [self::class, 'edit'])->name('roles.edit');
-            Route::get('/delete/{usuario_id}',  [self::class, 'destroy'])->name('roles.delete');
+            Route::get('/show/{usuario_id}', [self::class, 'show'])->name('roles.show');
+            Route::get('/edit/{usuario_id}', [self::class, 'edit'])->name('roles.edit');
+            Route::get('/delete/{usuario_id}', [self::class, 'destroy'])->name('roles.delete');
             Route::post('/update/{usuario_id}', [self::class, 'update'])->name('roles.update');
-            Route::post('/store',               [self::class, 'store'])->name('roles.store');
+            Route::post('/store', [self::class, 'store'])->name('roles.store');
         });
     }
 
@@ -55,12 +53,12 @@ class RoleController extends Controller
         ];
 
         return view('admin.roles.index', [
-            'roles'  => Role::paginate(10),
-            'columns'   => [
+            'roles' => Role::paginate(10),
+            'columns' => [
                 'id' => 'ID',
                 'name' => 'Nome',
             ],
-            'actions'   => $actions,
+            'actions' => $actions,
         ]);
     }
 
@@ -93,41 +91,39 @@ class RoleController extends Controller
      */
     public function show($role_id)
     {
-        if (!is_numeric($role_id))
-        {
+        if (! is_numeric($role_id)) {
             return redirect()->route('roles.index')->with('error', __('Invalid :item', ['item' => __('Role')]));
         }
 
         $role = RoleCache::getById((int) $role_id);
 
-        if (!$role)
-        {
+        if (! $role) {
             return redirect()->route('roles.index')->with('error', __(':item not found', ['item' => __('Role')]));
         }
 
-        $role_permissions   = $role->permissions->pluck('name');
-        $permissions        = Permission::select('id', 'name')->get();
+        $role_permissions = $role->permissions->pluck('name');
+        $permissions = Permission::select('id', 'name')->get();
 
         $items = [];
-        foreach($permissions as $permission)
-        {
+        foreach ($permissions as $permission) {
             $sufixo = explode('-', $permission->name)[0] ?? null;
 
             $f_permission = [
                 'id' => $permission->id,
                 'name' => $permission->name,
-                'checked' => $role_permissions->contains($permission->name)
+                'checked' => $role_permissions->contains($permission->name),
             ];
 
-            if($sufixo)
+            if ($sufixo) {
                 $items[$sufixo][] = $f_permission;
-            else
+            } else {
                 $items[$permission][] = $f_permission;
+            }
         }
 
         return view('admin.roles.show', [
-            'role'      => $role,
-            'items'     => $items,
+            'role' => $role,
+            'items' => $items,
             'role_show' => true,
         ]);
     }
@@ -140,40 +136,38 @@ class RoleController extends Controller
      */
     public function edit($role_id)
     {
-        if (!is_numeric($role_id))
-        {
+        if (! is_numeric($role_id)) {
             return redirect()->route('roles.index')->with('error', __('Invalid :item', ['item' => __('Role')]));
         }
 
         $role = RoleCache::getById((int) $role_id);
 
-        if (!$role)
-        {
+        if (! $role) {
             return redirect()->route('roles.index')->with('error', __(':item not found', ['item' => __('Role')]));
         }
 
-        $role_permissions   = $role->permissions->pluck('name');
-        $permissions        = Permission::select('id', 'name')->get();
+        $role_permissions = $role->permissions->pluck('name');
+        $permissions = Permission::select('id', 'name')->get();
 
         $items = [];
-        foreach($permissions as $permission)
-        {
+        foreach ($permissions as $permission) {
             $sufixo = explode('-', $permission->name)[0] ?? null;
 
             $f_permission = [
                 'id' => $permission->id,
                 'name' => $permission->name,
-                'checked' => $role_permissions->contains($permission->name)
+                'checked' => $role_permissions->contains($permission->name),
             ];
 
-            if($sufixo)
+            if ($sufixo) {
                 $items[$sufixo][] = $f_permission;
-            else
+            } else {
                 $items[$permission][] = $f_permission;
+            }
         }
 
         return view('admin.roles.form', [
-            'role'  => $role,
+            'role' => $role,
             'items' => $items,
         ]);
     }
@@ -189,26 +183,23 @@ class RoleController extends Controller
     {
         $role = Role::where('id', $role_id)->first();
 
-        if (!$role)
-        {
+        if (! $role) {
             return redirect()->route('roles.index')->with('error', __(':item not found', ['item' => __('Role')]));
         }
 
         $permisssions = $request->input('permissions');
 
-        if($permisssions && is_array($permisssions))
-        {
+        if ($permisssions && is_array($permisssions)) {
             $permisssions = Permission::whereIn('name', $permisssions)->select('id', 'name')->get();
 
             $role->syncPermissions($permisssions->pluck('name')->all());
         }
 
-        $saved          = $role->save();
+        $saved = $role->save();
 
         RoleCache::getById((int) $role_id, true, true);
 
-        if ($saved)
-        {
+        if ($saved) {
             return redirect()->route('roles.index')->with('success', __(':item updated successfully', ['item' => __('Role')]));
         }
 
@@ -224,16 +215,17 @@ class RoleController extends Controller
     public function destroy($role_id)
     {
         $role = Usuario::find($role_id);
-        if (!$role)
-        {
+        if (! $role) {
             return redirect()->route('roles.index')->with('error', __('User not found'));
         }
 
-        if($role->hasAnyRole(['admin', 'super-admin']))
+        if ($role->hasAnyRole(['admin', 'super-admin'])) {
             return redirect()->route('roles.index')->with('error', __('Admin user can not be deleted'));
+        }
 
-        if (\Auth::user()->id != $role->id)
+        if (\Auth::user()->id != $role->id) {
             return redirect()->route('roles.index')->with('error', __('The logged user can not be deleted'));
+        }
 
         $role->delete();
 

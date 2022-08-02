@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'site_title'        => env('APP_NAME', 'Help Desk'),
+    'site_title' => env('APP_NAME', 'Help Desk'),
 
     //URL assinada para homologação de chamado
     'signed_url' => [

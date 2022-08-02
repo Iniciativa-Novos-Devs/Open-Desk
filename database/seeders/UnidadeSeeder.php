@@ -17,41 +17,37 @@ class UnidadeSeeder extends Seeder
     {
         $unidades = [
             [
-                'nome'    => 'Administração Central',
-                'ue'      => '001',
-                'cidade'  => 'São Paulo',
+                'nome' => 'Administração Central',
+                'ue' => '001',
+                'cidade' => 'São Paulo',
             ],
         ];
 
-        if(env('APP_ENV') != 'production')
-        {
-            foreach(range(1, 10) as $_i)
-            {
+        if (env('APP_ENV') != 'production') {
+            foreach (range(1, 10) as $_i) {
                 $unidades[] = [
-                    'nome'    => 'Unidade '. Str::random(10),
-                    'ue'      => Str::random(3),
-                    'cidade'  => Str::random(5).' '.Str::random(5),
+                    'nome' => 'Unidade '.Str::random(10),
+                    'ue' => Str::random(3),
+                    'cidade' => Str::random(5).' '.Str::random(5),
                 ];
             }
         }
 
-        foreach ($unidades as $unidade)
-        {
+        foreach ($unidades as $unidade) {
             if (
-                !($unidade['nome'] ?? null) ||
-                !($unidade['ue'] ?? null)
-            )
-            {
+                ! ($unidade['nome'] ?? null) ||
+                ! ($unidade['ue'] ?? null)
+            ) {
                 continue;
             }
 
             $newData = [
-                'ue'      => $unidade['ue']      ?? null,
-                'nome'    => $unidade['nome']    ?? null,
-                'cidade'  => $unidade['cidade']  ?? null,
+                'ue' => $unidade['ue'] ?? null,
+                'nome' => $unidade['nome'] ?? null,
+                'cidade' => $unidade['cidade'] ?? null,
                 'diretor' => $unidade['diretor'] ?? null,
                 'dir_adm' => $unidade['dir_adm'] ?? null,
-                'versao'  => 1,
+                'versao' => 1,
             ];
 
             Unidade::updateOrCreate([

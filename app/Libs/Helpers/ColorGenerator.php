@@ -4,13 +4,11 @@ namespace App\Libs\Helpers;
 
 class ColorGenerator
 {
-
-    public static function randomColor(string|null $type = 'rgb') :string
+    public static function randomColor(string|null $type = 'rgb'): string
     {
         $types = ['rgb', 'hex'];
 
-        if (!in_array($type, $types))
-        {
+        if (! in_array($type, $types)) {
             $type = 'rgb';
         }
 
@@ -28,18 +26,16 @@ class ColorGenerator
 
     public static function randomHexColor()
     {
-        return '#' . substr(str_shuffle('ABCDEF0123456789'), 0, 6);
+        return '#'.substr(str_shuffle('ABCDEF0123456789'), 0, 6);
     }
 
-    public static function generateArrayOfColors(int $quantity, string|null $type = 'rgb') :array
+    public static function generateArrayOfColors(int $quantity, string|null $type = 'rgb'): array
     {
         $colors = [];
-        for ($i = 0; $i < $quantity;)
-        {
+        for ($i = 0; $i < $quantity;) {
             $color = static::randomColor($type);
 
-            if(!in_array($color, $colors))
-            {
+            if (! in_array($color, $colors)) {
                 $colors[] = $color;
                 $i++;
             }

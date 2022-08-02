@@ -9,9 +9,9 @@ class UsuarioRole extends Model
 {
     use HasFactory;
 
-    protected $table        = 'hd_usuario_roles';
+    protected $table = 'hd_usuario_roles';
 
-    protected $fillable     = [
+    protected $fillable = [
         'usuario_id',
         'role_uid',
     ];
@@ -23,7 +23,6 @@ class UsuarioRole extends Model
 
     /**
      * Get all of the usuarios for the UsuarioRole
-     *
      */
     public function usuarios()
     {
@@ -32,7 +31,6 @@ class UsuarioRole extends Model
 
     /**
      * Get the role that owns the UsuarioRole
-     *
      */
     public function role()
     {
@@ -50,5 +48,4 @@ class UsuarioRole extends Model
     {
         return $this->role->uid;
     }
-
 }

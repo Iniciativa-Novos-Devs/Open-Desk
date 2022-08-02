@@ -13,11 +13,11 @@ class UserMassiveImportController extends Controller
 {
     public static function routes()
     {
-        Route::get('massive-import',    [self::class, 'form'])->name('usuarios.massive-import.form');
-        Route::post('massive-import',   [self::class, 'uploadFileAndDispatch'])
+        Route::get('massive-import', [self::class, 'form'])->name('usuarios.massive-import.form');
+        Route::post('massive-import', [self::class, 'uploadFileAndDispatch'])
             ->name('usuarios.massive-import.upload');
 
-        Route::get('massive-import/report',   [self::class, 'importedReportDownload'])
+        Route::get('massive-import/report', [self::class, 'importedReportDownload'])
             ->name('usuarios.massive-import.imported_report_download');
     }
 
@@ -29,15 +29,14 @@ class UserMassiveImportController extends Controller
     /**
      * function importedReportDownload
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return
      */
     public function importedReportDownload(Request $request)
     {
         $lastImportedReport = storage_path('logs/usuarios_cadastrados.xlsx');
 
-        if (file_exists($lastImportedReport))
-        {
+        if (file_exists($lastImportedReport)) {
             return response()->download($lastImportedReport);
         }
     }
@@ -45,7 +44,7 @@ class UserMassiveImportController extends Controller
     /**
      * function form
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return
      */
     public function form(Request $request)
@@ -56,7 +55,7 @@ class UserMassiveImportController extends Controller
     /**
      * function uploadFileAndDispatch
      *
-     * @param Request $request
+     * @param  Request  $request
      * @return
      */
     public function uploadFileAndDispatch(Request $request)
@@ -69,8 +68,7 @@ class UserMassiveImportController extends Controller
 
         $extension = $importSheet->getClientOriginalExtension();
 
-        if (!$extension || !in_array($extension, ['csv', 'xlsx']))
-        {
+        if (! $extension || ! in_array($extension, ['csv', 'xlsx'])) {
             return redirect()->back()->with(
                 'error', __('Error on import file')
             );
@@ -89,8 +87,7 @@ class UserMassiveImportController extends Controller
             'processFile'
         );
 
-        if ($success)
-        {
+        if ($success) {
             return redirect()->route('usuarios.index')->with(
                 'success',
                 __('File uploaded successfully. Wait the finish of import proccess.')
@@ -112,16 +109,14 @@ class UserMassiveImportController extends Controller
         string $importSheetPath,
         string $importerClass,
         string $startClassMethod
-    )
-    {
+    ) {
         $massive_import = static::storeOnDb(
             $importSheetPath,
             $importerClass,
             $startClassMethod
         );
 
-        if(!$massive_import || !$massive_import instanceof MassiveImport)
-        {
+        if (! $massive_import || ! $massive_import instanceof MassiveImport) {
             return false;
         }
 
@@ -133,34 +128,31 @@ class UserMassiveImportController extends Controller
     /**
      * function storeOnDb
      *
-     * @param string $importSheetPath
+     * @param  string  $importSheetPath
      * @return
      */
     protected static function storeOnDb(
         string $importSheetPath,
         string $importerClass,
         string $startClassMethod
-    )
-    {
-        if(!$importSheetPath || !file_exists(storage_path("app/{$importSheetPath}")))
-        {
+    ) {
+        if (! $importSheetPath || ! file_exists(storage_path("app/{$importSheetPath}"))) {
             return false;
         }
 
         $lastImportedReport = storage_path('logs/usuarios_cadastrados.xlsx');
 
-        if (file_exists($lastImportedReport))
-        {
+        if (file_exists($lastImportedReport)) {
             unlink($lastImportedReport);
         }
 
         return MassiveImport::create([
-            'file_path'          => $importSheetPath,
-            'importer_class'     => $importerClass,
+            'file_path' => $importSheetPath,
+            'importer_class' => $importerClass,
             'start_class_method' => $startClassMethod,
-            'started_at'         => null,
-            'finished_at'        => null,
-            'report_file'        => null,
+            'started_at' => null,
+            'finished_at' => null,
+            'report_file' => null,
         ]);
     }
 }

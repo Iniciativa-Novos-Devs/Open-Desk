@@ -2,14 +2,13 @@
 
 namespace App\Libs\Helpers;
 
-use Carbon\Carbon;
-
 class DateHelpers
 {
     public static function dateFormat($date, string $date_format)
     {
-        if(!$date || !self::isRealDate($date))
+        if (! $date || ! self::isRealDate($date)) {
             return null;
+        }
 
         return date($date_format, strtotime($date));
     }
@@ -19,9 +18,8 @@ class DateHelpers
         try {
             $time = strtotime($date);
 
-            return (!! $time) ? true : false;
-        } catch (\Throwable $th)
-        {
+            return ((bool) $time) ? true : false;
+        } catch (\Throwable $th) {
             return false;
         }
 

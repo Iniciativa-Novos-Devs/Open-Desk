@@ -12,10 +12,10 @@ class ProblemaController extends Controller
 {
     public static function routes()
     {
-        Route::get('/problemas/{atividade_id?}',                [self::class, 'index'])->name('problemas_index');
-        Route::get('/problemas/add/atividade/{atividade_id}',   [self::class, 'add'])->name('problemas_add');
-        Route::get('/problemas/delete/{atividade_id}',          [self::class, 'delete'])->name('problemas_delete');
-        Route::post('/problemas/store',                         [self::class, 'store'])->name('problemas_store');
+        Route::get('/problemas/{atividade_id?}', [self::class, 'index'])->name('problemas_index');
+        Route::get('/problemas/add/atividade/{atividade_id}', [self::class, 'add'])->name('problemas_add');
+        Route::get('/problemas/delete/{atividade_id}', [self::class, 'delete'])->name('problemas_delete');
+        Route::post('/problemas/store', [self::class, 'store'])->name('problemas_store');
     }
 
     public function index($atividade_id = null)
@@ -30,21 +30,21 @@ class ProblemaController extends Controller
         $atividades = Atividade::select('id', 'nome')->get();
 
         return view('problemas.add', [
-            'atividades'    => $atividades,
-            'atividade_id'  => $atividade_id,
+            'atividades' => $atividades,
+            'atividade_id' => $atividade_id,
         ]);
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'atividade_id'  => 'required|integer|exists:hd_atividades_area,id',
-            'descricao'     => 'required|string|min:5',
+            'atividade_id' => 'required|integer|exists:hd_atividades_area,id',
+            'descricao' => 'required|string|min:5',
         ]);
 
         Problema::create([
             'atividade_area_id' => $request->input('atividade_id'),
-            'descricao'         => $request->input('descricao'),
+            'descricao' => $request->input('descricao'),
         ]);
 
         return redirect()->route('problemas_index', $request->input('atividade_id'))->with('success', 'Problema criado com sucesso');
@@ -54,8 +54,9 @@ class ProblemaController extends Controller
     {
         $problema = Problema::where('id', $problema_id)->first();
 
-        if(!$problema)
+        if (! $problema) {
             return redirect()->route('problemas_index')->with('error', 'Problema não encontrado');
+        }
 
         $problema->delete();
 

@@ -4,11 +4,11 @@ namespace App\Libs\Helpers;
 
 class GitHashVersion
 {
-    const MAJOR = 1;
+    public const MAJOR = 1;
 
-    const MINOR = 0;
+    public const MINOR = 0;
 
-    const PATCH = 3;
+    public const PATCH = 3;
 
     public static function get()
     {

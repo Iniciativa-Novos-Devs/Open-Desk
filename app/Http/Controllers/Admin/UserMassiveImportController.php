@@ -70,7 +70,8 @@ class UserMassiveImportController extends Controller
 
         if (! $extension || ! in_array($extension, ['csv', 'xlsx'])) {
             return redirect()->back()->with(
-                'error', __('Error on import file')
+                'error',
+                __('Error on import file')
             );
         }
 
@@ -95,7 +96,8 @@ class UserMassiveImportController extends Controller
         }
 
         return redirect()->route('usuarios.massive-import.form')->with(
-            'error', __('Error on import file')
+            'error',
+            __('Error on import file')
         );
     }
 

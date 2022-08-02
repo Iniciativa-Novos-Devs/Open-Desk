@@ -21,7 +21,8 @@ use Str;
 
 class AtendimentosChamadoList extends Component
 {
-    use WithPagination, LoadSpinner;
+    use WithPagination;
+    use LoadSpinner;
 
     protected $select_items;
 
@@ -235,7 +236,7 @@ class AtendimentosChamadoList extends Component
     public function changeOrderBy(string $order_by = null)
     {
         //Valida se um campo pelo qual deseja ordenar existe na model
-        $model = new Chamado;
+        $model = new Chamado();
         $dates = array_merge(array_keys($model->getAttributes()), $model->getDates());
         $accepted_order_by = array_merge($model->getFillable(), $dates);
 
@@ -245,7 +246,7 @@ class AtendimentosChamadoList extends Component
 
     public function changeChamadosAccordionOpenState()
     {
-        (new UserPreferencesController)->changeBooleanState('atendente.chamados_a_atender.keep_accordion_open');
+        (new UserPreferencesController())->changeBooleanState('atendente.chamados_a_atender.keep_accordion_open');
         $this->keep_accordion_open = session()->get('user_preferences.atendente.chamados_a_atender.keep_accordion_open', false);
     }
 
@@ -626,11 +627,13 @@ class AtendimentosChamadoList extends Component
                                         ? $this->getSelectedToTransferName($this->transferencia_para_id) : null;
 
         if ($this->transferencia_para_nome) {
-            $this->toastIt('Alterado para: '
+            $this->toastIt(
+                'Alterado para: '
                             .$this->transferencia_para_nome
                             .' ('.$this->transferencia_para.')',
                 'success',
-                ['preventDuplicates' => true]);
+                ['preventDuplicates' => true]
+            );
         }
     }
 
@@ -688,10 +691,13 @@ class AtendimentosChamadoList extends Component
         }
 
         if ($updated ?? null) {
-            $this->toastIt("concluirTransferencia() 'transferencia_para_id' "
+            $this->toastIt(
+                "concluirTransferencia() 'transferencia_para_id' "
                             .$this->transferencia_para.' id:'
-                            .$this->transferencia_para_id, 'success',
-                ['preventDuplicates' => true]);
+                            .$this->transferencia_para_id,
+                'success',
+                ['preventDuplicates' => true]
+            );
 
             $this->emit('closeModalTransferenciaPorEvent');
 

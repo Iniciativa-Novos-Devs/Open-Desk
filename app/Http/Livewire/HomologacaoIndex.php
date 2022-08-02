@@ -69,7 +69,7 @@ class HomologacaoIndex extends Component
     public function changeOrderBy(string $order_by = null)
     {
         //Valida se um campo pelo qual deseja ordenar existe na model
-        $model = new Chamado;
+        $model = new Chamado();
         $dates = array_merge(array_keys($model->getAttributes()), $model->getDates());
         $accepted_order_by = array_merge($model->getFillable(), $dates);
 

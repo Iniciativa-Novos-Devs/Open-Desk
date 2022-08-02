@@ -12,7 +12,8 @@ use Livewire\WithPagination;
 
 class ChamadoList extends Component
 {
-    use WithPagination, LoadSpinner;
+    use WithPagination;
+    use LoadSpinner;
 
     protected $select_items;
 
@@ -45,15 +46,17 @@ class ChamadoList extends Component
     public function render()
     {
         return view('livewire.chamado-list', [
-            'chamados' => $this->getFilteredChamados([
-                'homologado_em',
-                'atendente_id',
-            ],
+            'chamados' => $this->getFilteredChamados(
+                [
+                    'homologado_em',
+                    'atendente_id',
+                ],
                 [
                     'atendente' => function ($query) {
                         $query->select('id', 'name', );
                     },
-                ])
+                ]
+            )
             ->paginate($this->items_by_page),
         ]);
     }
@@ -149,7 +152,7 @@ class ChamadoList extends Component
     public function changeOrderBy(string $order_by = null)
     {
         //Valida se um campo pelo qual deseja ordenar existe na model
-        $model = new Chamado;
+        $model = new Chamado();
         $dates = array_merge(array_keys($model->getAttributes()), $model->getDates());
         $accepted_order_by = array_merge($model->getFillable(), $dates);
 
@@ -174,7 +177,7 @@ class ChamadoList extends Component
 
     public function changeChamadosAccordionOpenState()
     {
-        (new UserPreferencesController)->changeBooleanState('atendente.chamados_a_atender.keep_accordion_open');
+        (new UserPreferencesController())->changeBooleanState('atendente.chamados_a_atender.keep_accordion_open');
         $this->keep_accordion_open = session()->get('user_preferences.atendente.chamados_a_atender.keep_accordion_open', false);
     }
 

@@ -48,7 +48,7 @@ class ProblemasIndex extends Component
     public function changeOrderBy(string $order_by = null)
     {
         //Valida se um campo pelo qual deseja ordenar existe na model
-        $model = new Problema;
+        $model = new Problema();
         $dates = array_merge(array_keys($model->getAttributes()), $model->getDates());
         $accepted_order_by = array_merge($model->getFillable(), $dates);
 

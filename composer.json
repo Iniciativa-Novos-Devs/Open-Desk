@@ -56,13 +56,22 @@
     "scripts": {
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover --ansi"
+            "@php artisan package:discover --ansi",
+            "echo \"\nTry run now:\ncomposer pint-test\n\nor:\ncomposer pint-fix\n\""
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
+        ],
+        "pint-test": [
+            "./vendor/bin/pint --preset psr12 --test; php -r \"echo PHP_EOL . 'End of Pint test for psr12 preset' . PHP_EOL . PHP_EOL;\"",
+            "./vendor/bin/pint --preset laravel --test; php -r \"echo PHP_EOL . 'End of Pint test for laravel preset' . PHP_EOL . PHP_EOL;\""
+        ],
+        "pint-fix": [
+            "./vendor/bin/pint --preset psr12; php -r \"echo PHP_EOL . 'End of Pint for psr12 preset' . PHP_EOL . PHP_EOL;\"",
+            "./vendor/bin/pint --preset laravel; php -r \"echo PHP_EOL . 'End of Pint for laravel preset' . PHP_EOL . PHP_EOL;\""
         ]
     },
     "extra": {

@@ -112,7 +112,7 @@ class ImportaUsuariosViaExcel
             ! ($usuarioData['email'] ?? null) ||
             ! filter_var($usuarioData['email'], FILTER_VALIDATE_EMAIL)
         ) {
-            return $return_error_line ? __FILE__.':'.__LINE__ : false;
+            return $return_error_line ? __FILE__ . ':' . __LINE__ : false;
         }
 
         $randPassword = \Str::random(7);
@@ -148,7 +148,7 @@ class ImportaUsuariosViaExcel
             ];
         }
 
-        return $return_error_line ? __FILE__.':'.__LINE__ : false;
+        return $return_error_line ? __FILE__ . ':' . __LINE__ : false;
     }
 
     /**

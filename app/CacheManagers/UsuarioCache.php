@@ -17,7 +17,7 @@ class UsuarioCache
         'roles',
     ];
 
-    public static function byId(int $usuario_id, array $relationships = null)
+    public static function byId(int $usuario_id, ?array $relationships = null)
     {
         $relationships = $relationships === null ? self::$default_relations : [];
 
@@ -27,12 +27,10 @@ class UsuarioCache
             Cache::forget($cache_key);
         }
 
-        return Cache::remember($cache_key, 1800 /*secs*/, function () use ($usuario_id, $relationships) {
-            return Usuario::with($relationships)->where('id', $usuario_id)->first();
-        });
+        return Cache::remember($cache_key, 1800 /*secs*/, fn () => Usuario::with($relationships)->where('id', $usuario_id)->first());
     }
 
-    public static function byLoggedUser(array $relationships = null)
+    public static function byLoggedUser(?array $relationships = null)
     {
         if (Auth::user()->id ?? null) {
             return self::byId(Auth::user()->id, $relationships);
@@ -41,7 +39,7 @@ class UsuarioCache
         return null;
     }
 
-    public static function all(string $role = null, array $attributes = [], int $limit = null)
+    public static function all(?string $role = null, array $attributes = [], ?int $limit = null)
     {
         $cache_key = Str::slug(Arr::query(['role' => ($role ?? 'all'), 'limit' => ($limit ? $limit : 'no-limit'), 'attributes' => $attributes]));
 
@@ -70,7 +68,7 @@ class UsuarioCache
         });
     }
 
-    public function clearCache(bool $clear_cache = null)
+    public function clearCache(?bool $clear_cache = null)
     {
         self::$clear_cache = (bool) $clear_cache;
     }

@@ -88,7 +88,7 @@ class UsuarioSeeder extends Seeder
                 ],
                 [
                     'name' => 'Random Usuario 1',
-                    'email' => \Str::random(7).'@mail.com',
+                    'email' => \Str::random(7) . '@mail.com',
                     'password' => bcrypt('power@123'),
                     'email_verified_at' => now(),
                     'telefone_1' => '41 9888888',
@@ -120,7 +120,7 @@ class UsuarioSeeder extends Seeder
                 }
             }
         } else {
-            dump(PHP_EOL.'Nenhuma unidade encontrada. '.__FILE__.':'.__LINE__.PHP_EOL);
+            dump(PHP_EOL . 'Nenhuma unidade encontrada. ' . __FILE__ . ':' . __LINE__ . PHP_EOL);
         }
     }
 }

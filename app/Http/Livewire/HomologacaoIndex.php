@@ -66,7 +66,7 @@ class HomologacaoIndex extends Component
         return $chamados;
     }
 
-    public function changeOrderBy(string $order_by = null)
+    public function changeOrderBy(?string $order_by = null)
     {
         //Valida se um campo pelo qual deseja ordenar existe na model
         $model = new Chamado();

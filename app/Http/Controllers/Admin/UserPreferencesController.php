@@ -31,16 +31,16 @@ class UserPreferencesController extends Controller
 
     public static function changeBooleanState(string $option_name)
     {
-        $option_value = session()->get('user_preferences.'.$option_name, 'NO_DATA');
+        $option_value = session()->get('user_preferences.' . $option_name, 'NO_DATA');
 
         if ($option_value === 'NO_DATA') {
-            session()->put('user_preferences.'.$option_name, ($option_value = false));
+            session()->put('user_preferences.' . $option_name, ($option_value = false));
 
             return;
         }
 
-        session()->put('user_preferences.'.$option_name, ! $option_value);
-        $option_value = session()->get('user_preferences.'.$option_name, 'NO_DATA');
+        session()->put('user_preferences.' . $option_name, ! $option_value);
+        $option_value = session()->get('user_preferences.' . $option_name, 'NO_DATA');
     }
 
     /**

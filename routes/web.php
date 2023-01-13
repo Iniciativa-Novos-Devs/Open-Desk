@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Route;
 
 //#-----------------------------------------------------------------------------------
 Route::group(['middleware' => ['redirect_to_base_host']], function () {
-    require __DIR__.'/auth.php';
+    require __DIR__ . '/auth.php';
 });
 
 Route::get('/', [PainelController::class, 'index'])->name('painel');

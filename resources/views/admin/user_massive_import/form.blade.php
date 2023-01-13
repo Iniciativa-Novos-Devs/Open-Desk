@@ -35,7 +35,7 @@
                 <div class="row justify-content-center">
                     <div class="col-6">
                         <div class="row justify-content-between">
-                            <div class="col-12 d-md-none mt-5"></div>
+                            <div class="col-12 d-md-none mt-3"></div>
 
                             <div class="col-md-4 col-sm-4 d-grid gap-2">
                                 <a download="importacao-usuario-demo.xlsx"
@@ -46,7 +46,7 @@
                                 </a>
                             </div>
 
-                            <div class="col-12 d-md-none mt-5"></div>
+                            <div class="col-12 d-md-none mt-3"></div>
 
                             <div class="col-md-4 col-sm-4 d-grid gap-2">
                                 <button class="btn bnt-md btn-success" class="btn btn-success" type="submit">

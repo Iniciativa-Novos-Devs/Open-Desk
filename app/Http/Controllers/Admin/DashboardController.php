@@ -79,7 +79,7 @@ class DashboardController extends Controller
      */
     public function getProblemas(int|null $usuarioId = null): Collection
     {
-        $cacheKey = Str::slug('getProblemas_'.$usuarioId);
+        $cacheKey = Str::slug('getProblemas_' . $usuarioId);
 
         $data = Cache::remember($cacheKey, 60 /*secs*/, function () use ($usuarioId) {
             $query = DB::table('hd_chamados as c')

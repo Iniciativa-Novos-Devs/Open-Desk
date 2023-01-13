@@ -29,12 +29,12 @@ class AtividadeSeeder extends Seeder
                 $area = (\Arr::random($areas_array));
 
                 Atividade::create([
-                    'nome' => 'Atividade '.Str::random(2),
+                    'nome' => 'Atividade ' . Str::random(2),
                     'area_id' => $area['id'],
                 ]);
             }
         } else {
-            dump(PHP_EOL.'Nenhuma area encontrada. '.__FILE__.':'.__LINE__.PHP_EOL);
+            dump(PHP_EOL . 'Nenhuma area encontrada. ' . __FILE__ . ':' . __LINE__ . PHP_EOL);
         }
     }
 }

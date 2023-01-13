@@ -16,7 +16,7 @@ class AreaCache
         'atendentes',
     ];
 
-    public static function byId(int $area_id, array $relationships = null)
+    public static function byId(int $area_id, ?array $relationships = null)
     {
         $relationships = $relationships === [] ? self::$default_relations : [];
 
@@ -26,12 +26,10 @@ class AreaCache
             Cache::forget($cache_key);
         }
 
-        return Cache::remember($cache_key, (30 * 60/*secs*/), function () use ($area_id, $relationships) {
-            return Area::with($relationships)->where('id', $area_id)->first();
-        });
+        return Cache::remember($cache_key, (30 * 60/*secs*/), fn () => Area::with($relationships)->where('id', $area_id)->first());
     }
 
-    public static function allWhithoutRelationships(array $attributes = [], int $limit = null)
+    public static function allWhithoutRelationships(array $attributes = [], ?int $limit = null)
     {
         $cache_key = Str::slug(Arr::query(['limit' => ($limit ? $limit : 'no-limit'), 'attributes' => $attributes]));
 
@@ -54,7 +52,7 @@ class AreaCache
         });
     }
 
-    public function clearCache(bool $clear_cache = null)
+    public function clearCache(?bool $clear_cache = null)
     {
         self::$clear_cache = (bool) $clear_cache;
     }

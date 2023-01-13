@@ -178,7 +178,7 @@ class HomologacaoController extends Controller
             ]);
 
             $chamado->logs()->create([
-                'content' => htmlentities(($request->input('homologacao_nota') ?? 'Homologado.')."\n<em>Usuário: {$usuario_homologador}</em>"),
+                'content' => htmlentities(($request->input('homologacao_nota') ?? 'Homologado.') . "\n<em>Usuário: {$usuario_homologador}</em>"),
                 'type' => ChamadoLogTypeEnum::HOMOLOGADO,
             ]);
 
@@ -194,7 +194,7 @@ class HomologacaoController extends Controller
             ]);
 
             $chamado->logs()->create([
-                'content' => htmlentities(($request->input('homologacao_nota') ?? 'Reaberto na homologação.')."\n<em>Usuário: {$usuario_homologador}</em>"),
+                'content' => htmlentities(($request->input('homologacao_nota') ?? 'Reaberto na homologação.') . "\n<em>Usuário: {$usuario_homologador}</em>"),
                 'type' => ChamadoLogTypeEnum::RETORNO_DA_HOMOLOGAÇÃO,
             ]);
 
@@ -204,7 +204,7 @@ class HomologacaoController extends Controller
         return redirect()->route('homologacao_index')->with('error', "Falha na homologação do chamado #{$chamado->id}");
     }
 
-    public static function genHomologacaoPorEmail(int $chamado_id, int $expires_in_minutes = null)
+    public static function genHomologacaoPorEmail(int $chamado_id, ?int $expires_in_minutes = null)
     {
         $chamado = Chamado::with([
             'usuario' => function ($query) {
@@ -284,7 +284,7 @@ class HomologacaoController extends Controller
                                     <p>Seu chamado foi fechado e aguarda sua homologação.</p>",
 
             'email_content' => "<p>O chamado <strong>#{$chamado->id} "
-                                ."- {$chamado->title} </strong> está em homologação.</p>",
+                                . "- {$chamado->title} </strong> está em homologação.</p>",
 
             'email_footer' => '<p>Acesse o sistema para mais detalhes.</p>
                                 <p>Atenciosamente,<br>Equipe de Suporte</p>',

@@ -75,7 +75,7 @@ class UserMassiveImportController extends Controller
             );
         }
 
-        $fileName = Str::random(32)."_user_massive_file.{$extension}";
+        $fileName = Str::random(32) . "_user_massive_file.{$extension}";
 
         $importSheetPath = $importSheet->storeAs(
             'massive_import_files',

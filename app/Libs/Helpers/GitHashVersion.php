@@ -85,7 +85,7 @@ class GitHashVersion
         $array = explode('/', $data);
         $array = array_reverse($array);
 
-        return  trim(''.$array[0] ?? '');
+        return  trim('' . $array[0] ?? '');
     }
 
     /**

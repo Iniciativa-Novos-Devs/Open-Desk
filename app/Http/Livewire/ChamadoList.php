@@ -114,7 +114,7 @@ class ChamadoList extends Component
         $areas = $this->getUsuarioAreas();
 
         if ($areas && is_array($areas) && count($areas) > 0) {
-            $chamados = $chamados->whereRaw('area_id in('.implode(',', $areas).') or area_id is null');
+            $chamados = $chamados->whereRaw('area_id in(' . implode(',', $areas) . ') or area_id is null');
         }
 
         return $chamados;
@@ -149,7 +149,7 @@ class ChamadoList extends Component
         }
     }
 
-    public function changeOrderBy(string $order_by = null)
+    public function changeOrderBy(?string $order_by = null)
     {
         //Valida se um campo pelo qual deseja ordenar existe na model
         $model = new Chamado();

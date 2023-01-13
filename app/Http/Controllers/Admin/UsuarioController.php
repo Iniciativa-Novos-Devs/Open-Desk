@@ -151,9 +151,7 @@ class UsuarioController extends Controller
             $user_roles = collect($user_roles);
 
             if ($user_roles->contains('super-admin') && ! Auth::user()->hasRole('super-admin')) {
-                $user_roles = $user_roles->filter(function ($role) {
-                    return $role != 'super-admin';
-                });
+                $user_roles = $user_roles->filter(fn ($role) => $role != 'super-admin');
             }
 
             $roles = Role::whereIn('name', $user_roles->all())->select('name')->get()->pluck('name');

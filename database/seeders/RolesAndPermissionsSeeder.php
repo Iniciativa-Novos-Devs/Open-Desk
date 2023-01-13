@@ -96,7 +96,7 @@ class RolesAndPermissionsSeeder extends Seeder
                 continue;
             }
 
-            $end_value = $permission.'-'.$value;
+            $end_value = $permission . '-' . $value;
             $names[$end_value] = $end_value;
         }
 

@@ -26,7 +26,7 @@ class ColorGenerator
 
     public static function randomHexColor()
     {
-        return '#'.substr(str_shuffle('ABCDEF0123456789'), 0, 6);
+        return '#' . substr(str_shuffle('ABCDEF0123456789'), 0, 6);
     }
 
     public static function generateArrayOfColors(int $quantity, string|null $type = 'rgb'): array

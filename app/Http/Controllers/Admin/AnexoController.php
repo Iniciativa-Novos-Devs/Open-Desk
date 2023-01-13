@@ -43,14 +43,14 @@ class AnexoController extends Controller
         $mime_type = $file->getMimeType();
         $size = $file->getSize();
         $original_extension = $file->getClientOriginalExtension();
-        $original_name = str_replace('.'.$original_extension, '', $original_name);
+        $original_name = str_replace('.' . $original_extension, '', $original_name);
 
         if ($accepted_extensions && ! in_array($original_extension, $accepted_extensions)) {
             return null;
         }
 
-        $rand_number = '_'.rand(10, 1000).time().'_';
-        $new_name = Str::slug($prefix_name.' '.$rand_number.$original_name).($original_extension ? '.'.$original_extension : '');
+        $rand_number = '_' . rand(10, 1000) . time() . '_';
+        $new_name = Str::slug($prefix_name . ' ' . $rand_number . $original_name) . ($original_extension ? '.' . $original_extension : '');
         $path = $file->storeAs($dir_to_store, $new_name);
 
         if ($path) {

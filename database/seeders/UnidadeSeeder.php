@@ -26,9 +26,9 @@ class UnidadeSeeder extends Seeder
         if (env('APP_ENV') != 'production') {
             foreach (range(1, 10) as $_i) {
                 $unidades[] = [
-                    'nome' => 'Unidade '.Str::random(10),
+                    'nome' => 'Unidade ' . Str::random(10),
                     'ue' => Str::random(3),
-                    'cidade' => Str::random(5).' '.Str::random(5),
+                    'cidade' => Str::random(5) . ' ' . Str::random(5),
                 ];
             }
         }

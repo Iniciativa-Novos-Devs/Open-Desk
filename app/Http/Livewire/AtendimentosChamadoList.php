@@ -128,7 +128,7 @@ class AtendimentosChamadoList extends Component
         $areas = $this->getUsuarioAreas();
 
         if ($areas && is_array($areas) && count($areas) > 0) {
-            $chamados = $chamados->whereRaw('area_id in('.implode(',', $areas).') or area_id is null');
+            $chamados = $chamados->whereRaw('area_id in(' . implode(',', $areas) . ') or area_id is null');
         }
 
         return $chamados;
@@ -157,9 +157,7 @@ class AtendimentosChamadoList extends Component
             Cache::forget($this->cache_keys['all_areas']);
         }
 
-        return Cache::remember($this->cache_keys['all_areas'], (5 * 60) /*secs*/, function () {
-            return Area::select('id', 'sigla', 'nome')->get();
-        });
+        return Cache::remember($this->cache_keys['all_areas'], (5 * 60) /*secs*/, fn () => Area::select('id', 'sigla', 'nome')->get());
     }
 
     protected function getFilteredChamados(array $columns_to_select = [], array $relationships = [])
@@ -233,7 +231,7 @@ class AtendimentosChamadoList extends Component
         }
     }
 
-    public function changeOrderBy(string $order_by = null)
+    public function changeOrderBy(?string $order_by = null)
     {
         //Valida se um campo pelo qual deseja ordenar existe na model
         $model = new Chamado();
@@ -250,7 +248,7 @@ class AtendimentosChamadoList extends Component
         $this->keep_accordion_open = session()->get('user_preferences.atendente.chamados_a_atender.keep_accordion_open', false);
     }
 
-    public function startEmAtendimento(bool $update_cache = null)
+    public function startEmAtendimento(?bool $update_cache = null)
     {
         if (! $this->atendente->id ?? null) {
             $this->closeSpinner();
@@ -258,7 +256,7 @@ class AtendimentosChamadoList extends Component
             return; //TODO validar se o usuário é um atendente
         }
 
-        $this->cache_keys['em_atendimento'] = 'em_atendimento_atendente_id_'.$this->atendente->id;
+        $this->cache_keys['em_atendimento'] = 'em_atendimento_atendente_id_' . $this->atendente->id;
 
         if ($update_cache) {
             Cache::forget($this->cache_keys['em_atendimento']);
@@ -329,7 +327,7 @@ class AtendimentosChamadoList extends Component
     protected function setCurrentAsPaused()
     {
         if (! $this->log_message) {
-            $this->toastIt('Favor colocar um registro do atendimento antes de pausar. [ln~'.__LINE__.']', 'error', ['preventDuplicates' => true]);
+            $this->toastIt('Favor colocar um registro do atendimento antes de pausar. [ln~' . __LINE__ . ']', 'error', ['preventDuplicates' => true]);
 
             return;
         }
@@ -357,18 +355,18 @@ class AtendimentosChamadoList extends Component
         ]);
 
         if ($updated) {
-            $this->toastIt('Chamado #'.$this->em_atendimento->id.' pausado com sucesso!', 'success', ['preventDuplicates' => false]);
+            $this->toastIt('Chamado #' . $this->em_atendimento->id . ' pausado com sucesso!', 'success', ['preventDuplicates' => false]);
 
             return $updated;
         }
 
-        $this->toastIt('Falha ao pausar o chamado #'.$this->em_atendimento->id.'', 'error', ['preventDuplicates' => false]);
+        $this->toastIt('Falha ao pausar o chamado #' . $this->em_atendimento->id . '', 'error', ['preventDuplicates' => false]);
     }
 
     public function closeCurrent()
     {
         if (! $this->log_message) {
-            $this->toastIt('Favor colocar um registro do atendimento antes de encerrar. [ln~'.__LINE__.']', 'error', ['preventDuplicates' => true]);
+            $this->toastIt('Favor colocar um registro do atendimento antes de encerrar. [ln~' . __LINE__ . ']', 'error', ['preventDuplicates' => true]);
 
             return;
         }
@@ -410,33 +408,33 @@ class AtendimentosChamadoList extends Component
                 'type' => ChamadoLogTypeEnum::ENVIADO_PARA_HOMOLOGAÇÃO,
             ]);
 
-            $this->toastIt('Chamado #'.$this->em_atendimento->id.' encerrado com sucesso!', 'success', ['preventDuplicates' => false]);
+            $this->toastIt('Chamado #' . $this->em_atendimento->id . ' encerrado com sucesso!', 'success', ['preventDuplicates' => false]);
 
             return $updated;
         }
 
-        $this->toastIt('Falha ao encerrar o chamado #'.$this->em_atendimento->id, 'error', ['preventDuplicates' => false]);
+        $this->toastIt('Falha ao encerrar o chamado #' . $this->em_atendimento->id, 'error', ['preventDuplicates' => false]);
     }
 
     public function atenderChamado($chamado_id)
     {
         if (! $this->atendente->id ?? null) {
             //TODO validar se o usuário é um atendente
-            $this->toastIt('Usuário atual não é um atendente! [ln~'.__LINE__.']', 'error', ['preventDuplicates' => true]);
+            $this->toastIt('Usuário atual não é um atendente! [ln~' . __LINE__ . ']', 'error', ['preventDuplicates' => true]);
             $this->closeSpinner();
 
             return;
         }
 
         if ($this->hasEmAtendimento()) {
-            $this->toastIt('Já existe um chamado em atendimento! [ln~'.__LINE__.']', 'error', ['preventDuplicates' => true]);
+            $this->toastIt('Já existe um chamado em atendimento! [ln~' . __LINE__ . ']', 'error', ['preventDuplicates' => true]);
             $this->closeSpinner();
 
             return;
         }
 
         if (! is_numeric($chamado_id)) {
-            $this->toastIt('Falha ao selecionar identificador do chamado! [ln~'.__LINE__.']', 'error', ['preventDuplicates' => true]);
+            $this->toastIt('Falha ao selecionar identificador do chamado! [ln~' . __LINE__ . ']', 'error', ['preventDuplicates' => true]);
             $this->closeSpinner();
 
             return;
@@ -446,7 +444,7 @@ class AtendimentosChamadoList extends Component
             ->whereNotIn('status', $this->cantOpenIfStatusIn())->first();
 
         if (! $chamado) {
-            $this->toastIt('Falha ao abrir o chamado! [ln~'.__LINE__.']', 'error', ['preventDuplicates' => true]);
+            $this->toastIt('Falha ao abrir o chamado! [ln~' . __LINE__ . ']', 'error', ['preventDuplicates' => true]);
             $this->closeSpinner();
 
             return;
@@ -458,14 +456,14 @@ class AtendimentosChamadoList extends Component
         ]);
 
         if (! $update) {
-            $this->toastIt('Falha ao atualizar o chamado! [ln~'.__LINE__.']', 'error', ['preventDuplicates' => true]);
+            $this->toastIt('Falha ao atualizar o chamado! [ln~' . __LINE__ . ']', 'error', ['preventDuplicates' => true]);
             $this->closeSpinner();
 
             return;
         }
 
         $chamado->logs()->create([
-            'content' => 'Iniciado atendimento. Atendente: '.$this->atendente->name ?? null,
+            'content' => 'Iniciado atendimento. Atendente: ' . $this->atendente->name ?? null,
             'type' => ChamadoLogTypeEnum::ATENDIMENTO_INICIADO,
         ]);
 
@@ -566,7 +564,7 @@ class AtendimentosChamadoList extends Component
     protected function exigeLogMessage(int $min_chars = 5)
     {
         if (! $this->log_message || ! strlen($this->log_message) >= $min_chars) {
-            $this->toastIt("Favor informar um registro de atendimento com no mínimo $min_chars caracteres.", 'error', ['preventDuplicates' => true]);
+            $this->toastIt("Favor informar um registro de atendimento com no mínimo {$min_chars} caracteres.", 'error', ['preventDuplicates' => true]);
             $this->emit('reOpenModalTransferenciaPorEvent');
 
             return false;
@@ -602,14 +600,14 @@ class AtendimentosChamadoList extends Component
 
         if (! $formated_options) {
             $this->emit('closeModalTransferenciaPorEvent');
-            $this->toastIt("Sem opções disponíveis para '$transferencia_para'", 'error', ['preventDuplicates' => true]);
+            $this->toastIt("Sem opções disponíveis para '{$transferencia_para}'", 'error', ['preventDuplicates' => true]);
 
             return;
         }
 
         $this->options_data = [
-            'title' => $formated_data['formated_title'] ?? "Selecione um $transferencia_para para transferir",
-            'label' => $formated_data['formated_label'] ?? "Selecione um $transferencia_para para transferir",
+            'title' => $formated_data['formated_title'] ?? "Selecione um {$transferencia_para} para transferir",
+            'label' => $formated_data['formated_label'] ?? "Selecione um {$transferencia_para} para transferir",
             'options' => $formated_options,
         ];
 
@@ -629,8 +627,8 @@ class AtendimentosChamadoList extends Component
         if ($this->transferencia_para_nome) {
             $this->toastIt(
                 'Alterado para: '
-                            .$this->transferencia_para_nome
-                            .' ('.$this->transferencia_para.')',
+                            . $this->transferencia_para_nome
+                            . ' (' . $this->transferencia_para . ')',
                 'success',
                 ['preventDuplicates' => true]
             );
@@ -693,8 +691,8 @@ class AtendimentosChamadoList extends Component
         if ($updated ?? null) {
             $this->toastIt(
                 "concluirTransferencia() 'transferencia_para_id' "
-                            .$this->transferencia_para.' id:'
-                            .$this->transferencia_para_id,
+                            . $this->transferencia_para . ' id:'
+                            . $this->transferencia_para_id,
                 'success',
                 ['preventDuplicates' => true]
             );
@@ -722,14 +720,13 @@ class AtendimentosChamadoList extends Component
 
     protected function limpaValoresDasPropriedades()
     {
-
         //Transferencia
         $this->transferencia_para = null;
         $this->transferencia_para_id = null;
         $this->transferencia_para_nome = null;
     }
 
-    public function getOpcoesParaTranferencia(string $transferencia_para = null)
+    public function getOpcoesParaTranferencia(?string $transferencia_para = null)
     {
         return $this->options_data ?? [];
     }
@@ -765,7 +762,7 @@ class AtendimentosChamadoList extends Component
 
                 $data = [];
                 foreach ($areas as $area) {
-                    $data[] = ['id' => $area->id, 'label' => '#'.$area->id.' - '.$area->sigla.' - '.$area->nome];
+                    $data[] = ['id' => $area->id, 'label' => '#' . $area->id . ' - ' . $area->sigla . ' - ' . $area->nome];
                 }
 
                 return $data ?? [];
@@ -778,7 +775,7 @@ class AtendimentosChamadoList extends Component
 
                 $data = [];
                 foreach ($atendentes as $atendente) {
-                    $data[] = ['id' => $atendente->id, 'label' => '#'.$atendente->id.' - '.$atendente->name];
+                    $data[] = ['id' => $atendente->id, 'label' => '#' . $atendente->id . ' - ' . $atendente->name];
                 }
 
                 return $data ?? [];
@@ -795,7 +792,7 @@ class AtendimentosChamadoList extends Component
         }
 
         if ($this->hasEmAtendimento()) {
-            $this->toastIt('Já existe um chamado em atendimento! [ln~'.__LINE__.']', 'error', ['preventDuplicates' => true]);
+            $this->toastIt('Já existe um chamado em atendimento! [ln~' . __LINE__ . ']', 'error', ['preventDuplicates' => true]);
 
             return;
         }
@@ -821,7 +818,7 @@ class AtendimentosChamadoList extends Component
     public function minLogChar(int $min_chars = 10)
     {
         if (strlen($this->log_message) < $min_chars) {
-            $this->toastIt('O registro do atendimento precisa ter no mínimo 10 caracteres. [ln~'.__LINE__.']', 'error', ['preventDuplicates' => true]);
+            $this->toastIt('O registro do atendimento precisa ter no mínimo 10 caracteres. [ln~' . __LINE__ . ']', 'error', ['preventDuplicates' => true]);
 
             return false;
         }

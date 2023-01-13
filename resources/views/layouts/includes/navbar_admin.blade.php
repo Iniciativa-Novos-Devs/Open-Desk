@@ -1,21 +1,29 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{{ route('painel') }}">HelpDesk</a>
+        <div class=" w-100 d-flex justify-content-center text-center">
+                <a class="navbar-brand" href="{{ route('painel') }}">{{ config('app.name', 'Open Desk') }}</a>
+        </div>
 
-        @auth
+        <div class=" w-100 d-flex justify-content-between">
+            @auth
             @can('chamados-create')
-                <a class="btn btn-md btn-warning mx-5" href="{{ route('chamados_add') }}">Abrir Chamado</a>
-            @endcan
-        @endauth
+                <div class="d-none d-md-block d-xl-none"></div>
+                <div class="d-md-none">
+                    <a class="btn btn-md btn-warning" href="{{ route('chamados_add') }}">Abrir Chamado</a>
+                </div>
+                @endcan
+            @endauth
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
-            aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+            <div>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+                    aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </div>
 
         <div class="collapse navbar-collapse" id="navbarText">
-            <ul class="mb-2 navbar-nav me-auto mb-lg-0">
-
+            <ul class="mb-2 navbar-nav me-auto mb-lg-0 mx-md-4">
                 @auth
                 <li class="nav-item">
                     <a class="nav-link" href="@route('dashboard')">Dashboard</a>
@@ -47,7 +55,6 @@
                         Abrir Chamado
                     </a>
                 </li>
-                @endauth
 
                 @role('admin')
                 <li class="nav-item dropdown">
@@ -70,6 +77,15 @@
                     </ul>
                 </li>
                 @endrole
+
+                @endauth
+                @auth
+                    @can('chamados-create')
+                        <li class="nav-item d-none d-sm-none d-md-block d-lg-block">
+                            <a class="btn btn-warning nav-link" href="{{ route('chamados_add') }}">Abrir Chamado</a>
+                        </li>
+                    @endcan
+                @endauth
             </ul>
             <div class="order-3 navbar-collapse collapse w-100 dual-collapse2">
                 <ul class="navbar-nav ms-auto">

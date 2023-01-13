@@ -19,9 +19,7 @@ class DevTestsRouteController extends Controller
                 Route::get('valida-cps', [ValidadorCpsUsuarioController::class, 'secondLogin'])->middleware('auth')->name('valida_usuario_cps');
                 Route::post('valida-cps', [ValidadorCpsUsuarioController::class, 'validateCpsUser'])->middleware('auth');
 
-                Route::get('teste', function () {
-                    return Auth::user()->name;
-                })->middleware(['auth']);
+                Route::get('teste', fn () => Auth::user()->name)->middleware(['auth']);
             });
         }
     }

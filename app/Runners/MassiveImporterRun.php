@@ -37,7 +37,7 @@ class MassiveImporterRun
         $importerClass = $massiveImport->importer_class ?? '';
         $startClassMethod = $massiveImport->start_class_method ?? '';
 
-        $return = (new $importerClass())->$startClassMethod($importerFileFullPath);
+        $return = (new $importerClass())->{$startClassMethod}($importerFileFullPath);
 
         $success = (bool) ($return['success'] ?? null);
         $reportFile = $return['report_file'] ?? null;

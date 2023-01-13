@@ -29,7 +29,7 @@ class AtendenteCache
     //     });
     // }
 
-    public static function all(array $attributes = [], int $limit = null)
+    public static function all(array $attributes = [], ?int $limit = null)
     {
         $cache_key = Str::slug(Arr::query(['role' => 'atendente', 'limit' => ($limit ? $limit : 'no-limit'), 'attributes' => $attributes]));
 
@@ -37,12 +37,10 @@ class AtendenteCache
             Cache::forget($cache_key);
         }
 
-        return Cache::remember($cache_key, (60 * 60/*secs*/), function () use ($attributes, $limit) {
-            return UsuarioCache::all('atendente', $attributes, $limit);
-        });
+        return Cache::remember($cache_key, (60 * 60/*secs*/), fn () => UsuarioCache::all('atendente', $attributes, $limit));
     }
 
-    public function clearCache(bool $clear_cache = null)
+    public function clearCache(?bool $clear_cache = null)
     {
         self::$clear_cache = (bool) $clear_cache;
     }

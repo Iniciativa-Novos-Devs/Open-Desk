@@ -21,8 +21,7 @@
                 <div class="accordion-body row">
                     <div class="col-12">
                         <div class="cursor-pointer select-none form-check form-switch">
-                            <label class="cursor-pointer select-none form-check-label" for="keep_accordion_open">Manter
-                                aberto</label>
+                            <label class="cursor-pointer select-none form-check-label" for="keep_accordion_open">Manter aberto</label>
                             <input class="cursor-pointer select-none form-check-input" type="checkbox"
                                 id="keep_accordion_open" wire:change="changeChamadosAccordionOpenState()"
                                 {{ $keep_accordion_open ? 'checked' : '' }} value="1">
@@ -31,9 +30,14 @@
 
                     <div class="col-12">
                         <div class="row">
-                            <div class="col-8">
-                                <select class="form-select" aria-label="Default select example"
-                                    wire:model="selected_status">
+                            <div class="col-md-4 col-sm-12">
+                                <label for="filtrar_por_status">Filtrar por status</label>
+                                <select
+                                    class="form-select"
+                                    aria-label="Filtrar por status"
+                                    id="filtrar_por_status"
+                                    wire:model="selected_status"
+                                >
                                     <option value="">Sem filtro</option>
                                     @foreach (\App\Enums\StatusEnum::$humans as $enum => $status)
                                         <option value="{{ $enum }}">{{ \Str::plural($status) }}</option>

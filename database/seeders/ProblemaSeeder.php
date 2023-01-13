@@ -28,12 +28,12 @@ class ProblemaSeeder extends Seeder
                 $atividade = (\Arr::random($atividades_array));
 
                 Problema::create([
-                    'descricao' => 'Problema '.\Str::random(8),
+                    'descricao' => 'Problema ' . \Str::random(8),
                     'atividade_area_id' => $atividade['id'],
                 ]);
             }
         } else {
-            dump(PHP_EOL.'Nenhuma atividade encontrada. '.__FILE__.':'.__LINE__.PHP_EOL);
+            dump(PHP_EOL . 'Nenhuma atividade encontrada. ' . __FILE__ . ':' . __LINE__ . PHP_EOL);
         }
     }
 }

@@ -10,7 +10,7 @@ class RoleCache
 {
     protected static $clear_cache = false;
 
-    public static function all(bool $update_cache = false, bool $only_clear_cache = false, int $role_id = null)
+    public static function all(bool $update_cache = false, bool $only_clear_cache = false, ?int $role_id = null)
     {
         $cache_key = Str::slug(http_build_query([
             'class' => 'RoleCache',
@@ -55,7 +55,7 @@ class RoleCache
      * @param  int  $role_id
      * @return
      */
-    public static function getById(int $role_id = null, bool $update_cache = false, bool $only_clear_cache = false)
+    public static function getById(?int $role_id = null, bool $update_cache = false, bool $only_clear_cache = false)
     {
         if (! $role_id) {
             return null;
@@ -64,7 +64,7 @@ class RoleCache
         return self::all($update_cache, $only_clear_cache, $role_id);
     }
 
-    public function clearCache(bool $clear_cache = null)
+    public function clearCache(?bool $clear_cache = null)
     {
         self::$clear_cache = (bool) $clear_cache;
     }

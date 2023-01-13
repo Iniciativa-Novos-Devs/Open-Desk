@@ -5,12 +5,12 @@ namespace App\Libs\Helpers;
 class ArrayHandler
 {
     /**
-     * function reorder
+     * function invertPositionWith
      *
      * @param array $originalArray, int $currentPosition, int $desiredPosition
      * @return array
      */
-    public static function reorder(
+    public static function invertPositionWith(
         array $originalArray,
         int $currentPosition,
         int $desiredPosition

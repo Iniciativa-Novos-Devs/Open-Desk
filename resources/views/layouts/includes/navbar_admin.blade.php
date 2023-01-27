@@ -94,22 +94,26 @@
                 <ul class="navbar-nav ms-auto">
                     @auth
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                {{ auth()->user()->name }}
+                            <a
+                                class="nav-link dropdown-toggle"
+                                    href="#"
+                                    id="navbarDropdown" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false"
+                                >
                                 <i class="bi bi-person-circle"></i>
+                                {{ auth()->user()->name }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <li>
                                     <a class="dropdown-item" href="{{ route('user.preferences') }}">
-                                        {{ __('Profile') }}
                                         <i class="bi bi-person-badge-fill"></i>
+                                        {{ __('Profile') }}
                                     </a>
                                 </li>
                                 <li>
                                     <a class="dropdown-item" href="{{ route('logout') }}">
-                                        {{ __('Logout') }}
                                         <i class="bi bi-box-arrow-left"></i>
+                                        {{ __('Logout') }}
                                     </a>
                                 </li>
                             </ul>
@@ -117,8 +121,8 @@
                     @else
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('login') }}">
-                                {{ __('Login') }}
                                 <i class="bi bi-key-fill"></i>
+                                {{ __('Login') }}
                             </a>
                         </li>
                     @endauth

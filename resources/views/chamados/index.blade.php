@@ -1,5 +1,7 @@
 @extends('layouts.page')
 
+@section('title_header', __('List of :items', ['items' => 'tickets']))
+
 @section('content')
 <div class="row">
     <div class="col-12">

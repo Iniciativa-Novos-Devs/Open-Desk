@@ -5,13 +5,8 @@
 @endsection
 
 @section('body_content')
-<div class="container-fluid">
+<div class="container-fluid px-4 py-5 py-md-1" data-view="page.blade.php">
     @include('layouts.includes.cabecalho')
-    <div class="w-100">
-        @hasSection ('title_header')
-            <h5 class="my-1 text-center">@yield('title_header')</h5>
-        @endif
-    </div>
     @yield('content')
 </div>
 @endsection

@@ -14,7 +14,7 @@
     <x-flash-messages/>
 </div>
 
-<div class="container-fluid">
+<div class="container-fluid px-md-4" data-view="basic.blade.php">
     @hasSection ('content')
         @yield('content')
     @else

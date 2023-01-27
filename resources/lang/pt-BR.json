@@ -17,6 +17,10 @@
     "Atachment": "Anexo",
     "atachments": "anexos",
     "Atachments": "Anexos",
+    "ticket": "chamado",
+    "Ticket": "Chamado",
+    "tickets": "chamados",
+    "Tickets": "Chamados",
     "Note": "Observação",
     "Name": "Nome",
     "E-Mail Address": "E-mail",
@@ -88,7 +92,7 @@
     "The :attribute must contain at least one symbol.": "O campo :attribute deve conter pelo menos um símbolo.",
     "The :attribute must contain at least one number.": "O campo :attribute deve conter pelo menos um número.",
     "The given :attribute has appeared in a data leak. Please choose a different :attribute.": "A senha que você inseriu em :attribute está em um vazamento de dados. Por favor escolha uma senha diferente.",
-	"Delete Account": "Deletar Conta",
+    "Delete Account": "Deletar Conta",
     "Are you sure you want to delete your account? Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account." : "Você tem certeza que quer deletar essa conta? Uma vez que sua conta é deletada, todos os dados serão permanentemente deletados. Por favor, entre com a sua senha para confirmar que você quer deletar permanentemente sua conta.",
     "Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.": "Depois que sua conta for excluída, todos os seus recursos e dados serão excluídos permanentemente. Antes de excluir sua conta, baixe todos os dados ou informações que deseja reter.",
     "Permanently delete your account.": "Deleta permanentemente a sua conta.",
@@ -148,5 +152,11 @@
     "Invert selection": "Inverter seleção",
     "Uncheck all": "Desmarcar todos",
     "Check all": "Marcar todos",
-    "List of :items": "Lista de :items"
+    "List of :items": "Lista de :items",
+    "Pause": "Pausar",
+    "Transfer": "Transferir",
+    "Close ticket": "Encerrar chamado",
+    "Paused tickets": "Chamados pausados",
+    "Closed tickets": "Chamados encerrados",
+    "Share": "Compartilhar"
 }

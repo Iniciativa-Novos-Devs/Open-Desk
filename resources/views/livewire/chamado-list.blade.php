@@ -1,14 +1,12 @@
 <div class="row">
-
     <div class="mt-0 col-12">
         <hr class="mb-0 w-100">
     </div>
 
-
     <div class="py-2 accordion col-12" id="accordion_chamados_table">
-        <div class="accordion-item">
+        <div class="accordion-item border-1">
             <h2 class="select-none accordion-header" id="chamados_table_headingThree">
-                <button class="select-none accordion-button {{ $keep_accordion_open ? '' : 'collapsed' }}"
+                <button class="select-none accordion-button border {{ $keep_accordion_open ? '' : 'collapsed' }}"
                     type="button" data-bs-toggle="collapse" data-bs-target="#collapse_chamados_table"
                     aria-expanded="{{ $keep_accordion_open ? 'true' : 'false' }}"
                     aria-controls="collapse_chamados_table">

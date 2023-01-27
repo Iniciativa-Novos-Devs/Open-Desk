@@ -1,5 +1,5 @@
 <div class="row p-0 m-0">
-    <div class="col-md-12 col-sm-12 mx-0 mt-2 p-0 px-1">
+    <div class="col-md-6 col-sm-12 mx-0 mt-2 p-0 px-1">
         <label for="select_esq">Selecione uma atividade</label>
         <select class="form-select mx-0 _bg-danger" id="selcet_esq"
             wire:model='atividade_id'
@@ -11,7 +11,7 @@
         </select>
     </div>
 
-    <div class="col-md-12 col-sm-12 mx-0 mt-2 p-0 px-1">
+    <div class="col-md-6 col-sm-12 mx-0 mt-2 p-0 px-1">
         <label for="select_dir">Escolha um problema</label>
         <select class="form-select mx-0 _bg-warning" id="select_dir"
             name="problema_id"

@@ -49,7 +49,10 @@ blockquote {
 }
 
 .logo-container {
-    max-width: 8%;
+    max-width: 10%;
+    align-content: baseline;
+    align-self: center;
+    margin-right: 1rem;
 }
 
 .select-none, .force.select-none {
@@ -58,10 +61,23 @@ blockquote {
 
 
 /* Remove o outline dos botoes */
-button { outline: none; }
-.btn:focus { outline: thin dotted; outline: 5px auto -webkit-focus-ring-color; outline-offset: -2px; }
-.btn:focus { outline: none !important; }
-.btn:focus { box-shadow: none; }
+button {
+    outline: none;
+}
+
+.btn:focus {
+    outline: thin dotted;
+    outline: 5px auto -webkit-focus-ring-color;
+    outline-offset: -2px;
+}
+
+.btn:focus {
+    outline: none !important;
+}
+
+.btn:focus {
+    box-shadow: none;
+}
 
 
 .custom-backdrop {
@@ -76,9 +92,13 @@ button { outline: none; }
 }
 
 /* CKEditor */
-.ck.ck-editor__main .ck-editor__editable{ min-height: 25vh; }
+.ck.ck-editor__main .ck-editor__editable {
+    min-height: 25vh;
+}
 
-li.nav-item a.nav-link{white-space: nowrap;}
+li.nav-item a.nav-link {
+    white-space: nowrap;
+}
 
 /* Fixed footer */
 .footer.fixed-bottom {
@@ -91,4 +111,24 @@ li.nav-item a.nav-link{white-space: nowrap;}
 }
 
 /* Afasta a logo to topo */
-.top-logo { margin-top: 4.5rem !important; }
+.top-logo {
+    margin-top: 3.5rem !important;
+}
+
+.tf-vertical-align {
+    align-content: baseline;
+    align-self: center;
+}
+
+.navbar-toggler.tf-toggler-small {
+    padding: 0.20rem .30rem;
+    font-size: 1rem;
+}
+
+@media (min-width: 768px) {
+
+    [class*="position-"].tf-position-md-inherit,
+    .tf-position-md-inherit {
+        position: inherit !important;
+    }
+}

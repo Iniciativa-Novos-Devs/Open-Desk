@@ -1,5 +1,6 @@
 @extends('layouts.page')
 
+@section('title_header', __('Add new :item', ['item' => 'ticket']))
 @section('head')
     <!-- Include stylesheet -->
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">

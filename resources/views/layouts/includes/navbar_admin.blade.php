@@ -1,21 +1,24 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top py-1 py-md-3">
     <div class="container-fluid">
-        <div class=" w-100 d-flex justify-content-center text-center">
-                <a class="navbar-brand" href="{{ route('painel') }}">{{ config('app.name', 'Open Desk') }}</a>
+        <div class="w-100 d-flex justify-content-center text-center mb-2">
+                <a class="p-0 col-2 logo-container d-flex justify-content-around navbar-brand" href="{{ route('painel') }}">
+                    <img class="display-2 img-fluid Responsive mx-2" src=" {{ asset('/imagens/logo.webp') }}" alt="Logo" />
+                    {{ config('app.name', 'Open Desk') }}
+                </a>
         </div>
 
         <div class=" w-100 d-flex justify-content-between">
             @auth
             @can('chamados-create')
                 <div class="d-none d-md-block d-xl-none"></div>
-                <div class="d-md-none">
-                    <a class="btn btn-md btn-warning" href="{{ route('chamados_add') }}">Abrir Chamado</a>
+                <div class="d-md-none tf-vertical-align">
+                    <a class="btn btn-sm btn-warning" href="{{ route('chamados_add') }}">Abrir Chamado</a>
                 </div>
                 @endcan
             @endauth
 
             <div>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+                <button class="navbar-toggler tf-toggler-small" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
                     aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
